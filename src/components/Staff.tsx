@@ -5,6 +5,7 @@ const LINE_SPACING = 16
 const STAFF_TOP = 60
 const STAFF_LEFT = 40
 const NOTE_RADIUS = 8
+const LEDGER_EXTEND = NOTE_RADIUS * 3
 
 interface StaffProps {
   note?: Note | null
@@ -17,11 +18,12 @@ function getAccidental(name: string): string | null {
 }
 
 export default function Staff({ note, showNoteName }: StaffProps) {
+  const SVG_TOP_PAD = 20
   const height = STAFF_TOP + LINE_SPACING * 8 + 40
 
   return (
     <div className="flex justify-center py-6">
-      <svg viewBox={`0 0 ${STAFF_LEFT + 400} ${height}`} className="w-full max-w-[500px] h-auto" role="img" aria-label={note ? `Staff showing ${note.name}${note.octave}` : 'Empty musical staff'} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox={`0 -${SVG_TOP_PAD} ${STAFF_LEFT + 400} ${height + SVG_TOP_PAD}`} className="w-full max-w-[500px] h-auto" role="img" aria-label={note ? `Staff showing ${note.name}${note.octave}` : 'Empty musical staff'} xmlns="http://www.w3.org/2000/svg">
         {[0, 1, 2, 3, 4].map((i) => (
           <line
             key={i}
@@ -43,7 +45,7 @@ export default function Staff({ note, showNoteName }: StaffProps) {
           const accidental = getAccidental(note.name)
           const ledgerLines: number[] = []
           if (pos < 0) {
-            for (let p = 0; p >= pos; p -= 2) ledgerLines.push(p)
+            for (let p = -2; p >= pos; p -= 2) ledgerLines.push(p)
           } else if (pos > 8) {
             for (let p = 10; p <= pos; p += 2) ledgerLines.push(p)
           }
@@ -52,7 +54,7 @@ export default function Staff({ note, showNoteName }: StaffProps) {
             <g>
               {ledgerLines.map(lp => {
                 const ly = STAFF_TOP - lp * LINE_SPACING / 2 + LINE_SPACING * 4
-                return <line key={lp} x1={x - NOTE_RADIUS * 1.5} y1={ly} x2={x + NOTE_RADIUS * 1.5} y2={ly} stroke="#333" strokeWidth={1} />
+                return <line key={lp} x1={x - LEDGER_EXTEND} y1={ly} x2={x + LEDGER_EXTEND} y2={ly} stroke="#333" strokeWidth={1} />
               })}
               {accidental && (
                 <text x={x - 22} y={y + 6} fontSize={20} fill="#333">{accidental}</text>
