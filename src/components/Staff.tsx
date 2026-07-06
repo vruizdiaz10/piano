@@ -6,6 +6,7 @@ const STAFF_TOP = 60
 const STAFF_LEFT = 40
 const NOTE_RADIUS = 8
 const LEDGER_EXTEND = NOTE_RADIUS * 3
+const STEM_LENGTH = LINE_SPACING * 3.5
 
 interface StaffProps {
   note?: Note | null
@@ -60,7 +61,20 @@ export default function Staff({ note, showNoteName }: StaffProps) {
               {accidental && (
                 <text x={x - 22} y={y + 6} fontSize={20} fill="var(--staff-line, #4B3F2B)">{accidental}</text>
               )}
-              <ellipse cx={x} cy={y} rx={NOTE_RADIUS} ry={NOTE_RADIUS * 0.65} fill="#DC2626" transform={`rotate(-18 ${x} ${y})`} />
+              <g>
+                {(() => {
+                  const stemUp = pos < 4
+                  const stemX = stemUp ? x + NOTE_RADIUS * 0.55 : x - NOTE_RADIUS * 0.55
+                  const yAttach = stemUp ? y - NOTE_RADIUS * 0.35 : y + NOTE_RADIUS * 0.35
+                  const yEnd = stemUp ? yAttach - STEM_LENGTH : yAttach + STEM_LENGTH
+                  return (
+                    <>
+                      <ellipse cx={x} cy={y} rx={NOTE_RADIUS} ry={NOTE_RADIUS * 0.65} fill="#DC2626" transform={`rotate(-18 ${x} ${y})`} />
+                      <line x1={stemX} y1={yAttach} x2={stemX} y2={yEnd} stroke="#DC2626" strokeWidth={2.5} strokeLinecap="round" />
+                    </>
+                  )
+                })()}
+              </g>
               {showNoteName && (
                 <text x={x} y={y - 24} textAnchor="middle" fontSize={14} fill="#666">
                   {note.name}{note.octave}
