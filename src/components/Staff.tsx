@@ -60,7 +60,7 @@ export default function Staff({ note, showNoteName }: StaffProps) {
               {accidental && (
                 <text x={x - 22} y={y + 6} fontSize={20} fill="var(--staff-line, #4B3F2B)">{accidental}</text>
               )}
-              <ellipse cx={x} cy={y} rx={NOTE_RADIUS} ry={NOTE_RADIUS * 0.7} fill="#DC2626" />
+              <ellipse cx={x} cy={y} rx={NOTE_RADIUS} ry={NOTE_RADIUS * 0.65} fill="#DC2626" transform={`rotate(-18 ${x} ${y})`} />
               {showNoteName && (
                 <text x={x} y={y - 24} textAnchor="middle" fontSize={14} fill="#666">
                   {note.name}{note.octave}
