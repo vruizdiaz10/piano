@@ -1,3 +1,6 @@
 Task 1: complete (commit 495f995, review clean)
 Task 2: complete (commit 2543a7b, clean)
 Task 3: complete (commit 8c1a61a, clean)
+Task 4: complete (commit c0cab4f, clean)
+Task 5: complete (commit 052ac50, clean)
+Task 6: complete (commit d5d05f0, clean)
