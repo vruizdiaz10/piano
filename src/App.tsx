@@ -8,7 +8,7 @@ import Feedback from './components/Feedback'
 import Toolbar from './components/Toolbar'
 
 export default function App() {
-  const { state, startGame, submitAnswer, nextNote, setDifficulty, setShowNoteName } = useGameState()
+  const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName } = useGameState()
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
   const { playNote } = useSound()
 
@@ -62,13 +62,13 @@ export default function App() {
         )}
       </div>
       <Toolbar
-        difficulty={state.difficulty}
+        lessonId={state.lessonId}
         showNoteName={state.showNoteName}
-        onDifficultyChange={setDifficulty}
+        onLessonChange={setLesson}
         onShowNoteNameChange={setShowNoteName}
       />
       <Staff note={state.currentNote} showNoteName={state.showNoteName} />
-      <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} difficulty={state.difficulty} />
+      <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} />
       {state.phase === 'idle' ? (
         <button
           className="mt-6 px-8 py-3 text-base rounded-lg bg-green-600 text-white hover:bg-green-700 cursor-pointer border-none"

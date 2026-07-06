@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
-import { GameState, Difficulty, Note } from '../types'
+import { GameState, Note } from '../types'
 import { midiToNote } from '../utils/midiToNote'
-import { getNotePool } from '../utils/noteToPosition'
+import { getLessonPool } from '../data/lessons'
 
 const INITIAL_STATE: GameState = {
   phase: 'idle',
@@ -10,12 +10,12 @@ const INITIAL_STATE: GameState = {
   streak: 0,
   totalAttempts: 0,
   correctAttempts: 0,
-  difficulty: 'beginner',
+  lessonId: 'lines',
   showNoteName: true,
 }
 
-function randomNote(difficulty: Difficulty): Note {
-  const pool = getNotePool(difficulty)
+function randomNote(lessonId: string): Note {
+  const pool = getLessonPool(lessonId)
   const midi = pool[Math.floor(Math.random() * pool.length)]
   return midiToNote(midi)
 }
@@ -25,7 +25,7 @@ export function useGameState() {
 
   const startGame = useCallback(() => {
     setState(prev => {
-      const note = randomNote(prev.difficulty)
+      const note = randomNote(prev.lessonId)
       return { ...prev, phase: 'waiting', currentNote: note, streak: 0, totalAttempts: 0, correctAttempts: 0 }
     })
   }, [])
@@ -47,18 +47,18 @@ export function useGameState() {
 
   const nextNote = useCallback(() => {
     setState(prev => {
-      const note = randomNote(prev.difficulty)
+      const note = randomNote(prev.lessonId)
       return { ...prev, phase: 'waiting', currentNote: note }
     })
   }, [])
 
-  const setDifficulty = useCallback((difficulty: Difficulty) => {
-    setState(prev => ({ ...prev, difficulty }))
+  const setLesson = useCallback((lessonId: string) => {
+    setState(prev => ({ ...prev, lessonId }))
   }, [])
 
   const setShowNoteName = useCallback((show: boolean) => {
     setState(prev => ({ ...prev, showNoteName: show }))
   }, [])
 
-  return { state, startGame, submitAnswer, nextNote, setDifficulty, setShowNoteName }
+  return { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName }
 }

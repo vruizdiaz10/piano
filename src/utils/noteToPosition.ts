@@ -1,5 +1,4 @@
 import { Note } from '../types'
-import { Difficulty } from '../types'
 
 const NOTE_POSITIONS: Record<string, number> = {
   'C3': -14, 'D3': -13, 'E3': -12, 'F3': -11, 'G3': -10, 'A3': -9, 'B3': -8,
@@ -16,9 +15,4 @@ export function noteToPosition(note: Note): number {
   return pos
 }
 
-export function getNotePool(difficulty: Difficulty): number[] {
-  if (difficulty === 'beginner') {
-    return [60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81, 83, 84]
-  }
-  return Array.from({ length: 49 }, (_, i) => 48 + i)
-}
+

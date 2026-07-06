@@ -6,8 +6,6 @@ export interface Note {
   midi: number
 }
 
-export type Difficulty = 'beginner' | 'intermediate'
-
 export type GamePhase = 'idle' | 'waiting' | 'feedback'
 
 export interface GameState {
@@ -17,6 +15,6 @@ export interface GameState {
   streak: number
   totalAttempts: number
   correctAttempts: number
-  difficulty: Difficulty
+  lessonId: string
   showNoteName: boolean
 }

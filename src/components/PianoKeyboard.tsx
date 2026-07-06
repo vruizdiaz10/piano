@@ -1,11 +1,10 @@
 import { useMemo } from 'react'
-import { Note, Difficulty } from '../types'
+import { Note } from '../types'
 import { cn } from '../lib/utils'
 
 interface PianoKeyboardProps {
   onPlayNote: (note: Note) => void
   highlightKey?: number | null
-  difficulty: Difficulty
 }
 
 const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -14,13 +13,10 @@ function isBlack(midi: number): boolean {
   return NOTE_NAMES[midi % 12].includes('#')
 }
 
-function getKeyboardRange(difficulty: Difficulty): { start: number; count: number } {
-  if (difficulty === 'beginner') return { start: 60, count: 25 }
-  return { start: 48, count: 37 }
-}
+const KEYBOARD_RANGE = { start: 48, count: 37 }
 
-export default function PianoKeyboard({ onPlayNote, highlightKey, difficulty }: PianoKeyboardProps) {
-  const { start, count } = useMemo(() => getKeyboardRange(difficulty), [difficulty])
+export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboardProps) {
+  const { start, count } = KEYBOARD_RANGE
   const keys = useMemo(() => Array.from({ length: count }, (_, i) => start + i), [start, count])
   const whiteKeys = keys.filter(m => !isBlack(m))
   const blackKeyPositions = keys.map((midi, i) => {

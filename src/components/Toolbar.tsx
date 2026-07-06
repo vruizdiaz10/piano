@@ -1,33 +1,37 @@
-import { Difficulty } from '../types'
+import { LESSONS } from '../data/lessons'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './ui/select'
 import { Checkbox } from './ui/checkbox'
 
-const DIFFICULTIES: Difficulty[] = ['beginner', 'intermediate']
-
 interface ToolbarProps {
-  difficulty: Difficulty
+  lessonId: string
   showNoteName: boolean
-  onDifficultyChange: (d: Difficulty) => void
+  onLessonChange: (id: string) => void
   onShowNoteNameChange: (v: boolean) => void
 }
 
 export default function Toolbar({
-  difficulty, showNoteName,
-  onDifficultyChange, onShowNoteNameChange,
+  lessonId, showNoteName,
+  onLessonChange, onShowNoteNameChange,
 }: ToolbarProps) {
+  const current = LESSONS.find(l => l.id === lessonId)
+
   return (
     <div className="flex justify-center gap-3 mb-4 flex-wrap items-center">
-      <Select value={difficulty} onValueChange={(val) => {
-        if (DIFFICULTIES.includes(val as Difficulty)) onDifficultyChange(val as Difficulty)
-      }}>
-        <SelectTrigger className="w-40">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="beginner">Beginner</SelectItem>
-          <SelectItem value="intermediate">Intermediate</SelectItem>
-        </SelectContent>
-      </Select>
+      <div className="flex flex-col items-start gap-1">
+        <Select value={lessonId} onValueChange={onLessonChange}>
+          <SelectTrigger className="w-44">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {LESSONS.map(l => (
+              <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {current && (
+          <span className="text-xs text-gray-400 ml-1">{current.desc}</span>
+        )}
+      </div>
       <label className="flex items-center gap-2 text-sm cursor-pointer">
         <Checkbox checked={showNoteName} onCheckedChange={(v) => onShowNoteNameChange(!!v)} />
         Show note name
