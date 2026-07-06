@@ -26,7 +26,8 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
   })
 
   return (
-    <div className="flex justify-center py-4 select-none">
+    <div className="overflow-x-auto py-4 select-none scrollbar-thin">
+      <div className="flex justify-center min-w-[800px]">
       <div className="flex relative h-40" role="group" aria-label="Piano keyboard">
         {whiteKeys.map(midi => {
           const octave = Math.floor(midi / 12) - 1
@@ -75,6 +76,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
             </div>
           )
         })}
+      </div>
       </div>
     </div>
   )
