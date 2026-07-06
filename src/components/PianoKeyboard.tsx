@@ -32,7 +32,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
     const updateScale = () => {
       if (containerRef.current) {
         const w = containerRef.current.clientWidth
-        setScale(Math.min(1, w / 800))
+        setScale(Math.min(1, w / (22 * 44)))
       }
     }
     updateScale()
@@ -40,9 +40,11 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
     return () => window.removeEventListener('resize', updateScale)
   }, [])
 
+  const keyboardWidth = whiteKeys.length * 44
+
   return (
     <div ref={containerRef} className="overflow-hidden py-4 select-none">
-      <div className="flex justify-center" style={{ width: 800, transform: `scale(${scale})`, transformOrigin: 'top center' }}>
+      <div className="flex justify-center" style={{ width: keyboardWidth, transform: `scale(${scale})`, transformOrigin: 'top center' }}>
       <div className="flex relative h-40" role="group" aria-label="Piano keyboard">
         {whiteKeys.map(midi => {
           const octave = Math.floor(midi / 12) - 1
