@@ -82,9 +82,12 @@ export function useGameState() {
     setState(prev => ({ ...prev, theme }))
   }, [])
 
-  const resetToIdle = useCallback(() => {
-    setState(prev => ({ ...prev, phase: 'idle', currentNote: null, streak: 0, totalAttempts: 0, correctAttempts: 0, startTime: null }))
+  const restartGame = useCallback(() => {
+    setState(prev => {
+      const note = randomNote(prev.lessonId)
+      return { ...prev, phase: 'waiting', currentNote: note, streak: 0, bestStreak: 0, totalAttempts: 0, correctAttempts: 0, startTime: Date.now(), lastAnswerCorrect: null }
+    })
   }, [])
 
-  return { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTheme, resetToIdle }
+  return { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTheme, restartGame }
 }

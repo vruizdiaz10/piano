@@ -14,7 +14,7 @@ import LevelComplete from './components/LevelComplete'
 import ThemeToggle from './components/ThemeToggle'
 
 export default function App() {
-  const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTheme, resetToIdle } = useGameState()
+  const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTheme, restartGame } = useGameState()
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
   const [correctKey, setCorrectKey] = useState<number | null>(null)
   const [showConfetti, setShowConfetti] = useState(false)
@@ -116,8 +116,8 @@ export default function App() {
           bestStreak={state.bestStreak}
           totalNotes={state.totalAttempts}
           elapsedMs={state.startTime ? Date.now() - state.startTime : 0}
-          onRetry={() => { resetToIdle(); startGame() }}
-          onNext={() => { resetToIdle() }}
+          onRetry={restartGame}
+          onNext={() => { restartGame() }} // tambiÃ©n reinicia
         />
       )}
 
