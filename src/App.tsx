@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useGameState } from './hooks/useGameState'
 import { useMidi } from './hooks/useMidi'
+import { useSound } from './hooks/useSound'
 import Staff from './components/Staff'
 import PianoKeyboard from './components/PianoKeyboard'
 import Feedback from './components/Feedback'
@@ -9,6 +10,7 @@ import Toolbar from './components/Toolbar'
 export default function App() {
   const { state, startGame, submitAnswer, nextNote, setDifficulty, setShowNoteName } = useGameState()
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
+  const { playNote } = useSound()
 
   const { midiConnected } = useMidi(
     useCallback((midi: number) => {
@@ -17,6 +19,12 @@ export default function App() {
       }
     }, [state.phase, submitAnswer])
   )
+
+  useEffect(() => {
+    if (state.currentNote && (state.phase === 'waiting' || state.phase === 'feedback')) {
+      playNote(state.currentNote.midi)
+    }
+  }, [state.currentNote, state.phase, playNote])
 
   useEffect(() => {
     if (state.phase === 'feedback' && state.currentNote) {
