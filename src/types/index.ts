@@ -6,15 +6,20 @@ export interface Note {
   midi: number
 }
 
-export type GamePhase = 'idle' | 'waiting' | 'feedback'
+export type GamePhase = 'idle' | 'waiting' | 'feedback' | 'levelComplete'
 
 export interface GameState {
   phase: GamePhase
   currentNote: Note | null
   lastAnswerCorrect: boolean | null
   streak: number
+  bestStreak: number
   totalAttempts: number
   correctAttempts: number
   lessonId: string
   showNoteName: boolean
+  sessionTarget: number
+  startTime: number | null
+  isMuted: boolean
+  theme: 'light' | 'dark'
 }
