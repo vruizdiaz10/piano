@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Note } from '../types'
 import { cn } from '../lib/utils'
 
@@ -23,7 +23,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
   const containerRef = useRef<HTMLDivElement>(null)
   const [keyW, setKeyW] = useState(44)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const update = () => {
       if (containerRef.current) {
         setKeyW(containerRef.current.clientWidth / whiteKeys.length)
