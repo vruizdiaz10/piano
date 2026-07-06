@@ -66,6 +66,7 @@
   .animate-flash-green { animation: flash-green 0.6s ease-out; }
   .animate-flash-red { animation: flash-red 0.6s ease-out; }
   .animate-pulse-glow { animation: pulse-glow 1.5s ease-in-out infinite; }
+  .animate-star-appear { animation: star-appear 0.5s ease-out forwards; }
   .animate-note-pop { animation: note-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
   .animate-key-correct { animation: key-correct 0.4s ease-out; }
   .btn-3d { transition: transform 120ms ease, box-shadow 120ms ease; }
@@ -104,6 +105,17 @@
 @keyframes pulse-glow {
   0%, 100% { box-shadow: 0 0 5px rgba(217, 119, 6, 0.4); }
   50% { box-shadow: 0 0 20px rgba(217, 119, 6, 0.7); }
+}
+
+@keyframes star-appear {
+  0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
 }
 
 @keyframes note-pop {

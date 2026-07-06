@@ -3,15 +3,22 @@ import { GameState, Note } from '../types'
 import { midiToNote } from '../utils/midiToNote'
 import { getLessonPool } from '../data/lessons'
 
+const SESSION_TARGET = 10
+
 const INITIAL_STATE: GameState = {
   phase: 'idle',
   currentNote: null,
   lastAnswerCorrect: null,
   streak: 0,
+  bestStreak: 0,
   totalAttempts: 0,
   correctAttempts: 0,
   lessonId: 'lines',
   showNoteName: true,
+  sessionTarget: SESSION_TARGET,
+  startTime: null,
+  isMuted: false,
+  theme: (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light',
 }
 
 function randomNote(lessonId: string): Note {
@@ -26,7 +33,7 @@ export function useGameState() {
   const startGame = useCallback(() => {
     setState(prev => {
       const note = randomNote(prev.lessonId)
-      return { ...prev, phase: 'waiting', currentNote: note, streak: 0, totalAttempts: 0, correctAttempts: 0 }
+      return { ...prev, phase: 'waiting', currentNote: note, streak: 0, bestStreak: 0, totalAttempts: 0, correctAttempts: 0, startTime: Date.now() }
     })
   }, [])
 
@@ -34,13 +41,19 @@ export function useGameState() {
     setState(prev => {
       if (prev.phase !== 'waiting' || !prev.currentNote) return prev
       const isCorrect = midi === prev.currentNote.midi
+      const newStreak = isCorrect ? prev.streak + 1 : 0
+      const newTotal = prev.totalAttempts + 1
+      const newCorrect = prev.correctAttempts + (isCorrect ? 1 : 0)
+      const newBestStreak = Math.max(prev.bestStreak, newStreak)
+      const sessionDone = newTotal >= prev.sessionTarget
       return {
         ...prev,
-        phase: 'feedback',
+        phase: sessionDone ? 'levelComplete' : 'feedback',
         lastAnswerCorrect: isCorrect,
-        streak: isCorrect ? prev.streak + 1 : 0,
-        totalAttempts: prev.totalAttempts + 1,
-        correctAttempts: prev.correctAttempts + (isCorrect ? 1 : 0),
+        streak: newStreak,
+        bestStreak: newBestStreak,
+        totalAttempts: newTotal,
+        correctAttempts: newCorrect,
       }
     })
   }, [])
@@ -60,5 +73,17 @@ export function useGameState() {
     setState(prev => ({ ...prev, showNoteName: show }))
   }, [])
 
-  return { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName }
+  const setMuted = useCallback((muted: boolean) => {
+    setState(prev => ({ ...prev, isMuted: muted }))
+  }, [])
+
+  const setTheme = useCallback((theme: 'light' | 'dark') => {
+    setState(prev => ({ ...prev, theme }))
+  }, [])
+
+  const resetToIdle = useCallback(() => {
+    setState(prev => ({ ...prev, phase: 'idle', currentNote: null, streak: 0, totalAttempts: 0, correctAttempts: 0, startTime: null }))
+  }, [])
+
+  return { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTheme, resetToIdle }
 }
