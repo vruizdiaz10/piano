@@ -18,34 +18,36 @@ const KEYBOARD_RANGE = { start: 48, count: 37 }
 export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboardProps) {
   const { start, count } = KEYBOARD_RANGE
   const keys = useMemo(() => Array.from({ length: count }, (_, i) => start + i), [start, count])
-  const whiteKeys = keys.filter(m => !isBlack(m))
-  const blackKeyPositions = keys.map((midi, i) => {
-    if (!isBlack(midi)) return null
-    const prevWhiteCount = keys.slice(0, i).filter(m => !isBlack(m)).length
-    return { midi, offset: prevWhiteCount * 44 - 14 }
-  })
+  const whiteKeys = useMemo(() => keys.filter(m => !isBlack(m)), [keys])
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const [scale, setScale] = useState(1)
+  const [keyW, setKeyW] = useState(44)
 
   useEffect(() => {
-    const updateScale = () => {
+    const update = () => {
       if (containerRef.current) {
-        const w = containerRef.current.clientWidth
-        setScale(Math.min(1, w / (22 * 44)))
+        setKeyW(containerRef.current.clientWidth / whiteKeys.length)
       }
     }
-    updateScale()
-    window.addEventListener('resize', updateScale)
-    return () => window.removeEventListener('resize', updateScale)
-  }, [])
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [whiteKeys.length])
 
-  const keyboardWidth = whiteKeys.length * 44
+  const blackKeyData = useMemo(() => {
+    return keys.map((midi, i) => {
+      if (!isBlack(midi)) return null
+      const prevWhiteCount = keys.slice(0, i).filter(m => !isBlack(m)).length
+      return { midi, offset: prevWhiteCount * keyW - keyW * 0.32 }
+    })
+  }, [keys, keyW])
+
+  const blackKeyW = keyW * 0.6
+  const blackKeyH = 160 * 0.6
 
   return (
-    <div ref={containerRef} className="overflow-hidden py-4 select-none">
-      <div className="flex justify-center" style={{ width: keyboardWidth, transform: `scale(${scale})`, transformOrigin: 'top center' }}>
-      <div className="flex relative h-40" role="group" aria-label="Piano keyboard">
+    <div ref={containerRef} className="py-4 select-none">
+      <div className="flex relative h-40 mx-auto" role="group" aria-label="Piano keyboard">
         {whiteKeys.map(midi => {
           const octave = Math.floor(midi / 12) - 1
           const name = NOTE_NAMES[midi % 12]
@@ -54,9 +56,10 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
             <div
               key={midi}
               className={cn(
-                'w-11 h-40 border border-gray-400 rounded-b-md bg-white cursor-pointer flex flex-col justify-end items-center pb-2 text-xs text-gray-400 transition-colors duration-100 hover:bg-amber-50 active:bg-red-100',
+                'h-40 border border-gray-400 rounded-b-md bg-white cursor-pointer flex flex-col justify-end items-center pb-2 text-xs text-gray-400 transition-colors duration-100 hover:bg-amber-50 active:bg-red-100',
                 isHighlighted && '!bg-red-500'
               )}
+              style={{ width: keyW }}
               role="button"
               tabIndex={0}
               aria-label={`Note ${name}${octave}`}
@@ -65,7 +68,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
             />
           )
         })}
-        {blackKeyPositions.map(k => {
+        {blackKeyData.map(k => {
           if (!k) return null
           const octave = Math.floor(k.midi / 12) - 1
           const name = NOTE_NAMES[k.midi % 12]
@@ -73,14 +76,15 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
           return (
             <div
               key={k.midi}
-              className="absolute w-0 z-10"
+              className="absolute z-10"
               style={{ left: k.offset }}
             >
               <div
                 className={cn(
-                  'w-7 h-24 border border-gray-600 rounded-b-md bg-gray-800 cursor-pointer transition-colors duration-100 hover:bg-gray-600',
+                  'border border-gray-600 rounded-b-md bg-gray-800 cursor-pointer transition-colors duration-100 hover:bg-gray-600',
                   isHighlighted && '!bg-blue-500'
                 )}
+                style={{ width: blackKeyW, height: blackKeyH }}
                 role="button"
                 tabIndex={0}
                 aria-label={`Note ${name}${octave}`}
@@ -93,7 +97,6 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
             </div>
           )
         })}
-      </div>
       </div>
     </div>
   )
