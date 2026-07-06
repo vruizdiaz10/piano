@@ -31,11 +31,11 @@ export default function Staff({ note, showNoteName }: StaffProps) {
             y1={STAFF_TOP + i * LINE_SPACING}
             x2={STAFF_LEFT + 340}
             y2={STAFF_TOP + i * LINE_SPACING}
-            stroke="#333"
-            strokeWidth={1}
+            stroke="#4B3F2B"
+            strokeWidth={1.5}
           />
         ))}
-        <text x={12} y={STAFF_TOP + LINE_SPACING * 3 + 6} fontSize={36} fill="#333">
+        <text x={12} y={STAFF_TOP + LINE_SPACING * 3 + 6} fontSize={36} fill="#4B3F2B">
           {'\u{1D11E}'}
         </text>
         {note && (() => {
@@ -54,12 +54,12 @@ export default function Staff({ note, showNoteName }: StaffProps) {
             <g>
               {ledgerLines.map(lp => {
                 const ly = STAFF_TOP - lp * LINE_SPACING / 2 + LINE_SPACING * 4
-                return <line key={lp} x1={x - LEDGER_EXTEND} y1={ly} x2={x + LEDGER_EXTEND} y2={ly} stroke="#333" strokeWidth={1} />
+                return <line key={lp} x1={x - LEDGER_EXTEND} y1={ly} x2={x + LEDGER_EXTEND} y2={ly} stroke="#4B3F2B" strokeWidth={1.5} />
               })}
               {accidental && (
-                <text x={x - 22} y={y + 6} fontSize={20} fill="#333">{accidental}</text>
+                <text x={x - 22} y={y + 6} fontSize={20} fill="#4B3F2B">{accidental}</text>
               )}
-              <ellipse cx={x} cy={y} rx={NOTE_RADIUS} ry={NOTE_RADIUS * 0.7} fill="#333" />
+              <ellipse cx={x} cy={y} rx={NOTE_RADIUS} ry={NOTE_RADIUS * 0.7} fill="#DC2626" />
               {showNoteName && (
                 <text x={x} y={y - 24} textAnchor="middle" fontSize={14} fill="#666">
                   {note.name}{note.octave}

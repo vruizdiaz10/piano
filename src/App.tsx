@@ -44,19 +44,23 @@ export default function App() {
   }, [state.phase, submitAnswer])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
-      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12">
-        <header className="flex items-center justify-between mb-8">
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight">
+    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
+      <div className="max-w-2xl mx-auto px-4 py-6 sm:py-10">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-red-700 tracking-tight">
             Piano Sight-Reading
           </h1>
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-white border border-slate-200 shadow-sm">
+          <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm ${
+            midiConnected
+              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+              : 'bg-red-50 text-red-600 border border-red-200'
+          }`}>
             <span className={`inline-block w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500' : 'bg-red-400'}`} />
-            <span className="text-slate-500">MIDI: {midiConnected ? 'Connected' : 'Offline'}</span>
+            MIDI: {midiConnected ? 'Connected' : 'Offline'}
           </div>
-        </header>
+        </div>
 
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 sm:p-6 mb-4">
+        <div className="bg-white rounded-2xl border border-amber-200 shadow-lg shadow-amber-100/50 p-5 sm:p-6 mb-4 animate-slide-up">
           <Toolbar
             lessonId={state.lessonId}
             showNoteName={state.showNoteName}
@@ -69,31 +73,31 @@ export default function App() {
         </div>
 
         {state.phase !== 'idle' && (
-          <div className="flex justify-center gap-3 mb-4">
-            <div className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-sm text-slate-600 font-medium shadow-sm">
-              Streak: <span className="text-amber-600">{state.streak}</span>
+          <div className="flex justify-center gap-3 mb-4 animate-slide-up">
+            <div className="px-4 py-2 rounded-xl bg-white border border-amber-200 shadow-sm text-sm font-semibold text-amber-800">
+              Streak <span className="text-amber-600 text-base">{state.streak}</span>
             </div>
-            <div className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-sm text-slate-600 font-medium shadow-sm">
-              Score: <span className="text-emerald-600">
+            <div className="px-4 py-2 rounded-xl bg-white border border-amber-200 shadow-sm text-sm font-semibold text-amber-800">
+              Score <span className="text-emerald-600 text-base">
                 {state.totalAttempts > 0
                   ? `${Math.round(state.correctAttempts / state.totalAttempts * 100)}%`
                   : '-'}
               </span>
             </div>
-            <div className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-sm text-slate-600 font-medium shadow-sm">
-              Total: <span className="text-blue-600">{state.totalAttempts}</span>
+            <div className="px-4 py-2 rounded-xl bg-white border border-amber-200 shadow-sm text-sm font-semibold text-amber-800">
+              Total <span className="text-red-600 text-base">{state.totalAttempts}</span>
             </div>
           </div>
         )}
 
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 mb-4">
+        <div className="bg-white rounded-2xl border border-amber-200 shadow-lg shadow-amber-100/50 p-4 mb-4 animate-slide-up">
           <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} />
         </div>
 
         {state.phase === 'idle' ? (
-          <div className="text-center">
+          <div className="text-center animate-slide-up">
             <button
-              className="px-10 py-3 text-base font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 transition-colors cursor-pointer border-none shadow-sm"
+              className="px-12 py-4 text-lg font-bold rounded-2xl bg-gradient-to-b from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 active:from-red-700 active:to-red-800 transition-all duration-150 cursor-pointer border-none shadow-lg shadow-red-200/50 hover:shadow-xl hover:shadow-red-300/50 hover:-translate-y-0.5 active:translate-y-0"
               onClick={startGame}
             >
               Start Game
@@ -104,9 +108,9 @@ export default function App() {
         )}
 
         {state.phase === 'feedback' && (
-          <div className="text-center mt-3">
+          <div className="text-center mt-3 animate-slide-up">
             <button
-              className="px-6 py-2 text-sm font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 active:bg-slate-100 transition-colors cursor-pointer shadow-sm"
+              className="px-8 py-3 text-base font-semibold rounded-xl border-2 border-amber-300 bg-white text-amber-700 hover:bg-amber-50 active:bg-amber-100 transition-all duration-150 cursor-pointer shadow-sm hover:shadow-md"
               onClick={() => { setHighlightKey(null); nextNote() }}
             >
               Next Note &rarr;

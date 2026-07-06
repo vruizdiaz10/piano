@@ -36,8 +36,8 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
             <div
               key={midi}
               className={cn(
-                'w-11 h-40 border border-gray-400 rounded-b-md bg-white cursor-pointer flex flex-col justify-end items-center pb-2 text-xs text-gray-400 transition-colors duration-100 hover:bg-gray-100 active:bg-blue-200',
-                isHighlighted && '!bg-blue-500'
+                'w-11 h-40 border border-gray-400 rounded-b-md bg-white cursor-pointer flex flex-col justify-end items-center pb-2 text-xs text-gray-400 transition-colors duration-100 hover:bg-amber-50 active:bg-red-100',
+                isHighlighted && '!bg-red-500'
               )}
               role="button"
               tabIndex={0}

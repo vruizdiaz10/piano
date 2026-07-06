@@ -29,7 +29,7 @@ export default function Toolbar({
           </SelectContent>
         </Select>
         {current && (
-          <span className="text-xs text-gray-400 ml-1">{current.desc}</span>
+          <span className="text-xs text-amber-600 ml-1">{current.desc}</span>
         )}
       </div>
       <label className="flex items-center gap-2 text-sm cursor-pointer">

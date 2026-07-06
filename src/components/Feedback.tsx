@@ -6,21 +6,21 @@ interface FeedbackProps {
 }
 
 export default function Feedback({ isCorrect, note }: FeedbackProps) {
-  if (isCorrect === null || !note) return <div className="h-12" />
+  if (isCorrect === null || !note) return <div className="h-14" />
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 mt-2">
-      <div className={`flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold ${
+    <div className="flex flex-col items-center justify-center gap-2 mt-2 animate-pop-in">
+      <div className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl text-base font-bold shadow-sm ${
         isCorrect
-          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-          : 'bg-red-50 text-red-700 border border-red-200'
+          ? 'bg-emerald-50 text-emerald-700 border-2 border-emerald-300'
+          : 'bg-red-50 text-red-700 border-2 border-red-300'
       }`}>
-        <span className="text-base">{isCorrect ? '\u2713' : '\u2717'}</span>
+        <span className="text-xl">{isCorrect ? '\u2713' : '\u2717'}</span>
         {isCorrect ? 'Correct!' : 'Wrong'}
       </div>
       {!isCorrect && (
-        <div className="text-sm text-slate-500">
-          That was <span className="font-semibold text-slate-700">{note.name}{note.octave}</span>
+        <div className="text-sm text-amber-700 font-medium">
+          That was <span className="font-bold text-red-600">{note.name}{note.octave}</span>
         </div>
       )}
     </div>
