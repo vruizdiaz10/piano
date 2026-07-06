@@ -31,7 +31,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, difficulty }: 
 
   return (
     <div className="flex justify-center py-4 select-none">
-      <div className="flex relative h-40">
+      <div className="flex relative h-40" role="group" aria-label="Piano keyboard">
         {whiteKeys.map(midi => {
           const octave = Math.floor(midi / 12) - 1
           const name = NOTE_NAMES[midi % 12]
@@ -60,7 +60,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, difficulty }: 
             <div
               key={k.midi}
               className="absolute w-0 z-10"
-              style={{ left: k.offset + 44 }}
+              style={{ left: k.offset }}
             >
               <div
                 className={cn(

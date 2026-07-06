@@ -34,7 +34,7 @@ export function useMidi(onNoteOn: (midi: number) => void) {
           connectInputs(access)
           access.onstatechange = () => connectInputs(access)
         })
-        .catch(() => setMidiConnected(false))
+        .catch(() => { console.warn('MIDI access denied or unavailable'); setMidiConnected(false) })
     }
 
     return () => {

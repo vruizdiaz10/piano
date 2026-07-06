@@ -38,7 +38,7 @@ export default function Staff({ note, showNoteName }: StaffProps) {
         </text>
         {note && (() => {
           const pos = noteToPosition(note)
-          const y = STAFF_TOP - pos * LINE_SPACING / 2 + LINE_SPACING * 2
+          const y = STAFF_TOP - pos * LINE_SPACING / 2 + LINE_SPACING * 4
           const x = STAFF_LEFT + 160
           const accidental = getAccidental(note.name)
 
