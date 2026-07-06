@@ -16,11 +16,11 @@ export default function Feedback({ isCorrect, note }: FeedbackProps) {
           : 'bg-red-50 text-red-700 border-2 border-red-300'
       }`}>
         <span className="text-xl">{isCorrect ? '\u2713' : '\u2717'}</span>
-        {isCorrect ? 'Correct!' : 'Wrong'}
+        {isCorrect ? '¡Correcto!' : 'Incorrecto'}
       </div>
       {!isCorrect && (
         <div className="text-sm text-amber-700 font-medium">
-          That was <span className="font-bold text-red-600">{note.name}{note.octave}</span>
+          Era <span className="font-bold text-red-600">{note.name}{note.octave}</span>
         </div>
       )}
     </div>

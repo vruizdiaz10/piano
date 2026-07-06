@@ -47,7 +47,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
 
   return (
     <div ref={containerRef} className="py-4 select-none">
-      <div className="flex relative h-40 mx-auto" role="group" aria-label="Piano keyboard">
+      <div className="flex relative h-40 mx-auto" role="group" aria-label="Teclado de piano">
         {whiteKeys.map(midi => {
           const octave = Math.floor(midi / 12) - 1
           const name = NOTE_NAMES[midi % 12]
@@ -62,7 +62,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
               style={{ width: keyW }}
               role="button"
               tabIndex={0}
-              aria-label={`Note ${name}${octave}`}
+              aria-label={`Nota ${name}${octave}`}
               onMouseDown={() => onPlayNote({ name: name as Note['name'], octave, midi })}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPlayNote({ name: name as Note['name'], octave, midi }) } }}
             />
@@ -87,7 +87,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
                 style={{ width: blackKeyW, height: blackKeyH }}
                 role="button"
                 tabIndex={0}
-                aria-label={`Note ${name}${octave}`}
+                aria-label={`Nota ${name}${octave}`}
                 onMouseDown={(e) => {
                   e.stopPropagation()
                   onPlayNote({ name: name as Note['name'], octave, midi: k.midi })

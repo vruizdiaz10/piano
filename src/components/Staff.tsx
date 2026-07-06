@@ -23,7 +23,7 @@ export default function Staff({ note, showNoteName }: StaffProps) {
 
   return (
     <div className="flex justify-center">
-      <svg viewBox={`0 -${SVG_TOP_PAD} ${STAFF_LEFT + 400} ${height + SVG_TOP_PAD}`} className="w-full max-w-[500px] h-auto" role="img" aria-label={note ? `Staff showing ${note.name}${note.octave}` : 'Empty musical staff'} xmlns="http://www.w3.org/2000/svg">
+      <svg viewBox={`0 -${SVG_TOP_PAD} ${STAFF_LEFT + 400} ${height + SVG_TOP_PAD}`} className="w-full max-w-[500px] h-auto" role="img" aria-label={note ? `Pentagrama mostrando ${note.name}${note.octave}` : 'Pentagrama vacío'} xmlns="http://www.w3.org/2000/svg">
         {[0, 1, 2, 3, 4].map((i) => (
           <line
             key={i}
