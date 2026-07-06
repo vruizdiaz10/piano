@@ -67,7 +67,6 @@
   .animate-flash-red { animation: flash-red 0.6s ease-out; }
   .animate-pulse-glow { animation: pulse-glow 1.5s ease-in-out infinite; }
   .animate-star-appear { animation: star-appear 0.5s ease-out forwards; }
-  .animate-note-pop { animation: note-pop 0.15s ease-out forwards; }
   .animate-key-correct { animation: key-correct 0.4s ease-out; }
   .btn-3d { transition: transform 120ms ease, box-shadow 120ms ease; }
   .btn-3d:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
@@ -116,11 +115,6 @@
 @keyframes confetti-fall {
   0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
   100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}
-
-@keyframes note-pop {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
 }
 
 @keyframes key-correct {
