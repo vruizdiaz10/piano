@@ -41,9 +41,19 @@ export default function Staff({ note, showNoteName }: StaffProps) {
           const y = STAFF_TOP - pos * LINE_SPACING / 2 + LINE_SPACING * 4
           const x = STAFF_LEFT + 160
           const accidental = getAccidental(note.name)
+          const ledgerLines: number[] = []
+          if (pos < 0) {
+            for (let p = 0; p >= pos; p -= 2) ledgerLines.push(p)
+          } else if (pos > 8) {
+            for (let p = 10; p <= pos; p += 2) ledgerLines.push(p)
+          }
 
           return (
             <g>
+              {ledgerLines.map(lp => {
+                const ly = STAFF_TOP - lp * LINE_SPACING / 2 + LINE_SPACING * 4
+                return <line key={lp} x1={x - NOTE_RADIUS * 1.5} y1={ly} x2={x + NOTE_RADIUS * 1.5} y2={ly} stroke="#333" strokeWidth={1} />
+              })}
               {accidental && (
                 <text x={x - 22} y={y + 6} fontSize={20} fill="#333">{accidental}</text>
               )}
