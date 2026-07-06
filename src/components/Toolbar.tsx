@@ -18,16 +18,18 @@ export default function Toolbar({
   return (
     <div className="flex justify-center gap-3 mb-4 flex-wrap items-center">
       <div className="flex flex-col items-start gap-1">
-        <Select value={lessonId} onValueChange={onLessonChange}>
-          <SelectTrigger className="w-44">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {LESSONS.map(l => (
-              <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="relative z-50">
+          <Select value={lessonId} onValueChange={onLessonChange}>
+            <SelectTrigger className="w-44">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {LESSONS.map(l => (
+                <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         {current && (
           <span className="text-xs text-gray-400 ml-1">{current.desc}</span>
         )}
