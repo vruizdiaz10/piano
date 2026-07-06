@@ -8,6 +8,7 @@ import Feedback from './components/Feedback'
 import Toolbar from './components/Toolbar'
 import ProgressBar from './components/ProgressBar'
 import StreakBadge from './components/StreakBadge'
+import StreakOwl from './components/StreakOwl'
 import ScoreDisplay from './components/ScoreDisplay'
 import Confetti from './components/Confetti'
 import LevelComplete from './components/LevelComplete'
@@ -17,6 +18,7 @@ export default function App() {
   const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTheme, restartGame } = useGameState()
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
   const [correctKey, setCorrectKey] = useState<number | null>(null)
+  const [wrongKey, setWrongKey] = useState<number | null>(null)
   const [showConfetti, setShowConfetti] = useState(false)
   const [staffFlash, setStaffFlash] = useState<'correct' | 'wrong' | null>(null)
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
@@ -48,6 +50,15 @@ export default function App() {
     if (state.phase === 'feedback' && state.lastAnswerCorrect && state.currentNote) {
       setCorrectKey(state.currentNote.midi)
       const timer = setTimeout(() => setCorrectKey(null), 400)
+      return () => clearTimeout(timer)
+    }
+  }, [state.phase])
+
+  // Highlight wrong key ghost
+  useEffect(() => {
+    if (state.phase === 'feedback' && state.lastAnswerCorrect === false && state.currentNote) {
+      setWrongKey(state.currentNote.midi)
+      const timer = setTimeout(() => setWrongKey(null), 1500)
       return () => clearTimeout(timer)
     }
   }, [state.phase])
@@ -175,6 +186,7 @@ export default function App() {
         {state.phase !== 'idle' && (
           <div className="flex justify-center items-center gap-2 sm:gap-3 mb-4 animate-slide-up flex-wrap">
             <StreakBadge streak={state.streak} />
+            <StreakOwl streak={state.streak} />
             <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-white dark:bg-gray-800 border border-amber-200 dark:border-gray-700 shadow-sm text-xs sm:text-sm font-semibold text-amber-800 dark:text-amber-300 transition-colors">
               <span className="hidden sm:inline">Aciertos </span>
               <ScoreDisplay accuracy={accuracy} totalAttempts={state.totalAttempts} />
@@ -187,7 +199,7 @@ export default function App() {
         )}
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl border border-amber-200 dark:border-gray-700 shadow-lg shadow-amber-100/50 dark:shadow-none p-4 mb-4 animate-slide-up transition-colors duration-300">
-          <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} />
+          <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} />
         </div>
 
         {state.phase === 'idle' ? (

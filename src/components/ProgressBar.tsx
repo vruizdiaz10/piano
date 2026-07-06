@@ -15,7 +15,7 @@ export default function ProgressBar({ current, total, label }: ProgressBarProps)
           <span className="text-xs font-bold text-amber-600 dark:text-amber-300">{current}/{total}</span>
         </div>
       )}
-      <div className="h-2.5 rounded-full bg-amber-100 dark:bg-amber-900/40 overflow-hidden">
+      <div className="relative h-3 rounded-full bg-amber-100 dark:bg-amber-900/40 overflow-visible">
         <div
           className="h-full rounded-full transition-all duration-500 ease-out"
           style={{
@@ -27,6 +27,15 @@ export default function ProgressBar({ current, total, label }: ProgressBarProps)
                 : 'linear-gradient(90deg, #22C55E, #16A34A)',
           }}
         />
+        {current > 0 && (
+          <span
+            className={`absolute -top-3 text-lg transition-all duration-500 ease-out pointer-events-none select-none ${pct >= 100 ? 'animate-bounce-once' : ''}`}
+            style={{ left: `calc(${pct}% - 12px)` }}
+            aria-hidden="true"
+          >
+            {'\uD83D\uDC24'}
+          </span>
+        )}
       </div>
     </div>
   )
