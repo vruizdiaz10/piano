@@ -6,6 +6,7 @@ const STAFF_TOP = 60
 const STAFF_LEFT = 40
 const NOTE_RADIUS = 8
 const LEDGER_EXTEND = NOTE_RADIUS * 3
+const STEM_LENGTH = LINE_SPACING * 3.5
 
 interface StaffProps {
   note?: Note | null
@@ -31,11 +32,12 @@ export default function Staff({ note, showNoteName }: StaffProps) {
             y1={STAFF_TOP + i * LINE_SPACING}
             x2={STAFF_LEFT + 340}
             y2={STAFF_TOP + i * LINE_SPACING}
-            stroke="#4B3F2B"
+            className="dark:stroke-slate-300"
+            stroke="var(--staff-line, #4B3F2B)"
             strokeWidth={1.5}
           />
         ))}
-        <text x={12} y={STAFF_TOP + LINE_SPACING * 3 + 6} fontSize={36} fill="#4B3F2B">
+        <text x={12} y={STAFF_TOP + LINE_SPACING * 3 + 6} fontSize={36} fill="var(--staff-line, #4B3F2B)">
           {'\u{1D11E}'}
         </text>
         {note && (() => {
@@ -51,15 +53,28 @@ export default function Staff({ note, showNoteName }: StaffProps) {
           }
 
           return (
-            <g>
+            <g key={`${note.midi}-${Date.now()}`}>
               {ledgerLines.map(lp => {
                 const ly = STAFF_TOP - lp * LINE_SPACING / 2 + LINE_SPACING * 4
-                return <line key={lp} x1={x - LEDGER_EXTEND} y1={ly} x2={x + LEDGER_EXTEND} y2={ly} stroke="#4B3F2B" strokeWidth={1.5} />
+                return <line key={lp} x1={x - LEDGER_EXTEND} y1={ly} x2={x + LEDGER_EXTEND} y2={ly} stroke="var(--staff-line, #4B3F2B)" strokeWidth={1.5} />
               })}
               {accidental && (
-                <text x={x - 22} y={y + 6} fontSize={20} fill="#4B3F2B">{accidental}</text>
+                <text x={x - 22} y={y + 6} fontSize={20} fill="var(--staff-line, #4B3F2B)">{accidental}</text>
               )}
-              <ellipse cx={x} cy={y} rx={NOTE_RADIUS} ry={NOTE_RADIUS * 0.7} fill="#DC2626" />
+              <g>
+                {(() => {
+                  const stemUp = pos < 4
+                  const stemX = stemUp ? x + NOTE_RADIUS * 0.55 : x - NOTE_RADIUS * 0.55
+                  const yAttach = stemUp ? y - NOTE_RADIUS * 0.35 : y + NOTE_RADIUS * 0.35
+                  const yEnd = stemUp ? yAttach - STEM_LENGTH : yAttach + STEM_LENGTH
+                  return (
+                    <>
+                      <ellipse cx={x} cy={y} rx={NOTE_RADIUS} ry={NOTE_RADIUS * 0.65} fill="#DC2626" transform={`rotate(-18 ${x} ${y})`} />
+                      <line x1={stemX} y1={yAttach} x2={stemX} y2={yEnd} stroke="#DC2626" strokeWidth={2.5} strokeLinecap="round" />
+                    </>
+                  )
+                })()}
+              </g>
               {showNoteName && (
                 <text x={x} y={y - 24} textAnchor="middle" fontSize={14} fill="#666">
                   {note.name}{note.octave}

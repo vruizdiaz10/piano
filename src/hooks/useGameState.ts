@@ -21,9 +21,10 @@ const INITIAL_STATE: GameState = {
   theme: (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light',
 }
 
-function randomNote(lessonId: string): Note {
+function randomNote(lessonId: string, excludeMidi?: number): Note {
   const pool = getLessonPool(lessonId)
-  const midi = pool[Math.floor(Math.random() * pool.length)]
+  const filtered = pool.length > 1 ? pool.filter(m => m !== excludeMidi) : pool
+  const midi = filtered[Math.floor(Math.random() * filtered.length)]
   return midiToNote(midi)
 }
 
@@ -60,7 +61,7 @@ export function useGameState() {
 
   const nextNote = useCallback(() => {
     setState(prev => {
-      const note = randomNote(prev.lessonId)
+      const note = randomNote(prev.lessonId, prev.currentNote?.midi)
       return { ...prev, phase: 'waiting', currentNote: note }
     })
   }, [])
@@ -81,9 +82,12 @@ export function useGameState() {
     setState(prev => ({ ...prev, theme }))
   }, [])
 
-  const resetToIdle = useCallback(() => {
-    setState(prev => ({ ...prev, phase: 'idle', currentNote: null, streak: 0, totalAttempts: 0, correctAttempts: 0, startTime: null }))
+  const restartGame = useCallback(() => {
+    setState(prev => {
+      const note = randomNote(prev.lessonId)
+      return { ...prev, phase: 'waiting', currentNote: note, streak: 0, bestStreak: 0, totalAttempts: 0, correctAttempts: 0, startTime: Date.now(), lastAnswerCorrect: null }
+    })
   }, [])
 
-  return { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTheme, resetToIdle }
+  return { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTheme, restartGame }
 }
