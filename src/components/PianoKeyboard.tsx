@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Note } from '../types'
 import { cn } from '../lib/utils'
 
@@ -25,9 +25,24 @@ export default function PianoKeyboard({ onPlayNote, highlightKey }: PianoKeyboar
     return { midi, offset: prevWhiteCount * 44 - 14 }
   })
 
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(1)
+
+  useEffect(() => {
+    const updateScale = () => {
+      if (containerRef.current) {
+        const w = containerRef.current.clientWidth
+        setScale(Math.min(1, w / 800))
+      }
+    }
+    updateScale()
+    window.addEventListener('resize', updateScale)
+    return () => window.removeEventListener('resize', updateScale)
+  }, [])
+
   return (
-    <div className="overflow-x-auto py-4 select-none scrollbar-thin">
-      <div className="flex justify-center min-w-[800px]">
+    <div ref={containerRef} className="overflow-hidden py-4 select-none">
+      <div className="flex justify-center" style={{ width: 800, transform: `scale(${scale})`, transformOrigin: 'top center' }}>
       <div className="flex relative h-40" role="group" aria-label="Piano keyboard">
         {whiteKeys.map(midi => {
           const octave = Math.floor(midi / 12) - 1
