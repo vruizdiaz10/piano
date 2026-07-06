@@ -31,11 +31,12 @@ export default function Staff({ note, showNoteName }: StaffProps) {
             y1={STAFF_TOP + i * LINE_SPACING}
             x2={STAFF_LEFT + 340}
             y2={STAFF_TOP + i * LINE_SPACING}
-            stroke="#4B3F2B"
+            className="dark:stroke-slate-300"
+            stroke="var(--staff-line, #4B3F2B)"
             strokeWidth={1.5}
           />
         ))}
-        <text x={12} y={STAFF_TOP + LINE_SPACING * 3 + 6} fontSize={36} fill="#4B3F2B">
+        <text x={12} y={STAFF_TOP + LINE_SPACING * 3 + 6} fontSize={36} fill="var(--staff-line, #4B3F2B)">
           {'\u{1D11E}'}
         </text>
         {note && (() => {
@@ -51,13 +52,13 @@ export default function Staff({ note, showNoteName }: StaffProps) {
           }
 
           return (
-            <g>
+            <g className="animate-note-pop" key={`${note.midi}-${Date.now()}`}>
               {ledgerLines.map(lp => {
                 const ly = STAFF_TOP - lp * LINE_SPACING / 2 + LINE_SPACING * 4
-                return <line key={lp} x1={x - LEDGER_EXTEND} y1={ly} x2={x + LEDGER_EXTEND} y2={ly} stroke="#4B3F2B" strokeWidth={1.5} />
+                return <line key={lp} x1={x - LEDGER_EXTEND} y1={ly} x2={x + LEDGER_EXTEND} y2={ly} stroke="var(--staff-line, #4B3F2B)" strokeWidth={1.5} />
               })}
               {accidental && (
-                <text x={x - 22} y={y + 6} fontSize={20} fill="#4B3F2B">{accidental}</text>
+                <text x={x - 22} y={y + 6} fontSize={20} fill="var(--staff-line, #4B3F2B)">{accidental}</text>
               )}
               <ellipse cx={x} cy={y} rx={NOTE_RADIUS} ry={NOTE_RADIUS * 0.7} fill="#DC2626" />
               {showNoteName && (
