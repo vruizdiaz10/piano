@@ -115,19 +115,11 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
                 </text>
               )}
               {noteExpression && (() => {
-                const fx = x + NOTE_RADIUS + 12
-                const fy = y - 2
-                const s = 1.2
+                const ey = noteExpression === 'happy' ? y - NOTE_RADIUS * 1.2 : y - NOTE_RADIUS * 0.8
                 return (
-                  <g className="animate-face-pop">
-                    <circle cx={fx - 3 * s} cy={fy - 2 * s} r={1.5 * s} fill="#DC2626" />
-                    <circle cx={fx + 3 * s} cy={fy - 2 * s} r={1.5 * s} fill="#DC2626" />
-                    {noteExpression === 'happy' ? (
-                      <path d={`M${fx - 4 * s},${fy + 2 * s} Q${fx},${fy - 1 * s} ${fx + 4 * s},${fy + 2 * s}`} fill="none" stroke="#DC2626" strokeWidth={1.5} strokeLinecap="round" />
-                    ) : (
-                      <path d={`M${fx - 4 * s},${fy + 4 * s} Q${fx},${fy + 7 * s} ${fx + 4 * s},${fy + 4 * s}`} fill="none" stroke="#DC2626" strokeWidth={1.5} strokeLinecap="round" />
-                    )}
-                  </g>
+                  <text x={x + NOTE_RADIUS + 18} y={ey + 4} fontSize={18} textAnchor="middle" className="animate-face-pop">
+                    {noteExpression === 'happy' ? '\u263A' : '\u2639'}
+                  </text>
                 )
               })()}
             </g>
