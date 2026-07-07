@@ -81,9 +81,8 @@ export default function App() {
       })
       setNoteExpression(state.lastAnswerCorrect ? 'happy' : 'sad')
       setAnsweredNotes(prev => [...prev, state.currentNote!.midi])
-      const timer = setTimeout(() => setNoteExpression(null), 1500)
-      return () => clearTimeout(timer)
     }
+    return () => setNoteExpression(null)
   }, [state.phase, state.lastAnswerCorrect, state.currentNote])
 
   // Clear trail + answered notes on new game
