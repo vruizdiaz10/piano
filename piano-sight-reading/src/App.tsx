@@ -14,6 +14,7 @@ import ScoreDisplay from './components/ScoreDisplay'
 import Confetti from './components/Confetti'
 import LevelComplete from './components/LevelComplete'
 import ThemeToggle from './components/ThemeToggle'
+import OrnateFrame from './components/OrnateFrame'
 
 export default function App() {
   const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTheme, restartGame } = useGameState()
@@ -223,17 +224,19 @@ export default function App() {
           <ProgressBar current={state.totalAttempts} total={state.sessionTarget} label="Progreso" />
         )}
 
-        <div className={`bg-card rounded-2xl border border-border p-4 sm:p-6 mb-4 animate-slide-up transition-colors duration-300 ${staffClass} ${sleepyClass}`}>
-          <Toolbar
-            lessonId={state.lessonId}
-            showNoteName={state.showNoteName}
-            onLessonChange={setLesson}
-            onShowNoteNameChange={setShowNoteName}
-          />
-          <div className="mt-4">
-            <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} />
+        <OrnateFrame>
+          <div className={`bg-card rounded-2xl border border-border p-4 sm:p-6 mb-4 animate-slide-up transition-colors duration-300 ${staffClass} ${sleepyClass}`}>
+            <Toolbar
+              lessonId={state.lessonId}
+              showNoteName={state.showNoteName}
+              onLessonChange={setLesson}
+              onShowNoteNameChange={setShowNoteName}
+            />
+            <div className="mt-4">
+              <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} />
+            </div>
           </div>
-        </div>
+        </OrnateFrame>
 
         {state.phase !== 'idle' && (
           <div className="flex justify-center items-center gap-2 sm:gap-3 mb-4 animate-slide-up flex-wrap">
