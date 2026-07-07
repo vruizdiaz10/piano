@@ -84,7 +84,7 @@ export default function App() {
       const timer = setTimeout(() => setNoteExpression(null), 1500)
       return () => clearTimeout(timer)
     }
-  }, [state.phase])
+  }, [state.phase, state.lastAnswerCorrect, state.currentNote])
 
   // Clear trail + answered notes on new game
   useEffect(() => {
