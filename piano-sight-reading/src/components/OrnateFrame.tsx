@@ -7,14 +7,14 @@ interface OrnateFrameProps {
 export default function OrnateFrame({ children }: OrnateFrameProps) {
   return (
     <div className="relative">
-      <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
+      <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
         <svg width="120" height="12" viewBox="0 0 120 12" aria-hidden="true">
           <path d="M0,6 Q15,0 30,6 Q45,12 60,6 Q75,0 90,6 Q105,12 120,6" fill="none" stroke="var(--gold)" strokeWidth="1" />
           <circle cx="60" cy="6" r="2" fill="var(--gold)" />
         </svg>
       </div>
       {[0,1,2,3].map(i => (
-        <div key={i} className={`absolute ${['-top-2 -left-2','-top-2 -right-2','-bottom-2 -left-2','-bottom-2 -right-2'][i]} z-20`}>
+        <div key={i} className={`absolute ${['-top-2 -left-2','-top-2 -right-2','-bottom-2 -left-2','-bottom-2 -right-2'][i]} z-20 pointer-events-none`}>
           <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
             <path d={[
               'M0,24 L0,0 L24,0',

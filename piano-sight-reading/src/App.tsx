@@ -188,7 +188,7 @@ export default function App() {
         />
       )}
 
-      <div className="max-w-2xl mx-auto px-4 py-6 sm:py-8">
+      <div className="max-w-2xl mx-auto px-4 py-6 sm:py-8 relative z-10">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
             Lectura Musical
@@ -196,7 +196,7 @@ export default function App() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setMuted(!state.isMuted)}
-              className="p-2 rounded-xl bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-all cursor-pointer relative"
+              className="p-2 rounded-xl bg-white/80 dark:bg-gray-700/80 border border-amber-200 dark:border-gray-600 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-gray-600 transition-all cursor-pointer shadow-sm relative"
               aria-label={state.isMuted ? 'Activar sonido' : 'Silenciar sonido'}
             >
               {state.isMuted ? (
