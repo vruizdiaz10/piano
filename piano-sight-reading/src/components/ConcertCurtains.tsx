@@ -19,7 +19,7 @@ export default function ConcertCurtains({ isOpen }: ConcertCurtainsProps) {
           <line x1="0" y1="62" x2="1200" y2="62" stroke="var(--gold-dim)" strokeWidth="1" />
         </svg>
       </div>
-      <div className={`fixed top-0 left-0 bottom-0 z-40 pointer-events-none ${isOpen ? 'animate-curtain-open-left' : 'animate-curtain-slide'}`} style={{ width: '48px' }}>
+      <div className={`fixed top-0 left-0 bottom-0 z-40 pointer-events-none ${isOpen ? 'animate-curtain-open-left' : 'animate-curtain-slide'}`} style={{ width: '48px', animationDelay: isOpen ? '0.4s' : '0s' }}>
         <svg viewBox="0 0 48 800" className="w-full h-full" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="left-curtain" x1="0" y1="0" x2="1" y2="0">
@@ -38,7 +38,7 @@ export default function ConcertCurtains({ isOpen }: ConcertCurtainsProps) {
           <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[var(--gold-light)] to-[var(--gold)] shadow-lg" />
         </div>
       </div>
-      <div className={`fixed top-0 right-0 bottom-0 z-40 pointer-events-none ${isOpen ? 'animate-curtain-open-right' : 'animate-curtain-slide-right'}`} style={{ width: '48px' }}>
+      <div className={`fixed top-0 right-0 bottom-0 z-40 pointer-events-none ${isOpen ? 'animate-curtain-open-right' : 'animate-curtain-slide-right'}`} style={{ width: '48px', animationDelay: isOpen ? '0.4s' : '0s' }}>
         <svg viewBox="0 0 48 800" className="w-full h-full" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="right-curtain" x1="0" y1="0" x2="1" y2="0">

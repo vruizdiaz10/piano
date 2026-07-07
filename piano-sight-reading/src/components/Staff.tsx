@@ -88,7 +88,7 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
           }
 
           return (
-            <g key={`${note.midi}-${Date.now()}`}>
+            <g key={note.midi}>
               {ledgerLines.map(lp => {
                 const ly = STAFF_TOP - lp * LINE_SPACING / 2 + LINE_SPACING * 4
                 return <line key={lp} x1={x - LEDGER_EXTEND} y1={ly} x2={x + LEDGER_EXTEND} y2={ly} stroke="var(--staff-line, #4B3F2B)" strokeWidth={1.5} />

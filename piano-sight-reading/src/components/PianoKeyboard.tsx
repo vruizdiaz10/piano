@@ -93,7 +93,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
             >
               <div
                 className={cn(
-                  'border border-[var(--ebony)] rounded-b-[4px] bg-gradient-to-b from-[var(--ebony)] to-black cursor-pointer transition-colors duration-100 hover:bg-foreground/60 key-press',
+                  'border border-[var(--ebony)] rounded-b-[4px] bg-gradient-to-b from-[var(--ebony)] to-black cursor-pointer transition-colors duration-100 hover:bg-foreground/60 key-press-black',
                   isHighlighted && '!bg-accent',
                   isCorrect && '!bg-success animate-key-correct',
                   isWrong && 'animate-pulse-glow'
