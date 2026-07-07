@@ -7,6 +7,8 @@ interface PianoKeyboardProps {
   highlightKey?: number | null
   correctKey?: number | null
   wrongKey?: number | null
+  startMidi?: number
+  count?: number
 }
 
 const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -17,8 +19,9 @@ function isBlack(midi: number): boolean {
 
 const KEYBOARD_RANGE = { start: 48, count: 37 }
 
-export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wrongKey }: PianoKeyboardProps) {
-  const { start, count } = KEYBOARD_RANGE
+export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wrongKey, startMidi, count: countProp }: PianoKeyboardProps) {
+  const start = startMidi ?? KEYBOARD_RANGE.start
+  const count = countProp ?? KEYBOARD_RANGE.count
   const keys = useMemo(() => Array.from({ length: count }, (_, i) => start + i), [start, count])
   const whiteKeys = useMemo(() => keys.filter(m => !isBlack(m)), [keys])
 
@@ -48,8 +51,8 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
   const blackKeyH = 160 * 0.6
 
   return (
-    <div ref={containerRef} className="py-4 select-none">
-      <div className="flex relative h-40 mx-auto" role="group" aria-label="Teclado de piano">
+    <div ref={containerRef} className="py-2 select-none">
+      <div className="flex relative h-36 mx-auto" role="group" aria-label="Teclado de piano">
         {whiteKeys.map(midi => {
           const octave = Math.floor(midi / 12) - 1
           const name = NOTE_NAMES[midi % 12]
@@ -60,10 +63,10 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
             <div
               key={midi}
               className={cn(
-                'h-40 border border-gray-400 rounded-b-md bg-white cursor-pointer flex flex-col justify-end items-center pb-2 text-xs text-gray-400 transition-colors duration-100 hover:bg-amber-50 active:bg-red-100 key-press',
-                isHighlighted && '!bg-red-500',
-                isCorrect && '!bg-emerald-500 animate-key-correct',
-                  isWrong && 'animate-pulse-glow'
+                'h-36 border border-border rounded-b-[4px] bg-white cursor-pointer flex flex-col justify-end items-center pb-1 text-xs text-muted-foreground transition-colors duration-100 hover:bg-muted active:bg-primary/10 key-press',
+                isHighlighted && '!bg-primary !text-white',
+                isCorrect && '!bg-success animate-key-correct',
+                isWrong && 'animate-pulse-glow'
               )}
               style={{ width: keyW }}
               role="button"
@@ -89,10 +92,10 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
             >
               <div
                 className={cn(
-                  'border border-gray-600 rounded-b-md bg-gray-800 cursor-pointer transition-colors duration-100 hover:bg-gray-600 key-press',
-                  isHighlighted && '!bg-blue-500',
-                  isCorrect && '!bg-emerald-500 animate-key-correct',
-                isWrong && 'animate-pulse-glow'
+                  'border border-border rounded-b-[4px] bg-foreground/80 cursor-pointer transition-colors duration-100 hover:bg-foreground/60 key-press',
+                  isHighlighted && '!bg-accent',
+                  isCorrect && '!bg-success animate-key-correct',
+                  isWrong && 'animate-pulse-glow'
                 )}
                 style={{ width: blackKeyW, height: blackKeyH }}
                 role="button"

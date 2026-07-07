@@ -4,7 +4,7 @@ interface ConfettiProps {
   active: boolean
 }
 
-const COLORS = ['#DC2626', '#D97706', '#22C55E', '#3B82F6', '#EAB308', '#F97316']
+const COLORS = ['#B91C1C', '#D97706', '#10B981', '#6366F1', '#EAB308', '#F97316']
 
 function randomBetween(min: number, max: number) {
   return Math.random() * (max - min) + min
