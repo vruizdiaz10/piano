@@ -11,7 +11,7 @@ export default function StreakBadge({ streak }: StreakBadgeProps) {
       ? 'text-accent border-accent/30 bg-accent/10'
       : streak >= 3
         ? 'text-primary border-primary/30 bg-primary/10'
-        : 'text-muted-foreground border-border bg-muted'
+        : 'text-muted-foreground border-[var(--gold-dim)]/40 bg-[var(--gold-dim)]/10'
 
   const glowClass = streak >= 5 ? 'animate-pulse-glow' : ''
 

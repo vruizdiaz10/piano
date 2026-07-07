@@ -250,10 +250,10 @@ export default function App() {
           <div className="flex justify-center items-center gap-2 sm:gap-3 mb-4 animate-slide-up flex-wrap">
             <StreakBadge streak={state.streak} />
             <StreakOwl streak={state.streak} />
-            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-border text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
+            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/40 text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
               <ScoreDisplay accuracy={accuracy} totalAttempts={state.totalAttempts} />
             </div>
-            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-border text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
+            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/40 text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
               <span className="hidden sm:inline">Intentos </span>
               <span className="text-destructive text-sm sm:text-base">{state.totalAttempts}</span>
             </div>
