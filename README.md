@@ -1,277 +1,277 @@
 # Lectura Musical al Piano
 
-> A sight-reading training game for piano. A musical note appears on a treble clef staff, and the player presses the correct key -- either on a connected MIDI keyboard or the on-screen piano.
+> Un juego de entrenamiento de lectura musical a primera vista para piano. Aparece una nota en el pentagrama en clave de sol y el jugador debe presionar la tecla correcta, ya sea en un teclado MIDI conectado o en el piano en pantalla.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![Screenshot](screenshot.png)
-<!-- Replace screenshot.png with a screenshot of the game in action. Consider including the staff, on-screen keyboard, and toolbar for an at-a-glance preview. -->
+<!-- Reemplazar screenshot.png con una captura del juego en accion. Incluir el pentagrama, el teclado en pantalla y la barra de herramientas para una vista previa rapida. -->
 
 ---
 
-## Features
+## Caracteristicas
 
-- **MIDI keyboard input** -- Plug in any USB/MIDI keyboard via the Web MIDI API. The game detects connected devices automatically and shows connection status.
-- **On-screen piano fallback** -- A 37-key interactive piano (MIDI range 48-84) renders on screen for touch, mouse, or keyboard input. No MIDI device required.
-- **SVG staff rendering** -- The treble clef, notehead, stem, ledger lines, and accidentals are drawn in SVG. Note position follows standard music notation conventions.
-- **9 progressive lessons** -- From single lines to full chromatic range (C4-C6). Each lesson targets a specific note region or concept. See the [Lessons table](#lessons).
-- **Sound synthesis** -- Built with the Web Audio API. Each note plays with layered harmonics (triangle + sine oscillators). Correct answers trigger a major chord arpeggio, wrong answers a minor chord, and level completion a fanfare.
-- **Recovery window** -- After a wrong answer, the game enters a 2.5-second recovery window with a visual countdown timer. Answering correctly within the window grants partial credit.
-- **Streak system** -- Consecutive correct answers build a streak. A "búho" (owl) badge appears at 3+ streak, intensifying visually at 5, 8, and 10 streaks. Streak milestones play a celebratory ascending scale.
-- **Note trail ghosts** -- The last three answered notes drift upward on the staff as translucent ghost noteheads.
-- **Progress bar with duckling swimmer** -- A duckling emoji slides along a gradient progress bar showing the current note count toward the 10-note session target.
-- **Level complete overlay** -- After 10 correct answers, a modal shows accuracy percentage, best streak, total notes, elapsed time, star rating (1-3), and an SVG constellation drawing lines between answered note MIDI values.
-- **Confetti burst** -- Brief confetti particle effect on correct answers.
-- **Dark mode / Light mode** -- Theme toggle with a sun/moon icon. Transitioning triggers a "twilight theater" animation -- a large glowing sun or moon fades in and out. Respects `prefers-color-scheme` on initial load.
-- **Mute / Sleep theater** -- Muting audio dims the UI, shows floating "Zzz" indicators, and triggers a subtle sway animation on the treble clef. The staff dims to 70% opacity.
-- **Accessibility** -- ARIA live regions announce correct/incorrect and streak milestones. Keyboard-navigable on-screen piano. Staff SVG has descriptive `aria-label`. Respects `prefers-reduced-motion`.
+- **Entrada MIDI** -- Conecta cualquier teclado USB/MIDI via la Web MIDI API. El juego detecta dispositivos conectados automaticamente y muestra el estado de conexion.
+- **Piano en pantalla** -- Un piano interactivo de 37 teclas (rango MIDI 48-84) se renderiza en pantalla para entrada tactil, con raton o teclado. No requiere dispositivo MIDI.
+- **Pentagrama SVG** -- La clave de sol, cabeza de nota, plica, lineas adicionales y alteraciones se dibujan en SVG. La posicion de la nota sigue las convenciones de notacion musical estandar.
+- **9 lecciones progresivas** -- Desde lineas simples hasta el rango cromatico completo (C4-C6). Cada leccion apunta a una region o concepto especifico. Ver [tabla de lecciones](#lecciones).
+- **Sintesis de sonido** -- Construida con la Web Audio API. Cada nota se reproduce con armonicos superpuestos (onda triangular + sinusoidal). Las respuestas correctas activan un arpegio de acorde mayor, las incorrectas un acorde menor, y la finalizacion del nivel una fanfarria.
+- **Ventana de recuperacion** -- Despues de una respuesta incorrecta, el juego entra en una ventana de recuperacion de 2.5 segundos con una barra de cuenta atras visual. Responder correctamente dentro de la ventana otorga credito parcial.
+- **Sistema de racha** -- Las respuestas correctas consecutivas construyen una racha. Una insignia de "buho" aparece al alcanzar 3+ racha, intensificandose visualmente en 5, 8 y 10. Los hitos de racha reproducen una escala ascendente celebratoria.
+- **Notas fantasma** -- Las ultimas tres notas respondidas flotan hacia arriba en el pentagrama como cabezas de nota fantasma traslucidas.
+- **Barra de progreso con patito nadador** -- Un emoji de patito se desliza a lo largo de una barra de progreso gradientada que muestra el conteo actual hacia el objetivo de 10 notas por sesion.
+- **Pantalla de nivel completado** -- Despues de 10 respuestas correctas, un modal muestra el porcentaje de precision, mejor racha, total de notas, tiempo transcurrido, calificacion de estrellas (1-3) y una constelacion SVG que dibuja lineas entre los valores MIDI de las notas respondidas.
+- **Confeti** -- Efecto de particulas de confeti en respuestas correctas.
+- **Modo oscuro / Claro** -- Alternador de tema con icono de sol/luna. La transicion activa una animacion de "teatro crepuscular" -- un gran sol o luna brillante aparece y desaparece. Respeta `prefers-color-scheme` en la carga inicial.
+- **Silencio / Teatro de sueno** -- Silenciar el audio oscurece la interfaz, muestra indicadores "Zzz" flotantes y activa una animacion de balanceo sutil en la clave de sol. El pentagrama se oscurece al 70% de opacidad.
+- **Accesibilidad** -- Las regiones ARIA live anuncian aciertos/fallos e hitos de racha. Piano en pantalla navegable por teclado. El SVG del pentagrama tiene un `aria-label` descriptivo. Respeta `prefers-reduced-motion`.
 
 ---
 
-## Tech Stack
+## Tecnologias
 
-| Technology | Purpose |
+| Tecnologia | Proposito |
 |---|---|
-| [React 18](https://react.dev) | UI framework |
-| [TypeScript](https://www.typescriptlang.org) | Type safety |
-| [Vite](https://vitejs.dev) | Build tool and dev server |
-| [Tailwind CSS](https://tailwindcss.com) | Utility-first styling |
-| [shadcn/ui](https://ui.shadcn.com) | Radix-based Select and Checkbox primitives |
-| [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) | Sound synthesis and playback |
-| [Web MIDI API](https://developer.mozilla.org/en-US/docs/Web/API/Web_MIDI_API) | MIDI keyboard input |
-| SVG | Staff and notation rendering |
+| [React 18](https://react.dev) | Framework de interfaz de usuario |
+| [TypeScript](https://www.typescriptlang.org) | Seguridad de tipos |
+| [Vite](https://vitejs.dev) | Herramienta de compilacion y servidor de desarrollo |
+| [Tailwind CSS](https://tailwindcss.com) | Estilos utilitarios |
+| [shadcn/ui](https://ui.shadcn.com) | Primitivas Select y Checkbox basadas en Radix |
+| [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) | Sintesis y reproduccion de sonido |
+| [Web MIDI API](https://developer.mozilla.org/en-US/docs/Web/API/Web_MIDI_API) | Entrada de teclado MIDI |
+| SVG | Renderizado de pentagrama y notacion |
 
 ---
 
-## Project Structure
+## Estructura del Proyecto
 
 ```
 piano-sight-reading/
-├── index.html                  # Entry HTML
-├── vite.config.ts              # Vite config with @/ alias
-├── tailwind.config.js          # Tailwind theme (fonts, colors, animations)
-├── postcss.config.js           # PostCSS + Tailwind pipeline
-├── tsconfig.json               # TypeScript configuration
-├── package.json                # Dependencies and scripts
+├── index.html                  # HTML de entrada
+├── vite.config.ts              # Configuracion de Vite con alias @/
+├── tailwind.config.js          # Tema de Tailwind (fuentes, colores, animaciones)
+├── postcss.config.js           # Pipeline PostCSS + Tailwind
+├── tsconfig.json               # Configuracion de TypeScript
+├── package.json                # Dependencias y scripts
 ├── src/
-│   ├── main.tsx                # React entry point
-│   ├── App.tsx                 # Root component: game orchestration, state wiring, effects
-│   ├── index.css               # Tailwind directives, CSS variables (light/dark), keyframes
+│   ├── main.tsx                # Punto de entrada de React
+│   ├── App.tsx                 # Componente raiz: orquestacion del juego, estado, efectos
+│   ├── index.css               # Directivas de Tailwind, variables CSS (claro/oscuro), keyframes
 │   ├── types/
-│   │   └── index.ts            # Note, GameState, GamePhase type definitions
+│   │   └── index.ts            # Definiciones de tipos Note, GameState, GamePhase
 │   ├── data/
-│   │   └── lessons.ts          # Lesson definitions (9 lessons, MIDI note pools)
+│   │   └── lessons.ts          # Definiciones de lecciones (9 lecciones, pools de notas MIDI)
 │   ├── hooks/
-│   │   ├── useGameState.ts     # Game state reducer (phase, scoring, recovery, streak)
-│   │   ├── useSound.ts         # Web Audio oscillator synthesis (notes, effects, fanfare)
-│   │   └── useMidi.ts          # Web MIDI API connection and event handling
+│   │   ├── useGameState.ts     # Reducer de estado del juego (fase, puntuacion, recuperacion, racha)
+│   │   ├── useSound.ts         # Sintesis de osciladores Web Audio (notas, efectos, fanfarria)
+│   │   └── useMidi.ts          # Conexion Web MIDI API y manejo de eventos
 │   ├── utils/
-│   │   ├── midiToNote.ts       # MIDI number to Note object conversion
-│   │   └── noteToPosition.ts   # Note to SVG y-position mapping (treble clef)
+│   │   ├── midiToNote.ts       # Conversion de numero MIDI a objeto Note
+│   │   └── noteToPosition.ts   # Mapeo de nota a posicion Y en SVG (clave de sol)
 │   ├── lib/
-│   │   └── utils.ts            # cn() utility (clsx + tailwind-merge)
+│   │   └── utils.ts            # Utilidad cn() (clsx + tailwind-merge)
 │   └── components/
-│       ├── Staff.tsx           # SVG treble clef staff, notehead, ledger lines, accidentals, trail ghosts
-│       ├── PianoKeyboard.tsx   # 37-key interactive on-screen piano
-│       ├── Feedback.tsx        # Correct/incorrect banner with recovery timer
-│       ├── LevelComplete.tsx   # Score modal with constellation visualization
-│       ├── Toolbar.tsx         # Lesson selector dropdown and "show note name" checkbox
-│       ├── ProgressBar.tsx     # Session progress bar with duckling indicator
-│       ├── ScoreDisplay.tsx    # Accuracy percentage with color-coded bar
-│       ├── StreakBadge.tsx     # Streak count badge (fire emoji + multiplier)
-│       ├── StreakOwl.tsx       # Owl SVG badge that appears at 3+ streak
-│       ├── ThemeToggle.tsx     # Sun/moon dark mode toggle
-│       ├── Confetti.tsx        # Particle burst on correct answers
+│       ├── Staff.tsx           # Pentagrama SVG, cabeza de nota, lineas adicionales, alteraciones, fantasmas
+│       ├── PianoKeyboard.tsx   # Piano interactivo de 37 teclas en pantalla
+│       ├── Feedback.tsx        # Banner de correcto/incorrecto con temporizador de recuperacion
+│       ├── LevelComplete.tsx   # Modal de puntuacion con visualizacion de constelacion
+│       ├── Toolbar.tsx         # Selector de lecciones y checkbox "mostrar nombre de nota"
+│       ├── ProgressBar.tsx     # Barra de progreso de sesion con indicador de patito
+│       ├── ScoreDisplay.tsx    # Porcentaje de precision con barra codificada por color
+│       ├── StreakBadge.tsx     # Insignia de conteo de racha (emoji de fuego + multiplicador)
+│       ├── StreakOwl.tsx       # Insignia SVG de buho que aparece en racha 3+
+│       ├── ThemeToggle.tsx     # Alternador de modo oscuro sol/luna
+│       ├── Confetti.tsx        # Explosion de particulas en respuestas correctas
 │       └── ui/
-│           ├── select.tsx      # shadcn/ui Select primitive (Radix)
-│           └── checkbox.tsx    # shadcn/ui Checkbox primitive (Radix)
+│           ├── select.tsx      # Primitiva Select de shadcn/ui (Radix)
+│           └── checkbox.tsx    # Primitiva Checkbox de shadcn/ui (Radix)
 ```
 
 ---
 
-## Getting Started
+## Primeros Pasos
 
-### Prerequisites
+### Prerrequisitos
 
 - Node.js 18+
-- npm 9+ (or yarn, or pnpm)
+- npm 9+ (o yarn, o pnpm)
 
-### Install
+### Instalacion
 
 ```bash
-git clone https://github.com/yourusername/piano-sight-reading.git
+git clone https://github.com/vruizdiaz10/piano-sight-reading.git
 cd piano-sight-reading
 npm install
 ```
 
-### Development
+### Desarrollo
 
 ```bash
 npm run dev
 ```
 
-Opens at `http://localhost:5173`. Hot module replacement is enabled.
+Se abre en `http://localhost:5173`. La sustitucion de modulos en caliente esta habilitada.
 
-### Production Build
+### Compilacion para Produccion
 
 ```bash
 npm run build
 npm run preview
 ```
 
-Build output goes to `dist/`. Serve with any static file server.
+La salida de compilacion va a `dist/`. Servir con cualquier servidor de archivos estatico.
 
 ---
 
-## Usage
+## Uso
 
-### Connecting a MIDI Keyboard
+### Conexion de un Teclado MIDI
 
-1. Plug in your USB MIDI keyboard.
-2. Open the app in a browser that supports the Web MIDI API (Chrome, Edge, Opera).
-3. The badge in the top-right corner shows **MIDI: Conectado** (green) or **MIDI: Sin conexion** (red).
-4. Press any key on the MIDI keyboard during a round. The game registers the note automatically.
+1. Conecta tu teclado MIDI por USB.
+2. Abre la aplicacion en un navegador que soporte la Web MIDI API (Chrome, Edge, Opera).
+3. La insignia en la esquina superior derecha muestra **MIDI: Conectado** (verde) o **MIDI: Sin conexion** (rojo).
+4. Presiona cualquier tecla del teclado MIDI durante una ronda. El juego registra la nota automaticamente.
 
-No MIDI device? Use the on-screen piano keyboard by clicking or tapping keys.
+Sin dispositivo MIDI? Usa el piano en pantalla haciendo clic o tocando las teclas.
 
-### How to Play
+### Como Jugar
 
-1. Click **Iniciar Juego** to start a session.
-2. A note appears on the treble clef staff.
-3. Identify the note and press the corresponding key on your MIDI keyboard or the on-screen piano.
-4. **Correct**: The staff flashes green, "¡Correcto!" appears, and a major chord arpeggio plays. A brief confetti burst fires.
-5. **Wrong**: The staff flashes red and shakes. "Incorrecto" appears along with the correct answer. A 2.5-second recovery window begins -- answer correctly within the window for partial credit.
-6. After feedback, the game auto-advances to the next note (with randomized timing jitter of +/-200ms).
-7. After 10 correct answers, the **Level Complete** modal appears with your score and a constellation of answered notes.
-8. Choose **Reintentar** to replay the same lesson or **Siguiente Leccion** to advance.
+1. Haz clic en **Iniciar Juego** para comenzar una sesion.
+2. Aparece una nota en el pentagrama en clave de sol.
+3. Identifica la nota y presiona la tecla correspondiente en tu teclado MIDI o en el piano en pantalla.
+4. **Correcto**: El pentagrama parpadea en verde, aparece "¡Correcto!" y suena un arpegio de acorde mayor. Una breve explosion de confeti se activa.
+5. **Incorrecto**: El pentagrama parpadea en rojo y tiembla. Aparece "Incorrecto" junto con la respuesta correcta. Comienza una ventana de recuperacion de 2.5 segundos -- responde correctamente dentro de la ventana para obtener credito parcial.
+6. Despues de la retroalimentacion, el juego avanza automaticamente a la siguiente nota (con una variacion aleatoria de +/-200ms).
+7. Despues de 10 respuestas correctas, aparece el modal de **Nivel Completado** con tu puntuacion y una constelacion de las notas respondidas.
+8. Elige **Reintentar** para repetir la misma leccion o **Siguiente Leccion** para avanzar.
 
-### Lessons
+### Lecciones
 
-Use the dropdown in the toolbar to switch lessons at any time. The range indicator dots on the far left of the staff show the lowest and highest notes in the current lesson pool.
-
----
-
-## Lessons
-
-| # | ID | Name | Notes | Description |
-|---|----|------|-------|-------------|
-| 1 | `lines` | Lineas | E4, G4, B4, D5, F5 | Notes on staff lines |
-| 2 | `spaces` | Espacios | F4, A4, C5, E5 | Notes on staff spaces |
-| 3 | `lines-spaces` | Lineas+Espacios | E4-A5 | Lines and spaces combined |
-| 4 | `staff-range` | Rango del pentagrama | C4-E5 | Full staff range (C4 to E5) |
-| 5 | `below-staff` | Debajo del pentagrama | C4, D4 | Below-staff ledger lines (middle C region) |
-| 6 | `above-staff` | Encima del pentagrama | G5, A5, B5, C6 | Above-staff ledger lines |
-| 7 | `full-naturals` | Naturales completas | C4-C6 (naturals only) | All natural notes across full range |
-| 8 | `accidentals` | Sostenidos | C4-C6 (all) | Introduces sharps |
-| 9 | `all-notes` | Todas las notas | C4-C6 (all) | Full chromatic range, treble clef |
+Usa el menu desplegable en la barra de herramientas para cambiar de leccion en cualquier momento. Los puntos indicadores de rango en el extremo izquierdo del pentagrama muestran las notas mas baja y mas alta del pool de la leccion actual.
 
 ---
 
-## Game Rules
+## Lecciones
 
-- **Session target**: 10 correct answers complete a level.
-- **Scoring**: Accuracy is tracked as `correctAttempts / totalAttempts * 100`.
-- **Star rating**: 3 stars for 90%+ accuracy, 2 stars for 70%+, 1 star for 50%+, 0 stars below 50%.
-- **Streaks**: Consecutive correct answers increment the streak counter. A wrong answer resets it to 0. The best streak for the session is recorded.
-- **Recovery**: After a wrong answer, the game stays in feedback mode for 2.5 seconds. A timer bar visually counts down. Pressing the correct key during this window marks the answer as correct (recovery success) and grants credit.
-- **Skip**: The "Siguiente Nota" button lets you advance past the feedback screen at any time.
-- **Auto-advance**: The game automatically moves to the next note after the feedback window. Timing includes a random jitter of +/-200ms to prevent rhythmic dependency.
-- **Note selection**: Random within the lesson pool. Consecutive repeats are avoided when the pool has more than one note.
+| # | ID | Nombre | Notas | Descripcion |
+|---|----|--------|-------|-------------|
+| 1 | `lines` | Lineas | E4, G4, B4, D5, F5 | Notas en las lineas del pentagrama |
+| 2 | `spaces` | Espacios | F4, A4, C5, E5 | Notas en los espacios del pentagrama |
+| 3 | `lines-spaces` | Lineas+Espacios | E4-A5 | Lineas y espacios combinados |
+| 4 | `staff-range` | Rango del pentagrama | C4-E5 | Rango completo del pentagrama (C4 a E5) |
+| 5 | `below-staff` | Debajo del pentagrama | C4, D4 | Lineas adicionales debajo del pentagrama (region del Do central) |
+| 6 | `above-staff` | Encima del pentagrama | G5, A5, B5, C6 | Lineas adicionales encima del pentagrama |
+| 7 | `full-naturals` | Naturales completas | C4-C6 (solo naturales) | Todas las notas naturales en el rango completo |
+| 8 | `accidentals` | Sostenidos | C4-C6 (todas) | Introduce sostenidos |
+| 9 | `all-notes` | Todas las notas | C4-C6 (todas) | Rango cromatico completo, clave de sol |
 
 ---
 
-## Architecture
+## Reglas del Juego
 
-### Game State Machine
+- **Objetivo de sesion**: 10 respuestas correctas completan un nivel.
+- **Puntuacion**: La precision se calcula como `correctAttempts / totalAttempts * 100`.
+- **Calificacion de estrellas**: 3 estrellas para 90%+ de precision, 2 estrellas para 70%+, 1 estrella para 50%+, 0 estrellas por debajo del 50%.
+- **Rachas**: Las respuestas correctas consecutivas incrementan el contador de racha. Una respuesta incorrecta lo reinicia a 0. La mejor racha de la sesion se registra.
+- **Recuperacion**: Despues de una respuesta incorrecta, el juego permanece en modo de retroalimentacion durante 2.5 segundos. Una barra de temporizador cuenta visualmente hacia atras. Presionar la tecla correcta durante esta ventana marca la respuesta como correcta (recuperacion exitosa) y otorga credito.
+- **Saltar**: El boton "Siguiente Nota" permite avanzar mas alla de la pantalla de retroalimentacion en cualquier momento.
+- **Avance automatico**: El juego pasa automaticamente a la siguiente nota despues de la ventana de retroalimentacion. El tiempo incluye una variacion aleatoria de +/-200ms para evitar la dependencia ritmica.
+- **Seleccion de notas**: Aleatoria dentro del pool de la leccion. Se evitan repeticiones consecutivas cuando el pool tiene mas de una nota.
 
-The game uses a reducer pattern via `useGameState` hook. The state machine has four phases:
+---
+
+## Arquitectura
+
+### Maquina de Estados del Juego
+
+El juego utiliza un patron reducer a traves del hook `useGameState`. La maquina de estados tiene cuatro fases:
 
 ```
 idle -> waiting -> feedback -> levelComplete
                 -> waiting (auto-advance)
 ```
 
-- **idle**: Initial state. Only the "Iniciar Juego" button is shown.
-- **waiting**: A note is displayed on the staff. The player must press the correct key. MIDI and on-screen keyboard input are accepted.
-- **feedback**: Shows the result (correct/incorrect). If wrong, `recovering` is set to `true` for 2.5 seconds, during which the correct key can be pressed for recovery credit. Auto-advances after a timeout with jitter.
-- **levelComplete**: After 10 correct answers. Displays score, stars, stats, and constellation overlay.
+- **idle**: Estado inicial. Solo se muestra el boton "Iniciar Juego".
+- **waiting**: Se muestra una nota en el pentagrama. El jugador debe presionar la tecla correcta. Se acepta entrada MIDI y del teclado en pantalla.
+- **feedback**: Muestra el resultado (correcto/incorrecto). Si es incorrecto, `recovering` se establece en `true` durante 2.5 segundos, durante los cuales se puede presionar la tecla correcta para credito de recuperacion. Avanza automaticamente despues de un tiempo de espera con variacion.
+- **levelComplete**: Despues de 10 respuestas correctas. Muestra puntuacion, estrellas, estadisticas y la superposicion de constelacion.
 
-State is managed via `useState` with an immutable `GameState` object. All state transitions happen through named functions (`startGame`, `submitAnswer`, `nextNote`, `restartGame`).
+El estado se gestiona mediante `useState` con un objeto `GameState` inmutable. Todas las transiciones de estado ocurren a traves de funciones nombradas (`startGame`, `submitAnswer`, `nextNote`, `restartGame`).
 
-### Component Hierarchy
+### Jerarquia de Componentes
 
 ```
 <App>
   <Confetti />
-  <LevelComplete />          (overlay, shown when phase === 'levelComplete')
-  <Toolbar />                (lesson selector + show note name toggle)
-  <Staff />                  (SVG treble clef, note, trail ghosts, range dots)
-  <ProgressBar />            (duckling swimmer, session progress)
-  <StreakBadge />            (fire streak counter)
-  <StreakOwl />              (owl SVG, shown at 3+ streak)
-  <ScoreDisplay />           (accuracy percentage)
-  <PianoKeyboard />          (37-key interactive keyboard)
-  <Feedback />               (correct/incorrect banner + recovery timer)
+  <LevelComplete />          (superposicion, se muestra cuando phase === 'levelComplete')
+  <Toolbar />                (selector de leccion + alternar mostrar nombre de nota)
+  <Staff />                  (pentagrama SVG, nota, notas fantasma, puntos de rango)
+  <ProgressBar />            (patito nadador, progreso de sesion)
+  <StreakBadge />            (contador de racha de fuego)
+  <StreakOwl />              (SVG de buho, se muestra en racha 3+)
+  <ScoreDisplay />           (porcentaje de precision)
+  <PianoKeyboard />          (teclado interactivo de 37 teclas)
+  <Feedback />               (banner de correcto/incorrecto + temporizador de recuperacion)
 ```
 
-### Sound System
+### Sistema de Sonido
 
-The `useSound` hook creates a single `AudioContext` (lazily initialized on first user interaction to comply with browser autoplay policies). Each note is synthesized with five oscillators:
+El hook `useSound` crea un unico `AudioContext` (inicializado perezosamente en la primera interaccion del usuario para cumplir con las politicas de reproduccion automatica del navegador). Cada nota se sintetiza con cinco osciladores:
 
-- **Fundamental** (triangle wave, gain 1.0)
-- **Harmonics 2-5** (sine waves, diminishing gain)
+- **Fundamental** (onda triangular, ganancia 1.0)
+- **Armonicos 2-5** (ondas sinusoidales, ganancia decreciente)
 
-This produces a warm piano-like timbre. Sound effects use chord arpeggios:
+Esto produce un timbre similar al piano. Los efectos de sonido utilizan arpegios de acordes:
 
-| Effect | Notes | Description |
+| Efecto | Notas | Descripcion |
 |--------|-------|-------------|
-| Note playback | The note itself | Played when a note appears on staff |
-| Correct | C5-E5-G5 | Major chord, staggered arpeggio |
-| Wrong | C5-Eb5-G5 | Minor chord, staggered arpeggio |
-| Streak milestone | C5-D5-E5-G5-C6 | Ascending scale fragment on streak multiples of 5 |
-| Level complete | C5-E5-G5-C6 | Fanfare with fundamental + octave harmonic |
+| Reproduccion de nota | La nota en si | Se reproduce cuando aparece una nota en el pentagrama |
+| Correcto | C5-E5-G5 | Acorde mayor, arpegio escalonado |
+| Incorrecto | C5-Eb5-G5 | Acorde menor, arpegio escalonado |
+| Hito de racha | C5-D5-E5-G5-C6 | Fragmento de escala ascendente en multiplos de 5 de racha |
+| Nivel completado | C5-E5-G5-C6 | Fanfarria con fundamental + armonico de octava |
 
-### MIDI Input
+### Entrada MIDI
 
-The `useMidi` hook requests `MIDIAccess` via the Web MIDI API. It iterates over all connected inputs, attaches `onmidiessage` handlers, and filters for note-on events (`0x90` status byte with velocity > 0). The `onstatechange` event re-connects inputs when devices are plugged or unplugged. The hook returns a `midiConnected` boolean for the status indicator.
+El hook `useMidi` solicita `MIDIAccess` a traves de la Web MIDI API. Itera sobre todas las entradas conectadas, adjunta manejadores `onmidimessage` y filtra eventos de nota activada (`0x90` byte de estado con velocity > 0). El evento `onstatechange` reconecta las entradas cuando los dispositivos se conectan o desconectan. El hook devuelve un booleano `midiConnected` para el indicador de estado.
 
 ---
 
-## Theming
+## Temas (Theming)
 
-The app supports light and dark themes via a CSS class-based approach:
+La aplicacion soporta temas claro y oscuro mediante un enfoque basado en clases CSS:
 
-- A `.dark` class on `<html>` toggles the theme.
-- CSS custom properties (HSL values) define all colors in `:root` (light) and `.dark` (dark).
-- Tailwind's `dark:` variant applies theme-specific styles.
-- The `Staff` component uses a `--staff-line` CSS variable for ink color (brown in light, slate in dark).
-- Theme preference persists in the `GameState.theme` field and initializes from `prefers-color-scheme`.
-- Transitioning between themes triggers a 1.5-second "twilight theater" animation with a large glowing sun (light) or moon (dark) that fades in and out. The background smoothly crossfades via `transition-colors duration-300`.
+- Una clase `.dark` en `<html>` alterna el tema.
+- Las propiedades personalizadas CSS (valores HSL) definen todos los colores en `:root` (claro) y `.dark` (oscuro).
+- La variante `dark:` de Tailwind aplica estilos especificos del tema.
+- El componente `Staff` usa una variable CSS `--staff-line` para el color de la tinta (marron en claro, pizarra en oscuro).
+- La preferencia de tema persiste en el campo `GameState.theme` y se inicializa desde `prefers-color-scheme`.
+- La transicion entre temas activa una animacion de "teatro crepuscular" de 1.5 segundos con un gran sol brillante (claro) o luna (oscuro) que aparece y desaparece. El fondo se funde suavemente mediante `transition-colors duration-300`.
 
-### CSS Variables
+### Variables CSS
 
-| Variable | Light | Dark |
-|----------|-------|------|
-| `--background` | Warm amber-50 (#FFF7ED) | Gray-900 (#111827) |
+| Variable | Claro | Oscuro |
+|----------|-------|--------|
+| `--background` | Amber-50 calido (#FFF7ED) | Gray-900 (#111827) |
 | `--primary` | Red-600 (#DC2626) | Red-600 (#DC2626) |
-| `--staff-line` | Brown (#4B3F2B) | Slate-300 (#CBD5E1) |
-| `--card` | White (#FFFFFF) | Gray-800 (#1F2937) |
+| `--staff-line` | Marron (#4B3F2B) | Slate-300 (#CBD5E1) |
+| `--card` | Blanco (#FFFFFF) | Gray-800 (#1F2937) |
 
 ---
 
-## Contributing
+## Contribuir
 
-Contributions are welcome. Please follow these guidelines:
+Las contribuciones son bienvenidas. Por favor, sigue estas pautas:
 
-1. Open an issue to discuss proposed changes before submitting a PR.
-2. Maintain the existing code style (TypeScript strict mode, functional components, hooks).
-3. If adding a feature, update or add the relevant component. Ensure state transitions in `useGameState` are consistent.
-4. Test MIDI input if changing the `useMidi` hook or the answer submission flow.
-5. Run `npm run build` to verify TypeScript compilation and production build.
+1. Abre un issue para discutir los cambios propuestos antes de enviar un PR.
+2. Manten el estilo de codigo existente (TypeScript modo estricto, componentes funcionales, hooks).
+3. Si anades una funcionalidad, actualiza o anade el componente relevante. Asegurate de que las transiciones de estado en `useGameState` sean coherentes.
+4. Prueba la entrada MIDI si modificas el hook `useMidi` o el flujo de envio de respuestas.
+5. Ejecuta `npm run build` para verificar la compilacion de TypeScript y la compilacion de produccion.
 
 ---
 
-## License
+## Licencia
 
 MIT
 
