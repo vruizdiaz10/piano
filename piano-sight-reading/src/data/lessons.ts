@@ -35,8 +35,4 @@ export function getLessonPool(lessonId: string): number[] {
   return lesson ? lesson.pool : LESSONS[0].pool
 }
 
-export function getNextLessonPool(lessonId: string): number[] | null {
-  const idx = LESSONS.findIndex(l => l.id === lessonId)
-  if (idx === -1 || idx >= LESSONS.length - 1) return null
-  return LESSONS[idx + 1].pool
-}
+

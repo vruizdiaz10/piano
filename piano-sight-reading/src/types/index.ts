@@ -26,11 +26,6 @@ export interface MasteryCriteria {
   unlockNext: boolean
 }
 
-export interface AdaptiveData {
-  window: boolean[]
-  windowSize: number
-}
-
 export interface GameState {
   phase: GamePhase
   currentNote: Note | null
@@ -42,7 +37,6 @@ export interface GameState {
   bestStreak: number
   totalAttempts: number
   correctAttempts: number
-  adaptive: AdaptiveData
   lessonId: string
   showNoteName: boolean
   sessionTarget: number

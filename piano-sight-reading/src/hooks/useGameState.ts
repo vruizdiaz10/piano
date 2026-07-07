@@ -2,15 +2,9 @@ import { useState, useCallback } from 'react'
 import { GameState, Note, ErrorType } from '../types'
 import { midiToNote } from '../utils/midiToNote'
 import { analyzeError } from '../utils/errorAnalysis'
-import { getLessonPool, getNextLessonPool } from '../data/lessons'
+import { getLessonPool } from '../data/lessons'
 
 const SESSION_TARGET = 10
-const ADAPTIVE_WINDOW = 12
-const ADAPTIVE_CHECK_INTERVAL = 6
-
-function buildInitialAdaptive(): { window: boolean[]; windowSize: number } {
-  return { window: [], windowSize: ADAPTIVE_WINDOW }
-}
 
 const INITIAL_STATE: GameState = {
   phase: 'idle',
@@ -23,7 +17,6 @@ const INITIAL_STATE: GameState = {
   bestStreak: 0,
   totalAttempts: 0,
   correctAttempts: 0,
-  adaptive: buildInitialAdaptive(),
   lessonId: 'lines',
   showNoteName: true,
   sessionTarget: SESSION_TARGET,
@@ -32,22 +25,9 @@ const INITIAL_STATE: GameState = {
   theme: (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light',
 }
 
-function selectNote(lessonId: string, adaptive: { window: boolean[]; windowSize: number }, excludeMidi?: number): Note {
+function selectNote(lessonId: string, excludeMidi?: number): Note {
   const pool = getLessonPool(lessonId)
   const filtered = pool.length > 1 ? pool.filter(m => m !== excludeMidi) : pool
-
-  const windowAcc = adaptive.window.length > 0
-    ? adaptive.window.filter(Boolean).length / adaptive.window.length
-    : 0.5
-
-  if (adaptive.window.length >= ADAPTIVE_CHECK_INTERVAL && windowAcc > 0.85) {
-    const nextPool = getNextLessonPool(lessonId)
-    if (nextPool && nextPool.length > 0 && Math.random() < 0.2) {
-      const midi = nextPool[Math.floor(Math.random() * nextPool.length)]
-      return midiToNote(midi)
-    }
-  }
-
   const midi = filtered[Math.floor(Math.random() * filtered.length)]
   return midiToNote(midi)
 }
@@ -57,12 +37,11 @@ export function useGameState() {
 
   const startGame = useCallback(() => {
     setState(prev => {
-      const note = selectNote(prev.lessonId, prev.adaptive)
+      const note = selectNote(prev.lessonId)
       return {
         ...prev, phase: 'waiting', currentNote: note,
         streak: 0, bestStreak: 0, totalAttempts: 0, correctAttempts: 0,
         lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null,
-        adaptive: buildInitialAdaptive(),
         startTime: Date.now(), recovering: false,
       }
     })
@@ -78,7 +57,6 @@ export function useGameState() {
         const newBestStreak = Math.max(prev.bestStreak, newStreak)
         const sessionDone = newTotal >= prev.sessionTarget
 
-        const newWindow = [...prev.adaptive.window, isCorrect].slice(-prev.adaptive.windowSize)
         const errorType: ErrorType | null = isCorrect ? null : analyzeError(prev.currentNote, midi)
 
         return {
@@ -92,7 +70,6 @@ export function useGameState() {
           bestStreak: newBestStreak,
           totalAttempts: newTotal,
           correctAttempts: newCorrect,
-          adaptive: { ...prev.adaptive, window: newWindow },
         }
       }
       if (prev.phase === 'feedback' && prev.recovering && !prev.lastAnswerCorrect && prev.currentNote) {
@@ -112,13 +89,13 @@ export function useGameState() {
 
   const nextNote = useCallback(() => {
     setState(prev => {
-      const note = selectNote(prev.lessonId, prev.adaptive, prev.currentNote?.midi)
+      const note = selectNote(prev.lessonId, prev.currentNote?.midi)
       return { ...prev, phase: 'waiting', currentNote: note, lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null, recovering: false }
     })
   }, [])
 
   const setLesson = useCallback((lessonId: string) => {
-    setState(prev => ({ ...prev, lessonId, adaptive: buildInitialAdaptive() }))
+    setState(prev => ({ ...prev, lessonId }))
   }, [])
 
   const setShowNoteName = useCallback((show: boolean) => {
@@ -135,12 +112,11 @@ export function useGameState() {
 
   const restartGame = useCallback(() => {
     setState(prev => {
-      const note = selectNote(prev.lessonId, buildInitialAdaptive())
+      const note = selectNote(prev.lessonId)
       return {
         ...prev, phase: 'waiting', currentNote: note,
         streak: 0, bestStreak: 0, totalAttempts: 0, correctAttempts: 0,
         lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null,
-        adaptive: buildInitialAdaptive(),
         startTime: Date.now(), recovering: false,
       }
     })
