@@ -1,16 +1,26 @@
-# Task 2 Report: Types and Utility Functions
+# Task 2 Report: ConcertCurtains Component
 
-## Files Created
-- `src/types/index.ts` — NoteName, Note, Difficulty, GamePhase, GameState types
-- `src/utils/midiToNote.ts` — midiToNote() helper
-- `src/utils/noteToPosition.ts` — noteToPosition(), getNotePool() helpers
+## Status: DONE
 
-## Build Result
-- `npm run build` passes (tsc + vite, 31 modules, 2.39s)
+### Created files
+- `src/components/ConcertCurtains.tsx`
+- `piano-sight-reading/src/components/ConcertCurtains.tsx`
 
-## Self-Review
-- Types match brief exactly
-- No unused imports/exports
-- Functions are pure, well-typed
-- `getNotePool` intermediate range: 48–84 (C2–C6) — correct per brief
-- No lint warnings or errors
+### Component details
+- Exports `ConcertCurtains` default component
+- Props: `{ isOpen?: boolean }` — controls open/closed animation
+- SVG valance (top bar with scalloped bottom edge, gold trim)
+- Left curtain panel (48px wide, vertical fold lines, gold tassel)
+- Right curtain panel (48px wide, vertical fold lines, gold tassel)
+- Consumes CSS variables: `--curtain-primary`, `--curtain-fold`, `--gold`, `--gold-light`, `--gold-dim`
+- Uses keyframes: `curtain-slide`, `curtain-slide-right`, `curtain-open-left`, `curtain-open-right`
+- Fixed positioning, `z-40`, `pointer-events-none`
+
+### Build verification
+- `npx tsc --noEmit` — passed (no errors)
+- `npm run build` — passed (tsc -b + vite build, 9.33s)
+
+### Commit
+```
+5b58462 feat(ui): add ConcertCurtains component with SVG valance and tassels
+```

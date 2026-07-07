@@ -15,6 +15,8 @@ import Confetti from './components/Confetti'
 import LevelComplete from './components/LevelComplete'
 import ThemeToggle from './components/ThemeToggle'
 import OrnateFrame from './components/OrnateFrame'
+import ConcertCurtains from './components/ConcertCurtains'
+import Spotlight from './components/Spotlight'
 
 export default function App() {
   const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTheme, restartGame } = useGameState()
@@ -156,9 +158,15 @@ export default function App() {
   const sleepyClass = state.isMuted ? 'opacity-70 animate-sleepy-sway' : ''
 
   return (
-    <div className={`min-h-screen bg-background transition-colors duration-300 ${themeTransition ? 'animate-theatre-glow' : ''}`}>
+    <div
+      className={`min-h-screen transition-colors duration-300 ${themeTransition ? 'animate-theatre-glow' : ''}`}
+      style={{
+        background: 'radial-gradient(ellipse at 50% 30%, var(--stage-floor) 0%, var(--stage-bg) 100%)',
+      }}>
       <Confetti active={showConfetti} />
       <div aria-live="polite" aria-atomic="true" className="sr-only" ref={liveRegionRef} />
+      <ConcertCurtains isOpen={state.phase !== 'idle'} />
+      <Spotlight active={state.phase === 'feedback' || state.phase === 'levelComplete'} />
       {themeTransition && (
         <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center" aria-hidden="true">
           <span className={`text-6xl animate-twilight-theater ${state.theme === 'light' ? 'text-yellow-400' : 'text-blue-200'}`}>
@@ -280,6 +288,7 @@ export default function App() {
           </div>
         )}
       </div>
+      <div className="fixed bottom-0 left-0 right-0 h-2 z-30 pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent, var(--stage-floor))' }} aria-hidden="true" />
     </div>
   )
 }

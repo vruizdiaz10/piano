@@ -1,103 +1,56 @@
-### Task 4: PianoKeyboard Component
+### Task 4: OrnateFrame Component
 
 **Files:**
-- Create: `src/components/PianoKeyboard.tsx`
+- Create: `src/components/OrnateFrame.tsx`
+- Create: `piano-sight-reading/src/components/OrnateFrame.tsx`
+- Modify: `src/App.tsx`, `piano-sight-reading/src/App.tsx`
 
-**Interfaces:**
-- Consumes: `onPlayNote(note: Note): void` — callback when key is clicked
-- Consumes: `Note`, `Difficulty`, `cn()` from earlier tasks
+- [ ] **Step 1: Write component**
 
-**Step 1: Create PianoKeyboard.tsx**
 ```tsx
-import { useMemo } from 'react'
-import { Note, Difficulty } from '../types'
-import { cn } from '../lib/utils'
+import { ReactNode } from 'react'
 
-interface PianoKeyboardProps {
-  onPlayNote: (note: Note) => void
-  highlightKey?: number | null
-  difficulty: Difficulty
+interface OrnateFrameProps {
+  children: ReactNode
 }
 
-const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-
-function isBlack(midi: number): boolean {
-  return NOTE_NAMES[midi % 12].includes('#')
-}
-
-function getKeyboardRange(difficulty: Difficulty): { start: number; count: number } {
-  if (difficulty === 'beginner') return { start: 60, count: 25 }
-  return { start: 48, count: 37 }
-}
-
-export default function PianoKeyboard({ onPlayNote, highlightKey, difficulty }: PianoKeyboardProps) {
-  const { start, count } = useMemo(() => getKeyboardRange(difficulty), [difficulty])
-  const keys = useMemo(() => Array.from({ length: count }, (_, i) => start + i), [start, count])
-  const whiteKeys = keys.filter(m => !isBlack(m))
-  const blackKeyPositions = keys.map((midi, i) => {
-    if (!isBlack(midi)) return null
-    const prevWhiteCount = keys.slice(0, i).filter(m => !isBlack(m)).length
-    return { midi, offset: prevWhiteCount * 44 - 14 }
-  })
-
+export default function OrnateFrame({ children }: OrnateFrameProps) {
   return (
-    <div className="flex justify-center py-4 select-none">
-      <div className="flex relative h-40">
-        {whiteKeys.map(midi => {
-          const octave = Math.floor(midi / 12) - 1
-          const name = NOTE_NAMES[midi % 12]
-          const isHighlighted = highlightKey === midi
-          return (
-            <div
-              key={midi}
-              className={cn(
-                'w-11 h-40 border border-gray-400 rounded-b-md bg-white cursor-pointer flex flex-col justify-end items-center pb-2 text-xs text-gray-400 transition-colors duration-100 hover:bg-gray-100 active:bg-blue-200',
-                isHighlighted && '!bg-blue-500'
-              )}
-              role="button"
-              tabIndex={0}
-              aria-label={`Note ${name}${octave}`}
-              onMouseDown={() => onPlayNote({ name: name as Note['name'], octave, midi })}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPlayNote({ name: name as Note['name'], octave, midi }) } }}
-            />
-          )
-        })}
-        {blackKeyPositions.map(k => {
-          if (!k) return null
-          const octave = Math.floor(k.midi / 12) - 1
-          const name = NOTE_NAMES[k.midi % 12]
-          const isHighlighted = highlightKey === k.midi
-          return (
-            <div
-              key={k.midi}
-              className="absolute w-0 z-10"
-              style={{ left: k.offset + 44 }}
-            >
-              <div
-                className={cn(
-                  'w-7 h-24 border border-gray-600 rounded-b-md bg-gray-800 cursor-pointer transition-colors duration-100 hover:bg-gray-600',
-                  isHighlighted && '!bg-blue-500'
-                )}
-                role="button"
-                tabIndex={0}
-                aria-label={`Note ${name}${octave}`}
-                onMouseDown={(e) => {
-                  e.stopPropagation()
-                  onPlayNote({ name: name as Note['name'], octave, midi: k.midi })
-                }}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.stopPropagation(); onPlayNote({ name: name as Note['name'], octave, midi: k.midi }) } }}
-              />
-            </div>
-          )
-        })}
+    <div className="relative">
+      <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
+        <svg width="120" height="12" viewBox="0 0 120 12" aria-hidden="true">
+          <path d="M0,6 Q15,0 30,6 Q45,12 60,6 Q75,0 90,6 Q105,12 120,6" fill="none" stroke="var(--gold)" strokeWidth="1" />
+          <circle cx="60" cy="6" r="2" fill="var(--gold)" />
+        </svg>
       </div>
+      {[0,1,2,3].map(i => (
+        <div key={i} className={`absolute ${['-top-2 -left-2','-top-2 -right-2','-bottom-2 -left-2','-bottom-2 -right-2'][i]} z-20`}>
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+            <path d={[
+              'M0,24 L0,0 L24,0',
+              'M24,24 L24,0 L0,0',
+              'M0,0 L0,24 L24,24',
+              'M24,0 L24,24 L0,24',
+            ][i]} fill="none" stroke="var(--gold)" strokeWidth="1.5" />
+            <path d={[
+              'M4,20 L4,4 L20,4',
+              'M20,20 L20,4 L4,4',
+              'M4,4 L4,20 L20,20',
+              'M20,4 L20,20 L4,20',
+            ][i]} fill="none" stroke="var(--gold-dim)" strokeWidth="0.5" />
+            <circle cx={[4,20,4,20][i]} cy={[4,4,20,20][i]} r="1.5" fill="var(--gold)" />
+          </svg>
+        </div>
+      ))}
+      {children}
     </div>
   )
 }
 ```
 
-**Step 2: Commit**
-```bash
-git add src/components/PianoKeyboard.tsx
-git commit -m "feat: add piano keyboard component"
-```
+- [ ] **Step 2: Modify App.tsx** — import OrnateFrame, wrap staff card `<div>` with `<OrnateFrame>...</OrnateFrame>`
+- [ ] **Step 3: Verify build**
+- [ ] **Step 4: Commit**
+
+---
+

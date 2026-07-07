@@ -1,52 +1,39 @@
-# Task 1 Report: Project Scaffolding
+# Task 1 Report: CSS Variables + Keyframes for Concert Theme
 
-**Status:** DONE_WITH_CONCERNS
+## What Was Implemented
 
-## Files Created
+Added concert hall theme variables and curtain/gold-pulse keyframes to both `src/index.css` and `piano-sight-reading/src/index.css`:
 
-Per brief (13 files):
-- `package.json` (added `@types/node` devDep for build fix)
-- `tsconfig.json`
-- `tsconfig.app.json`
-- `tsconfig.node.json` (added `"types": ["node"]`)
-- `vite.config.ts`
-- `tailwind.config.js`
-- `postcss.config.js`
-- `src/index.css`
-- `components.json`
-- `src/lib/utils.ts`
-- `index.html`
-- `src/vite-env.d.ts`
-- `src/main.tsx`
+**CSS Variables (9 per theme):**
+- `:root`: `--curtain-primary`, `--curtain-fold`, `--gold`, `--gold-light`, `--gold-dim`, `--stage-floor`, `--stage-bg`, `--spotlight-color`, `--ebony`, `--ivory`
+- `.dark`: Same variables with darker/muted values appropriate for dark mode
 
-Extra files (required for build):
-- `src/App.tsx` — minimal component, since main.tsx imports `./App` but brief omitted it
-- `.gitignore` — excludes `node_modules` and `dist`
+**Keyframes (5):**
+- `curtain-slide` / `curtain-slide-right`: curtain entrance from off-screen
+- `curtain-open-left` / `curtain-open-right`: curtain parting animation
+- `gold-pulse`: pulsing gold opacity effect
 
-## npm install result
+**Utility Classes (5):**
+- `.animate-curtain-slide`, `.animate-curtain-slide-right`, `.animate-curtain-open-left`, `.animate-curtain-open-right`, `.animate-gold-pulse`
 
-- 139 packages added (142 after adding `@types/node`)
-- 2 vulnerabilities (1 moderate, 1 high) — pre-existing from dep chain, not blocking
+## Files Changed
 
-## Build result
+- `src/index.css` — +46 lines
+- `piano-sight-reading/src/index.css` — +46 lines
 
-- **tsc -b:** Passed (needed `@types/node` + `"types": ["node"]` in tsconfig.node.json)
-- **vite build:** Passed — 31 modules transformed, output: index.html (0.40 kB), CSS (6.03 kB), JS (142.55 kB)
+## Build Verification
 
-## Self-review findings
+- `npx tsc --noEmit`: ✅ Passed (no output = no errors)
+- `npm run build`: ✅ Passed — 1601 modules transformed, output dist/ (CSS 26.86 kB, JS 284.22 kB)
 
-1. **Missing `src/App.tsx` in brief:** `src/main.tsx` imports `./App` but the brief doesn't list it. Created minimal component so build works.
-2. **Missing `@types/node`:** `vite.config.ts` uses `path` module and `__dirname`. Added `@types/node` to devDependencies and `"types": ["node"]` to `tsconfig.node.json`.
-3. **Missing `.gitignore`:** Not in brief, but needed to keep `node_modules` and `dist` out of git tracking.
+## Self-Review
 
-## Issues or concerns
+- Variables placed correctly after `--staff-line` in both `:root` and `.dark`
+- Keyframes inserted after existing `constellation-draw` block, before `@media (prefers-reduced-motion: reduce)`
+- Utility classes inserted in `@layer utilities` after existing animation classes, before `.btn-3d`
+- Both files byte-for-byte identical in the added sections
+- No naming collisions with existing variables/keyframes
 
-- Brief's Step 1 `package.json` didn't include `@types/node` — a standard dependency for Vite projects using `path`/`__dirname` in vite.config.ts.
-- Brief's Step 13 `main.tsx` imports `./App` but no App.tsx is listed in the brief files.
-- These are minor omissions; the scaffolding otherwise works correctly.
+## Issues or Concerns
 
-## Commit
-
-```
-495f995 feat: scaffold Vite + React + TS + Tailwind/shadcn project
-```
+None.

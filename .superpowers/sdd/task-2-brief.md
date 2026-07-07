@@ -1,81 +1,82 @@
-### Task 2: Types and Utility Functions
+### Task 2: ConcertCurtains Component
 
 **Files:**
-- Create: `src/types/index.ts`
-- Create: `src/utils/midiToNote.ts`
-- Create: `src/utils/noteToPosition.ts`
+- Create: `src/components/ConcertCurtains.tsx`
+- Create: `piano-sight-reading/src/components/ConcertCurtains.tsx`
 
 **Interfaces:**
-- Consumes: nothing
-- Produces: `Note`, `NoteName`, `Difficulty`, `GamePhase`, `midiToNote(midi: number): Note`, `noteToPosition(note: Note): number`, `getNotePool(difficulty: Difficulty): number[]` for later tasks
+- Props: `{ isOpen?: boolean }`
+- Consumes: CSS variables `--curtain-primary`, `--curtain-fold`, `--gold`
 
-**Step 1: Create src/types/index.ts**
-```ts
-export type NoteName = 'C' | 'C#' | 'D' | 'D#' | 'E' | 'F' | 'F#' | 'G' | 'G#' | 'A' | 'A#' | 'B'
+- [ ] **Step 1: Write component**
 
-export interface Note {
-  name: NoteName
-  octave: number
-  midi: number
+```tsx
+interface ConcertCurtainsProps {
+  isOpen?: boolean
 }
 
-export type Difficulty = 'beginner' | 'intermediate'
-
-export type GamePhase = 'idle' | 'waiting' | 'feedback'
-
-export interface GameState {
-  phase: GamePhase
-  currentNote: Note | null
-  lastAnswerCorrect: boolean | null
-  streak: number
-  totalAttempts: number
-  correctAttempts: number
-  difficulty: Difficulty
-  showNoteName: boolean
+export default function ConcertCurtains({ isOpen }: ConcertCurtainsProps) {
+  return (
+    <>
+      <div className="fixed top-0 left-0 right-0 z-40 pointer-events-none" style={{ height: '64px' }}>
+        <svg viewBox="0 0 1200 64" className="w-full h-full" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="valance-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--curtain-primary)" />
+              <stop offset="100%" stopColor="var(--curtain-fold)" />
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="56" fill="url(#valance-grad)" />
+          <path d="M0,56 Q25,44 50,56 Q75,44 100,56 Q125,44 150,56 Q175,44 200,56 Q225,44 250,56 Q275,44 300,56 Q325,44 350,56 Q375,44 400,56 Q425,44 450,56 Q475,44 500,56 Q525,44 550,56 Q575,44 600,56 Q625,44 650,56 Q675,44 700,56 Q725,44 750,56 Q775,44 800,56 Q825,44 850,56 Q875,44 900,56 Q925,44 950,56 Q975,44 1000,56 Q1025,44 1050,56 Q1075,44 1100,56 Q1125,44 1150,56 Q1175,44 1200,56 L1200,64 L0,64 Z" fill="var(--curtain-fold)" />
+          <line x1="0" y1="56" x2="1200" y2="56" stroke="var(--gold)" strokeWidth="1.5" />
+          <line x1="0" y1="62" x2="1200" y2="62" stroke="var(--gold-dim)" strokeWidth="1" />
+        </svg>
+      </div>
+      <div className={`fixed top-0 left-0 bottom-0 z-40 pointer-events-none ${isOpen ? 'animate-curtain-open-left' : 'animate-curtain-slide'}`} style={{ width: '48px' }}>
+        <svg viewBox="0 0 48 800" className="w-full h-full" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="left-curtain" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="var(--curtain-primary)" />
+              <stop offset="60%" stopColor="var(--curtain-fold)" />
+              <stop offset="100%" stopColor="var(--curtain-primary)" />
+            </linearGradient>
+          </defs>
+          <rect width="48" height="800" fill="url(#left-curtain)" />
+          <line x1="16" y1="0" x2="16" y2="800" stroke="rgba(0,0,0,0.15)" strokeWidth="1" />
+          <line x1="32" y1="0" x2="32" y2="800" stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
+          <line x1="46" y1="0" x2="46" y2="800" stroke="var(--gold-dim)" strokeWidth="1" />
+        </svg>
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center">
+          <div className="w-0.5 h-6 bg-gradient-to-b from-[var(--gold)] to-[var(--gold-light)]" />
+          <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[var(--gold-light)] to-[var(--gold)] shadow-lg" />
+        </div>
+      </div>
+      <div className={`fixed top-0 right-0 bottom-0 z-40 pointer-events-none ${isOpen ? 'animate-curtain-open-right' : 'animate-curtain-slide-right'}`} style={{ width: '48px' }}>
+        <svg viewBox="0 0 48 800" className="w-full h-full" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="right-curtain" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="var(--curtain-primary)" />
+              <stop offset="40%" stopColor="var(--curtain-fold)" />
+              <stop offset="100%" stopColor="var(--curtain-primary)" />
+            </linearGradient>
+          </defs>
+          <rect width="48" height="800" fill="url(#right-curtain)" />
+          <line x1="16" y1="0" x2="16" y2="800" stroke="rgba(0,0,0,0.1)" strokeWidth="1" />
+          <line x1="32" y1="0" x2="32" y2="800" stroke="rgba(0,0,0,0.15)" strokeWidth="1" />
+          <line x1="1" y1="0" x2="1" y2="800" stroke="var(--gold-dim)" strokeWidth="1" />
+        </svg>
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center">
+          <div className="w-0.5 h-6 bg-gradient-to-b from-[var(--gold)] to-[var(--gold-light)]" />
+          <div className="w-3 h-3 rounded-full bg-gradient-to-br from-[var(--gold-light)] to-[var(--gold)] shadow-lg" />
+        </div>
+      </div>
+    </>
+  )
 }
 ```
 
-**Step 2: Create src/utils/midiToNote.ts**
-```ts
-import { Note, NoteName } from '../types'
+- [ ] **Step 2: Verify build** — `npx tsc --noEit` + `npm run build`
+- [ ] **Step 3: Commit** (stage and commit with `feat(ui): add ConcertCurtains`)
 
-const NOTE_NAMES: NoteName[] = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+---
 
-export function midiToNote(midi: number): Note {
-  const octave = Math.floor(midi / 12) - 1
-  const name = NOTE_NAMES[midi % 12]
-  return { name, octave, midi }
-}
-```
-
-**Step 3: Create src/utils/noteToPosition.ts**
-```ts
-import { Note } from '../types'
-import { Difficulty } from '../types'
-
-const NOTE_POSITIONS: Record<string, number> = {
-  'C4': -2, 'D4': -1, 'E4': 0, 'F4': 1, 'G4': 2, 'A4': 3, 'B4': 4,
-  'C5': 5, 'D5': 6, 'E5': 7, 'F5': 8, 'G5': 9, 'A5': 10, 'B5': 11,
-  'C6': 12,
-}
-
-export function noteToPosition(note: Note): number {
-  const key = `${note.name}${note.octave}`
-  const pos = NOTE_POSITIONS[key]
-  if (pos === undefined) throw new Error(`Note ${key} not in treble clef range`)
-  return pos
-}
-
-export function getNotePool(difficulty: Difficulty): number[] {
-  if (difficulty === 'beginner') {
-    return [60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79]
-  }
-  return Array.from({ length: 37 }, (_, i) => 48 + i)
-}
-```
-
-**Step 4: Commit**
-```bash
-git add src/types/index.ts src/utils/midiToNote.ts src/utils/noteToPosition.ts
-git commit -m "feat: add types and utility functions"
-```
