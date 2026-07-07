@@ -14,6 +14,8 @@ interface StaffProps {
   showNoteName: boolean
   lessonPool?: number[]
   trail?: Array<{ note: Note; id: number }>
+  noteExpression?: 'happy' | 'sad' | null
+  isMuted?: boolean
 }
 
 function getAccidental(name: string): string | null {
@@ -21,7 +23,7 @@ function getAccidental(name: string): string | null {
   return null
 }
 
-export default function Staff({ note, showNoteName, lessonPool, trail }: StaffProps) {
+export default function Staff({ note, showNoteName, lessonPool, trail, noteExpression, isMuted }: StaffProps) {
   const SVG_TOP_PAD = 20
   const height = STAFF_TOP + LINE_SPACING * 8 + 40
 
@@ -52,9 +54,14 @@ export default function Staff({ note, showNoteName, lessonPool, trail }: StaffPr
             strokeWidth={1.5}
           />
         ))}
-        <text x={12} y={STAFF_TOP + LINE_SPACING * 3 + 6} fontSize={36} fill="var(--staff-line, #4B3F2B)">
+        <text x={12} y={STAFF_TOP + LINE_SPACING * 3 + 6} fontSize={36} fill="var(--staff-line, #4B3F2B)" className={isMuted ? 'animate-sleepy-sway' : ''} style={{ transformOrigin: '30px 94px' }}>
           {'\u{1D11E}'}
         </text>
+        {isMuted && (
+          <text x={6} y={STAFF_TOP + LINE_SPACING * 5 + 8} fontSize={14} fill="#9CA3AF" opacity={0.6} aria-hidden="true">
+            {'\uD83D\uDCA4'}
+          </text>
+        )}
         {rangeDots}
         {trail && trail.map((entry, idx) => {
           const pos = noteToPosition(entry.note)
@@ -107,6 +114,22 @@ export default function Staff({ note, showNoteName, lessonPool, trail }: StaffPr
                   {note.name}{note.octave}
                 </text>
               )}
+              {noteExpression && (() => {
+                const fx = x + NOTE_RADIUS + 12
+                const fy = y - 2
+                const s = 1.2
+                return (
+                  <g className="animate-face-pop">
+                    <circle cx={fx - 3 * s} cy={fy - 2 * s} r={1.5 * s} fill="#DC2626" />
+                    <circle cx={fx + 3 * s} cy={fy - 2 * s} r={1.5 * s} fill="#DC2626" />
+                    {noteExpression === 'happy' ? (
+                      <path d={`M${fx - 4 * s},${fy + 2 * s} Q${fx},${fy - 1 * s} ${fx + 4 * s},${fy + 2 * s}`} fill="none" stroke="#DC2626" strokeWidth={1.5} strokeLinecap="round" />
+                    ) : (
+                      <path d={`M${fx - 4 * s},${fy + 4 * s} Q${fx},${fy + 7 * s} ${fx + 4 * s},${fy + 4 * s}`} fill="none" stroke="#DC2626" strokeWidth={1.5} strokeLinecap="round" />
+                    )}
+                  </g>
+                )
+              })()}
             </g>
           )
         })()}

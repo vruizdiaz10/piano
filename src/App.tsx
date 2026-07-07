@@ -24,14 +24,20 @@ export default function App() {
   const [staffFlash, setStaffFlash] = useState<'correct' | 'wrong' | null>(null)
   const [trail, setTrail] = useState<Array<{ note: import('./types').Note; id: number }>>([])
   const trailIdRef = useRef(0)
+  const [noteExpression, setNoteExpression] = useState<'happy' | 'sad' | null>(null)
+  const [themeTransition, setThemeTransition] = useState(false)
+  const [answeredNotes, setAnsweredNotes] = useState<number[]>([])
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
   const liveRegionRef = useRef<HTMLDivElement>(null)
 
   const accuracy = state.totalAttempts > 0 ? (state.correctAttempts / state.totalAttempts) * 100 : 0
 
-  // Apply dark mode class
+  // Apply dark mode class + twilight theater
   useEffect(() => {
     document.documentElement.classList.toggle('dark', state.theme === 'dark')
+    setThemeTransition(true)
+    const timer = setTimeout(() => setThemeTransition(false), 1500)
+    return () => clearTimeout(timer)
   }, [state.theme])
 
   const { midiConnected } = useMidi(
@@ -66,20 +72,25 @@ export default function App() {
     }
   }, [state.phase])
 
-  // Push answered notes to trail on feedback
+  // Push answered notes to trail + note expression + answered notes on feedback
   useEffect(() => {
     if (state.phase === 'feedback' && state.lastAnswerCorrect !== null && state.currentNote) {
       setTrail(prev => {
         const next = [...prev, { note: state.currentNote!, id: trailIdRef.current++ }]
         return next.slice(-3)
       })
+      setNoteExpression(state.lastAnswerCorrect ? 'happy' : 'sad')
+      setAnsweredNotes(prev => [...prev, state.currentNote!.midi])
+      const timer = setTimeout(() => setNoteExpression(null), 1500)
+      return () => clearTimeout(timer)
     }
   }, [state.phase])
 
-  // Clear trail on new game
+  // Clear trail + answered notes on new game
   useEffect(() => {
     if (state.totalAttempts === 0 && state.phase === 'waiting') {
       setTrail([])
+      setAnsweredNotes([])
     }
   }, [state.totalAttempts, state.phase])
 
@@ -138,10 +149,19 @@ export default function App() {
       ? 'animate-flash-red animate-shake'
       : ''
 
+  const sleepyClass = state.isMuted ? 'opacity-70 animate-sleepy-sway' : ''
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+    <div className={`min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300 ${themeTransition ? 'animate-theatre-glow' : ''}`}>
       <Confetti active={showConfetti} />
       <div aria-live="polite" aria-atomic="true" className="sr-only" ref={liveRegionRef} />
+      {themeTransition && (
+        <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center" aria-hidden="true">
+          <span className={`text-6xl animate-twilight-theater ${state.theme === 'light' ? 'text-yellow-400' : 'text-blue-200'}`}>
+            {state.theme === 'light' ? '\u2600\uFE0F' : '\uD83C\uDF19'}
+          </span>
+        </div>
+      )}
 
       {state.phase === 'levelComplete' && (
         <LevelComplete
@@ -150,7 +170,8 @@ export default function App() {
           totalNotes={state.totalAttempts}
           elapsedMs={state.startTime ? Date.now() - state.startTime : 0}
           onRetry={restartGame}
-          onNext={() => { restartGame() }} // tambiÃ©n reinicia
+          onNext={() => { restartGame() }}
+          answeredNotes={answeredNotes}
         />
       )}
 
@@ -162,14 +183,19 @@ export default function App() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setMuted(!state.isMuted)}
-              className="p-2 rounded-xl bg-white/80 dark:bg-gray-700/80 border border-amber-200 dark:border-gray-600 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-gray-600 transition-all cursor-pointer shadow-sm"
+              className="p-2 rounded-xl bg-white/80 dark:bg-gray-700/80 border border-amber-200 dark:border-gray-600 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-gray-600 transition-all cursor-pointer shadow-sm relative"
               aria-label={state.isMuted ? 'Activar sonido' : 'Silenciar sonido'}
             >
               {state.isMuted ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                </svg>
+                <>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                  </svg>
+                  <span className="absolute -top-2 -right-1 text-xs font-bold text-blue-400 animate-zzz-float" aria-hidden="true">Z</span>
+                  <span className="absolute -top-3 right-2 text-[10px] font-bold text-blue-300 animate-zzz-float" style={{ animationDelay: '0.3s' }} aria-hidden="true">z</span>
+                  <span className="absolute -top-4 right-4 text-[8px] font-bold text-blue-200 animate-zzz-float" style={{ animationDelay: '0.6s' }} aria-hidden="true">z</span>
+                </>
               ) : (
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
@@ -193,7 +219,7 @@ export default function App() {
           <ProgressBar current={state.totalAttempts} total={state.sessionTarget} label="Progreso" />
         )}
 
-        <div className={`bg-white dark:bg-gray-800 rounded-2xl border border-amber-200 dark:border-gray-700 shadow-lg shadow-amber-100/50 dark:shadow-none p-4 sm:p-6 mb-4 animate-slide-up transition-colors duration-300 ${staffClass}`}>
+        <div className={`bg-white dark:bg-gray-800 rounded-2xl border border-amber-200 dark:border-gray-700 shadow-lg shadow-amber-100/50 dark:shadow-none p-4 sm:p-6 mb-4 animate-slide-up transition-colors duration-300 ${staffClass} ${sleepyClass}`}>
           <Toolbar
             lessonId={state.lessonId}
             showNoteName={state.showNoteName}
@@ -201,7 +227,7 @@ export default function App() {
             onShowNoteNameChange={setShowNoteName}
           />
           <div className="mt-4">
-            <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} />
+            <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} />
           </div>
         </div>
 

@@ -5,6 +5,7 @@ interface LevelCompleteProps {
   elapsedMs: number
   onRetry: () => void
   onNext: () => void
+  answeredNotes?: number[]
 }
 
 function getStars(accuracy: number): number {
@@ -21,8 +22,28 @@ function formatTime(ms: number): string {
   return min > 0 ? `${min}m ${s}s` : `${s}s`
 }
 
-export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapsedMs, onRetry, onNext }: LevelCompleteProps) {
+function hash(midi: number, seed: number): number {
+  return ((midi * 9301 + 49297 * seed) % 233280) / 233280
+}
+
+function midiToConstellationPos(midi: number, index: number, total: number): { x: number; y: number } {
+  const angle = (index / Math.max(total, 2)) * Math.PI * 2 - Math.PI / 2
+  const r = 35 + hash(midi, 7) * 45
+  return {
+    x: 100 + Math.cos(angle) * r,
+    y: 70 + Math.sin(angle) * r,
+  }
+}
+
+export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapsedMs, onRetry, onNext, answeredNotes }: LevelCompleteProps) {
   const stars = getStars(accuracy)
+
+  const constellationPoints = answeredNotes && answeredNotes.length >= 2
+    ? answeredNotes.map((midi, i) => ({
+        midi,
+        ...midiToConstellationPos(midi, i, answeredNotes.length),
+      }))
+    : null
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Lección completada">
@@ -43,6 +64,32 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
             </span>
           ))}
         </div>
+
+        {constellationPoints && (
+          <div className="flex justify-center mb-3">
+            <svg viewBox="0 0 200 140" className="w-full max-w-[200px] h-auto" aria-hidden="true">
+              <rect width="200" height="140" rx={8} fill="var(--constellation-bg, #0F172A)" opacity={0.15} className="dark:opacity-30" />
+              {constellationPoints.map((p, i) => {
+                if (i === 0) return null
+                const prev = constellationPoints[i - 1]
+                return (
+                  <line key={`line-${i}`} x1={prev.x} y1={prev.y} x2={p.x} y2={p.y} stroke="#DC2626" strokeWidth={1} opacity={0.5} strokeDasharray="200" className="animate-constellation-draw" />
+                )
+              })}
+              {constellationPoints.map((p, i) => (
+                <g key={`star-${i}`} className="animate-star-appear" style={{ animationDelay: `${i * 0.2}s` }}>
+                  <circle cx={p.x} cy={p.y} r={3} fill="#DC2626" opacity={0.8} />
+                  <circle cx={p.x} cy={p.y} r={6} fill="#DC2626" opacity={0.2} />
+                </g>
+              ))}
+              {constellationPoints.map((p, i) => (
+                <text key={`label-${i}`} x={p.x} y={p.y + 14} textAnchor="middle" fontSize={8} fill="#9CA3AF" opacity={0.6}>
+                  {p.midi}
+                </text>
+              ))}
+            </svg>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-3 mb-6 text-center">
           <div className="rounded-xl bg-amber-50 dark:bg-amber-900/20 p-3">
