@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useGameState } from './hooks/useGameState'
 import { useMidi } from './hooks/useMidi'
 import { useSound } from './hooks/useSound'
+import { getLessonPool } from './data/lessons'
 import Staff from './components/Staff'
 import PianoKeyboard from './components/PianoKeyboard'
 import Feedback from './components/Feedback'
@@ -21,6 +22,8 @@ export default function App() {
   const [wrongKey, setWrongKey] = useState<number | null>(null)
   const [showConfetti, setShowConfetti] = useState(false)
   const [staffFlash, setStaffFlash] = useState<'correct' | 'wrong' | null>(null)
+  const [trail, setTrail] = useState<Array<{ note: import('./types').Note; id: number }>>([])
+  const trailIdRef = useRef(0)
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
   const liveRegionRef = useRef<HTMLDivElement>(null)
 
@@ -33,10 +36,10 @@ export default function App() {
 
   const { midiConnected } = useMidi(
     useCallback((midi: number) => {
-      if (state.phase === 'waiting') {
+      if (state.phase === 'waiting' || (state.phase === 'feedback' && state.recovering)) {
         submitAnswer(midi)
       }
-    }, [state.phase, submitAnswer])
+    }, [state.phase, state.recovering, submitAnswer])
   )
 
   useEffect(() => {
@@ -63,6 +66,23 @@ export default function App() {
     }
   }, [state.phase])
 
+  // Push answered notes to trail on feedback
+  useEffect(() => {
+    if (state.phase === 'feedback' && state.lastAnswerCorrect !== null && state.currentNote) {
+      setTrail(prev => {
+        const next = [...prev, { note: state.currentNote!, id: trailIdRef.current++ }]
+        return next.slice(-3)
+      })
+    }
+  }, [state.phase])
+
+  // Clear trail on new game
+  useEffect(() => {
+    if (state.totalAttempts === 0 && state.phase === 'waiting') {
+      setTrail([])
+    }
+  }, [state.totalAttempts, state.phase])
+
   // Sound effects + confetti + flash on answer
   useEffect(() => {
     if (state.phase === 'feedback' || state.phase === 'levelComplete') {
@@ -85,17 +105,19 @@ export default function App() {
     }
   }, [state.phase])
 
-  // Auto-advance after feedback
+  // Auto-advance after feedback (with recovery window + timing jitter)
   useEffect(() => {
     if (state.phase === 'feedback' && state.currentNote) {
       setHighlightKey(state.currentNote.midi)
+      const base = state.lastAnswerCorrect === false ? 2500 : 1500
+      const jitter = (Math.random() - 0.5) * 400
       const timer = setTimeout(() => {
         setHighlightKey(null)
         nextNote()
-      }, 1500)
+      }, base + jitter)
       return () => clearTimeout(timer)
     }
-  }, [state.phase])
+  }, [state.phase, state.recovering, state.lastAnswerCorrect])
 
   // Announce streak to screen readers
   useEffect(() => {
@@ -105,10 +127,10 @@ export default function App() {
   }, [state.streak])
 
   const handleKeyboardPlay = useCallback((note: { name: string; octave: number; midi: number }) => {
-    if (state.phase === 'waiting') {
+    if (state.phase === 'waiting' || (state.phase === 'feedback' && state.recovering)) {
       submitAnswer(note.midi)
     }
-  }, [state.phase, submitAnswer])
+  }, [state.phase, state.recovering, submitAnswer])
 
   const staffClass = staffFlash === 'correct'
     ? 'animate-flash-green'
@@ -179,7 +201,7 @@ export default function App() {
             onShowNoteNameChange={setShowNoteName}
           />
           <div className="mt-4">
-            <Staff note={state.currentNote} showNoteName={state.showNoteName} />
+            <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} />
           </div>
         </div>
 
@@ -212,7 +234,7 @@ export default function App() {
             </button>
           </div>
         ) : (
-          <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} />
+          <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} />
         )}
 
         {state.phase === 'feedback' && (

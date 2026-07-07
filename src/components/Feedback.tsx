@@ -3,9 +3,10 @@ import { Note } from '../types'
 interface FeedbackProps {
   isCorrect: boolean | null
   note: Note | null
+  recovering: boolean
 }
 
-export default function Feedback({ isCorrect, note }: FeedbackProps) {
+export default function Feedback({ isCorrect, note, recovering }: FeedbackProps) {
   if (isCorrect === null || !note) return <div className="h-14" />
 
   const announcement = isCorrect
@@ -27,9 +28,19 @@ export default function Feedback({ isCorrect, note }: FeedbackProps) {
         <span className="text-xl">{isCorrect ? '\u2713' : '\u2717'}</span>
         {isCorrect ? '\u00A1Correcto!' : 'Incorrecto'}
       </div>
-      {!isCorrect && (
+      {!isCorrect && !recovering && (
         <div className="text-sm text-amber-700 dark:text-amber-400 font-medium animate-slide-up">
           Era <span className="font-bold text-red-600 dark:text-red-400">{note.name}{note.octave}</span>
+        </div>
+      )}
+      {!isCorrect && recovering && (
+        <div className="flex flex-col items-center gap-1.5">
+          <div className="text-sm text-amber-700 dark:text-amber-400 font-medium animate-pulse animate-pulse-ring px-3 py-1 rounded-lg">
+            ¡Intenta de nuevo!
+          </div>
+          <div className="w-48 h-1.5 bg-amber-200 dark:bg-amber-700 rounded-full overflow-hidden">
+            <div className="h-full bg-amber-500 rounded-full animate-timer-shrink" />
+          </div>
         </div>
       )}
       <span className="sr-only">{announcement}</span>

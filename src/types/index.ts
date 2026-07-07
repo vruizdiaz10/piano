@@ -12,6 +12,7 @@ export interface GameState {
   phase: GamePhase
   currentNote: Note | null
   lastAnswerCorrect: boolean | null
+  recovering: boolean
   streak: number
   bestStreak: number
   totalAttempts: number

@@ -1,5 +1,6 @@
 import { Note } from '../types'
 import { noteToPosition } from '../utils/noteToPosition'
+import { midiToNote } from '../utils/midiToNote'
 
 const LINE_SPACING = 16
 const STAFF_TOP = 60
@@ -11,6 +12,8 @@ const STEM_LENGTH = LINE_SPACING * 3.5
 interface StaffProps {
   note?: Note | null
   showNoteName: boolean
+  lessonPool?: number[]
+  trail?: Array<{ note: Note; id: number }>
 }
 
 function getAccidental(name: string): string | null {
@@ -18,9 +21,21 @@ function getAccidental(name: string): string | null {
   return null
 }
 
-export default function Staff({ note, showNoteName }: StaffProps) {
+export default function Staff({ note, showNoteName, lessonPool, trail }: StaffProps) {
   const SVG_TOP_PAD = 20
   const height = STAFF_TOP + LINE_SPACING * 8 + 40
+
+  const rangeDots = lessonPool && lessonPool.length > 1
+    ? (() => {
+        const minMidi = Math.min(...lessonPool)
+        const maxMidi = Math.max(...lessonPool)
+        const minPos = noteToPosition(midiToNote(minMidi))
+        const maxPos = noteToPosition(midiToNote(maxMidi))
+        const minY = STAFF_TOP - minPos * LINE_SPACING / 2 + LINE_SPACING * 4
+        const maxY = STAFF_TOP - maxPos * LINE_SPACING / 2 + LINE_SPACING * 4
+        return <><circle cx={STAFF_LEFT - 12} cy={minY} r={4} fill="#9CA3AF" opacity={0.35} /><circle cx={STAFF_LEFT - 12} cy={maxY} r={4} fill="#9CA3AF" opacity={0.35} /></>
+      })()
+    : null
 
   return (
     <div className="flex justify-center">
@@ -40,6 +55,18 @@ export default function Staff({ note, showNoteName }: StaffProps) {
         <text x={12} y={STAFF_TOP + LINE_SPACING * 3 + 6} fontSize={36} fill="var(--staff-line, #4B3F2B)">
           {'\u{1D11E}'}
         </text>
+        {rangeDots}
+        {trail && trail.map((entry, idx) => {
+          const pos = noteToPosition(entry.note)
+          const y = STAFF_TOP - pos * LINE_SPACING / 2 + LINE_SPACING * 4
+          const x = STAFF_LEFT + 160
+          const opacity = 0.15 + (idx / (trail.length || 1)) * 0.35
+          return (
+            <g key={entry.id} opacity={opacity} className="animate-ghost-drift">
+              <ellipse cx={x} cy={y} rx={NOTE_RADIUS * 0.6} ry={NOTE_RADIUS * 0.6 * 0.65} fill="#DC2626" opacity={0.5} />
+            </g>
+          )
+        })}
         {note && (() => {
           const pos = noteToPosition(note)
           const y = STAFF_TOP - pos * LINE_SPACING / 2 + LINE_SPACING * 4
