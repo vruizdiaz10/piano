@@ -32,9 +32,9 @@
     --gold: #C9922B;
     --gold-light: #E2B84D;
     --gold-dim: rgba(201, 146, 43, 0.3);
-    --stage-floor: #3D1F1A;
-    --stage-bg: #2C1810;
-    --spotlight-color: rgba(255, 220, 150, 0.12);
+    --stage-floor: #D4C5AD;
+    --stage-bg: #E8DDCF;
+    --spotlight-color: rgba(255, 220, 150, 0.2);
     --ebony: #2C1810;
     --ivory: #F5F0E5;
   }
