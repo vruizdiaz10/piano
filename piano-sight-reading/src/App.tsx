@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useGameState } from './hooks/useGameState'
 import { useMidi } from './hooks/useMidi'
 import { useSound } from './hooks/useSound'
-import { getLessonPool } from './data/lessons'
+import { getLessonPool, LESSONS } from './data/lessons'
 import Staff from './components/Staff'
 import PianoKeyboard from './components/PianoKeyboard'
 import Feedback from './components/Feedback'
@@ -29,6 +29,10 @@ export default function App() {
   const [answeredNotes, setAnsweredNotes] = useState<number[]>([])
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
   const liveRegionRef = useRef<HTMLDivElement>(null)
+
+  const currentLesson = LESSONS.find(l => l.id === state.lessonId)
+  const clef = currentLesson?.clef ?? 'treble'
+  const keyboardStart = clef === 'bass' ? 36 : 48
 
   const accuracy = state.totalAttempts > 0 ? (state.correctAttempts / state.totalAttempts) * 100 : 0
 
@@ -227,7 +231,7 @@ export default function App() {
             onShowNoteNameChange={setShowNoteName}
           />
           <div className="mt-4">
-            <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} />
+            <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} />
           </div>
         </div>
 
@@ -246,7 +250,7 @@ export default function App() {
         )}
 
         <div className="bg-card rounded-2xl border border-border p-4 mb-4 animate-slide-up transition-colors duration-300">
-          <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} />
+          <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} startMidi={keyboardStart} />
         </div>
 
         {state.phase === 'idle' ? (

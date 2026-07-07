@@ -7,6 +7,8 @@ interface PianoKeyboardProps {
   highlightKey?: number | null
   correctKey?: number | null
   wrongKey?: number | null
+  startMidi?: number
+  count?: number
 }
 
 const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
@@ -17,8 +19,9 @@ function isBlack(midi: number): boolean {
 
 const KEYBOARD_RANGE = { start: 48, count: 37 }
 
-export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wrongKey }: PianoKeyboardProps) {
-  const { start, count } = KEYBOARD_RANGE
+export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wrongKey, startMidi, count: countProp }: PianoKeyboardProps) {
+  const start = startMidi ?? KEYBOARD_RANGE.start
+  const count = countProp ?? KEYBOARD_RANGE.count
   const keys = useMemo(() => Array.from({ length: count }, (_, i) => start + i), [start, count])
   const whiteKeys = useMemo(() => keys.filter(m => !isBlack(m)), [keys])
 

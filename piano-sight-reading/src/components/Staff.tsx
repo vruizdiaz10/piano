@@ -1,4 +1,4 @@
-import { Note } from '../types'
+import { Note, Clef } from '../types'
 import { noteToPosition } from '../utils/noteToPosition'
 import { midiToNote } from '../utils/midiToNote'
 
@@ -16,6 +16,7 @@ interface StaffProps {
   trail?: Array<{ note: Note; id: number }>
   noteExpression?: 'happy' | 'sad' | null
   isMuted?: boolean
+  clef?: Clef
 }
 
 function getAccidental(name: string): string | null {
@@ -23,7 +24,7 @@ function getAccidental(name: string): string | null {
   return null
 }
 
-export default function Staff({ note, showNoteName, lessonPool, trail, noteExpression, isMuted }: StaffProps) {
+export default function Staff({ note, showNoteName, lessonPool, trail, noteExpression, isMuted, clef = 'treble' }: StaffProps) {
   const SVG_TOP_PAD = 20
   const height = STAFF_TOP + LINE_SPACING * 8 + 40
 
@@ -31,8 +32,8 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
     ? (() => {
         const minMidi = Math.min(...lessonPool)
         const maxMidi = Math.max(...lessonPool)
-        const minPos = noteToPosition(midiToNote(minMidi))
-        const maxPos = noteToPosition(midiToNote(maxMidi))
+        const minPos = noteToPosition(midiToNote(minMidi), clef)
+        const maxPos = noteToPosition(midiToNote(maxMidi), clef)
         const minY = STAFF_TOP - minPos * LINE_SPACING / 2 + LINE_SPACING * 4
         const maxY = STAFF_TOP - maxPos * LINE_SPACING / 2 + LINE_SPACING * 4
         return <><circle cx={STAFF_LEFT - 12} cy={minY} r={4} fill="#9CA3AF" opacity={0.35} /><circle cx={STAFF_LEFT - 12} cy={maxY} r={4} fill="#9CA3AF" opacity={0.35} /></>
@@ -55,7 +56,7 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
           />
         ))}
         <text x={12} y={STAFF_TOP + LINE_SPACING * 3 + 6} fontSize={36} fill="var(--staff-line, #4B3F2B)" className={isMuted ? 'animate-sleepy-sway' : ''} style={{ transformOrigin: '30px 94px' }}>
-          {'\u{1D11E}'}
+          {clef === 'bass' ? '\u{1D122}' : '\u{1D11E}'}
         </text>
         {isMuted && (
           <text x={6} y={STAFF_TOP + LINE_SPACING * 5 + 8} fontSize={14} fill="#9CA3AF" opacity={0.6} aria-hidden="true">
@@ -64,7 +65,7 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
         )}
         {rangeDots}
         {trail && trail.map((entry, idx) => {
-          const pos = noteToPosition(entry.note)
+          const pos = noteToPosition(entry.note, clef)
           const y = STAFF_TOP - pos * LINE_SPACING / 2 + LINE_SPACING * 4
           const x = STAFF_LEFT + 160
           const opacity = 0.15 + (idx / (trail.length || 1)) * 0.35
@@ -75,7 +76,7 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
           )
         })}
         {note && (() => {
-          const pos = noteToPosition(note)
+          const pos = noteToPosition(note, clef)
           const y = STAFF_TOP - pos * LINE_SPACING / 2 + LINE_SPACING * 4
           const x = STAFF_LEFT + 160
           const accidental = getAccidental(note.name)
