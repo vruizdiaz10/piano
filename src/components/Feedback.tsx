@@ -1,12 +1,14 @@
-import { Note } from '../types'
+import { Note, ErrorType } from '../types'
+import { getErrorTip } from '../utils/errorAnalysis'
 
 interface FeedbackProps {
   isCorrect: boolean | null
   note: Note | null
   recovering: boolean
+  errorType?: ErrorType | null
 }
 
-export default function Feedback({ isCorrect, note, recovering }: FeedbackProps) {
+export default function Feedback({ isCorrect, note, recovering, errorType }: FeedbackProps) {
   if (isCorrect === null || !note) return <div className="h-14" />
 
   const announcement = isCorrect
@@ -31,6 +33,11 @@ export default function Feedback({ isCorrect, note, recovering }: FeedbackProps)
       {!isCorrect && !recovering && (
         <div className="text-sm text-amber-700 dark:text-amber-400 font-medium animate-slide-up">
           Era <span className="font-bold text-red-600 dark:text-red-400">{note.name}{note.octave}</span>
+        </div>
+      )}
+      {!isCorrect && !recovering && errorType && errorType !== 'random' && (
+        <div className="max-w-xs text-xs text-center text-amber-600 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 rounded-xl animate-slide-up border border-amber-200 dark:border-amber-700">
+          {getErrorTip(errorType, note)}
         </div>
       )}
       {!isCorrect && recovering && (

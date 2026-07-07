@@ -168,6 +168,7 @@ export default function App() {
           bestStreak={state.bestStreak}
           totalNotes={state.totalAttempts}
           elapsedMs={state.startTime ? Date.now() - state.startTime : 0}
+          lessonId={state.lessonId}
           onRetry={restartGame}
           onNext={() => { restartGame() }}
           answeredNotes={answeredNotes}
@@ -259,7 +260,7 @@ export default function App() {
             </button>
           </div>
         ) : (
-          <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} />
+          <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} errorType={state.lastErrorType} />
         )}
 
         {state.phase === 'feedback' && (

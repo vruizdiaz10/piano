@@ -1,8 +1,11 @@
+import { LESSONS } from '../data/lessons'
+
 interface LevelCompleteProps {
   accuracy: number
   bestStreak: number
   totalNotes: number
   elapsedMs: number
+  lessonId: string
   onRetry: () => void
   onNext: () => void
   answeredNotes?: number[]
@@ -35,8 +38,15 @@ function midiToConstellationPos(midi: number, index: number, total: number): { x
   }
 }
 
-export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapsedMs, onRetry, onNext, answeredNotes }: LevelCompleteProps) {
+export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapsedMs, lessonId, onRetry, onNext, answeredNotes }: LevelCompleteProps) {
   const stars = getStars(accuracy)
+  const lesson = LESSONS.find(l => l.id === lessonId)
+  const mastery = lesson?.mastery
+  const masteryAchieved = mastery
+    ? accuracy / 100 >= mastery.minAccuracy
+      && bestStreak >= mastery.minStreak
+      && totalNotes >= mastery.minNotes
+    : false
 
   const constellationPoints = answeredNotes && answeredNotes.length >= 2
     ? answeredNotes.map((midi, i) => ({
@@ -64,6 +74,18 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
             </span>
           ))}
         </div>
+
+        {mastery && (
+          <div className={`text-center mb-3 px-3 py-2 rounded-xl text-sm font-semibold ${
+            masteryAchieved
+              ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-600'
+              : 'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-600'
+          }`}>
+            {masteryAchieved
+              ? '\u2714 Maestría alcanzada'
+              : `Falta: ${accuracy / 100 < mastery.minAccuracy ? `precisión ${Math.round(mastery.minAccuracy * 100)}% ` : ''}${bestStreak < mastery.minStreak ? `racha ${mastery.minStreak} ` : ''}${totalNotes < mastery.minNotes ? `notas ${mastery.minNotes}` : ''}`}
+          </div>
+        )}
 
         {constellationPoints && (
           <div className="flex justify-center mb-3">
@@ -119,7 +141,13 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
           </button>
           <button
             onClick={onNext}
-            className="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-b from-red-500 to-red-600 text-white font-semibold hover:from-red-600 hover:to-red-700 transition-all cursor-pointer shadow-md"
+            disabled={mastery && mastery.unlockNext && !masteryAchieved}
+            className={`flex-1 px-4 py-2.5 rounded-xl font-semibold transition-all cursor-pointer shadow-md ${
+              mastery && mastery.unlockNext && !masteryAchieved
+                ? 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                : 'bg-gradient-to-b from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700'
+            }`}
+            title={mastery && mastery.unlockNext && !masteryAchieved ? 'Alcanza la maestría para desbloquear' : ''}
           >
             Siguiente Lección
           </button>
