@@ -188,7 +188,7 @@ export default function App() {
         />
       )}
 
-      <div className="max-w-2xl mx-auto px-4 py-6 sm:py-8 relative z-10">
+      <div className="max-w-2xl mx-auto px-4 pt-20 pb-6 sm:pt-24 sm:pb-8 relative z-10">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
             Lectura Musical
