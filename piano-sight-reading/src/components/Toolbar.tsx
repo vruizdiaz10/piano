@@ -16,7 +16,7 @@ export default function Toolbar({
   const current = LESSONS.find(l => l.id === lessonId)
 
   return (
-    <div className="flex justify-center gap-3 mb-4 flex-wrap items-center">
+    <div className="flex justify-center gap-3 flex-wrap items-center">
       <div className="flex flex-col items-start gap-1">
         <Select value={lessonId} onValueChange={onLessonChange}>
           <SelectTrigger className="w-44">
@@ -29,10 +29,10 @@ export default function Toolbar({
           </SelectContent>
         </Select>
         {current && (
-          <span className="text-xs text-amber-600 ml-1">{current.desc}</span>
+          <span className="text-xs text-muted-foreground ml-1">{current.desc}</span>
         )}
       </div>
-      <label className="flex items-center gap-2 text-sm cursor-pointer">
+      <label className="flex items-center gap-2 text-sm cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
         <Checkbox checked={showNoteName} onCheckedChange={(v) => onShowNoteNameChange(!!v)} />
         Mostrar nota
       </label>

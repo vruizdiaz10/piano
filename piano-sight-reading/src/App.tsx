@@ -151,7 +151,7 @@ export default function App() {
   const sleepyClass = state.isMuted ? 'opacity-70 animate-sleepy-sway' : ''
 
   return (
-    <div className={`min-h-screen bg-gradient-to-b from-amber-50 to-orange-50 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300 ${themeTransition ? 'animate-theatre-glow' : ''}`}>
+    <div className={`min-h-screen bg-background transition-colors duration-300 ${themeTransition ? 'animate-theatre-glow' : ''}`}>
       <Confetti active={showConfetti} />
       <div aria-live="polite" aria-atomic="true" className="sr-only" ref={liveRegionRef} />
       {themeTransition && (
@@ -175,15 +175,15 @@ export default function App() {
         />
       )}
 
-      <div className="max-w-2xl mx-auto px-4 py-6 sm:py-10">
+      <div className="max-w-2xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl sm:text-3xl font-bold text-red-700 dark:text-red-400 tracking-tight">
-            Lectura Musical al Piano
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
+            Lectura Musical
           </h1>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setMuted(!state.isMuted)}
-              className="p-2 rounded-xl bg-white/80 dark:bg-gray-700/80 border border-amber-200 dark:border-gray-600 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-gray-600 transition-all cursor-pointer shadow-sm relative"
+              className="p-2 rounded-xl bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-muted transition-all cursor-pointer relative"
               aria-label={state.isMuted ? 'Activar sonido' : 'Silenciar sonido'}
             >
               {state.isMuted ? (
@@ -203,10 +203,10 @@ export default function App() {
               )}
             </button>
             <ThemeToggle theme={state.theme} onToggle={setTheme} />
-            <div className={`flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm ${
+            <div className={`flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-full text-xs font-semibold ${
               midiConnected
-                ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700'
-                : 'bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-700'
+                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
+                : 'bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'
             }`}>
               <span className={`inline-block w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500' : 'bg-red-400'}`} />
               <span className="hidden sm:inline">MIDI: {midiConnected ? 'Conectado' : 'Sin conexión'}</span>
@@ -219,7 +219,7 @@ export default function App() {
           <ProgressBar current={state.totalAttempts} total={state.sessionTarget} label="Progreso" />
         )}
 
-        <div className={`bg-white dark:bg-gray-800 rounded-2xl border border-amber-200 dark:border-gray-700 shadow-lg shadow-amber-100/50 dark:shadow-none p-4 sm:p-6 mb-4 animate-slide-up transition-colors duration-300 ${staffClass} ${sleepyClass}`}>
+        <div className={`bg-card rounded-2xl border border-border p-4 sm:p-6 mb-4 animate-slide-up transition-colors duration-300 ${staffClass} ${sleepyClass}`}>
           <Toolbar
             lessonId={state.lessonId}
             showNoteName={state.showNoteName}
@@ -235,25 +235,24 @@ export default function App() {
           <div className="flex justify-center items-center gap-2 sm:gap-3 mb-4 animate-slide-up flex-wrap">
             <StreakBadge streak={state.streak} />
             <StreakOwl streak={state.streak} />
-            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-white dark:bg-gray-800 border border-amber-200 dark:border-gray-700 shadow-sm text-xs sm:text-sm font-semibold text-amber-800 dark:text-amber-300 transition-colors">
-              <span className="hidden sm:inline">Aciertos </span>
+            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-border text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
               <ScoreDisplay accuracy={accuracy} totalAttempts={state.totalAttempts} />
             </div>
-            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-white dark:bg-gray-800 border border-amber-200 dark:border-gray-700 shadow-sm text-xs sm:text-sm font-semibold text-amber-800 dark:text-amber-300 transition-colors">
+            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-border text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
               <span className="hidden sm:inline">Intentos </span>
-              <span className="text-red-600 dark:text-red-400 text-sm sm:text-base">{state.totalAttempts}</span>
+              <span className="text-destructive text-sm sm:text-base">{state.totalAttempts}</span>
             </div>
           </div>
         )}
 
-        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-amber-200 dark:border-gray-700 shadow-lg shadow-amber-100/50 dark:shadow-none p-4 mb-4 animate-slide-up transition-colors duration-300">
+        <div className="bg-card rounded-2xl border border-border p-4 mb-4 animate-slide-up transition-colors duration-300">
           <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} />
         </div>
 
         {state.phase === 'idle' ? (
           <div className="text-center animate-slide-up">
             <button
-              className="px-12 py-4 text-lg font-bold rounded-2xl bg-gradient-to-b from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 active:from-red-700 active:to-red-800 transition-all duration-150 cursor-pointer border-none shadow-lg shadow-red-200/50 hover:shadow-xl hover:shadow-red-300/50 btn-3d"
+              className="px-12 py-4 text-lg font-bold rounded-2xl bg-primary text-primary-foreground hover:opacity-90 active:opacity-80 transition-all duration-150 cursor-pointer border-none btn-3d"
               onClick={startGame}
             >
               Iniciar Juego
@@ -266,7 +265,7 @@ export default function App() {
         {state.phase === 'feedback' && (
           <div className="text-center mt-3 animate-slide-up">
             <button
-              className="px-8 py-3 text-base font-semibold rounded-xl border-2 border-amber-300 dark:border-amber-600 bg-white dark:bg-gray-700 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-gray-600 active:bg-amber-100 transition-all duration-150 cursor-pointer shadow-sm hover:shadow-md btn-3d"
+              className="px-8 py-3 text-base font-semibold rounded-xl border-2 border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted active:bg-card transition-all duration-150 cursor-pointer btn-3d"
               onClick={() => { setHighlightKey(null); nextNote() }}
             >
               Siguiente Nota &rarr;
