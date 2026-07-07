@@ -51,8 +51,9 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
   const blackKeyH = 160 * 0.6
 
   return (
-    <div ref={containerRef} className="py-2 select-none">
-      <div className="flex relative h-36 mx-auto" role="group" aria-label="Teclado de piano">
+    <div className="border border-[var(--gold-dim)]/50 rounded-lg shadow-inner shadow-[var(--ebony)]/10">
+      <div ref={containerRef} className="py-2 select-none">
+        <div className="flex relative h-36 mx-auto" role="group" aria-label="Teclado de piano">
         {whiteKeys.map(midi => {
           const octave = Math.floor(midi / 12) - 1
           const name = NOTE_NAMES[midi % 12]
@@ -63,8 +64,8 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
             <div
               key={midi}
               className={cn(
-                'h-36 border border-border rounded-b-[4px] bg-white cursor-pointer flex flex-col justify-end items-center pb-1 text-xs text-muted-foreground transition-colors duration-100 hover:bg-muted active:bg-primary/10 key-press',
-                isHighlighted && '!bg-primary !text-white',
+                'h-36 border border-[var(--gold-dim)] rounded-b-[4px] bg-gradient-to-b from-white to-[var(--ivory)] cursor-pointer flex flex-col justify-end items-center pb-1 text-xs text-muted-foreground transition-colors duration-100 hover:bg-gradient-to-b hover:from-white hover:to-[var(--gold-light)]/10 active:bg-primary/10 key-press',
+                isHighlighted && '!bg-gradient-to-b !from-primary !to-primary/80 !text-white',
                 isCorrect && '!bg-success animate-key-correct',
                 isWrong && 'animate-pulse-glow'
               )}
@@ -92,7 +93,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
             >
               <div
                 className={cn(
-                  'border border-border rounded-b-[4px] bg-foreground/80 cursor-pointer transition-colors duration-100 hover:bg-foreground/60 key-press',
+                  'border border-[var(--ebony)] rounded-b-[4px] bg-gradient-to-b from-[var(--ebony)] to-black cursor-pointer transition-colors duration-100 hover:bg-foreground/60 key-press',
                   isHighlighted && '!bg-accent',
                   isCorrect && '!bg-success animate-key-correct',
                   isWrong && 'animate-pulse-glow'
@@ -110,6 +111,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
             </div>
           )
         })}
+        </div>
       </div>
     </div>
   )
