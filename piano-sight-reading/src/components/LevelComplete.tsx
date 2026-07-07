@@ -91,19 +91,21 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
           <div className="flex justify-center mb-3">
             <svg viewBox="0 0 200 140" className="w-full max-w-[200px] h-auto" aria-hidden="true">
               <rect width="200" height="140" rx={8} fill="var(--constellation-bg, #0F172A)" opacity={0.15} className="dark:opacity-30" />
-              {constellationPoints.map((p, i) => {
-                if (i === 0) return null
-                const prev = constellationPoints[i - 1]
-                return (
-                  <line key={`line-${i}`} x1={prev.x} y1={prev.y} x2={p.x} y2={p.y} stroke="#DC2626" strokeWidth={1} opacity={0.5} strokeDasharray="200" className="animate-constellation-draw" />
-                )
-              })}
-              {constellationPoints.map((p, i) => (
-                <g key={`star-${i}`} className="animate-star-appear" style={{ animationDelay: `${i * 0.2}s` }}>
-                  <circle cx={p.x} cy={p.y} r={3} fill="#DC2626" opacity={0.8} />
-                  <circle cx={p.x} cy={p.y} r={6} fill="#DC2626" opacity={0.2} />
-                </g>
-              ))}
+              <g className="text-primary">
+                {constellationPoints.map((p, i) => {
+                  if (i === 0) return null
+                  const prev = constellationPoints[i - 1]
+                  return (
+                    <line key={`line-${i}`} x1={prev.x} y1={prev.y} x2={p.x} y2={p.y} stroke="currentColor" strokeWidth={1} opacity={0.5} strokeDasharray="200" className="animate-constellation-draw" />
+                  )
+                })}
+                {constellationPoints.map((p, i) => (
+                  <g key={`star-${i}`} className="animate-star-appear" style={{ animationDelay: `${i * 0.2}s` }}>
+                    <circle cx={p.x} cy={p.y} r={3} fill="currentColor" opacity={0.8} />
+                    <circle cx={p.x} cy={p.y} r={6} fill="currentColor" opacity={0.2} />
+                  </g>
+                ))}
+              </g>
               {constellationPoints.map((p, i) => (
                 <text key={`label-${i}`} x={p.x} y={p.y + 14} textAnchor="middle" fontSize={8} fill="#9CA3AF" opacity={0.6}>
                   {p.midi}

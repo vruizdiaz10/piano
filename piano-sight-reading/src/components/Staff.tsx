@@ -69,8 +69,8 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
           const x = STAFF_LEFT + 160
           const opacity = 0.15 + (idx / (trail.length || 1)) * 0.35
           return (
-            <g key={entry.id} opacity={opacity} className="animate-ghost-drift">
-              <ellipse cx={x} cy={y} rx={NOTE_RADIUS * 0.6} ry={NOTE_RADIUS * 0.6 * 0.65} fill="#DC2626" opacity={0.5} />
+            <g key={entry.id} opacity={opacity} className="animate-ghost-drift text-primary">
+              <ellipse cx={x} cy={y} rx={NOTE_RADIUS * 0.6} ry={NOTE_RADIUS * 0.6 * 0.65} fill="currentColor" opacity={0.5} />
             </g>
           )
         })}
@@ -95,7 +95,7 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
               {accidental && (
                 <text x={x - 22} y={y + 6} fontSize={20} fill="var(--staff-line, #4B3F2B)">{accidental}</text>
               )}
-              <g>
+              <g className="text-primary">
                 {(() => {
                   const stemUp = pos < 4
                   const stemX = stemUp ? x + NOTE_RADIUS * 0.55 : x - NOTE_RADIUS * 0.55
@@ -103,14 +103,14 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
                   const yEnd = stemUp ? yAttach - STEM_LENGTH : yAttach + STEM_LENGTH
                   return (
                     <>
-                      <ellipse cx={x} cy={y} rx={NOTE_RADIUS} ry={NOTE_RADIUS * 0.65} fill="#DC2626" transform={`rotate(-18 ${x} ${y})`} />
-                      <line x1={stemX} y1={yAttach} x2={stemX} y2={yEnd} stroke="#DC2626" strokeWidth={2.5} strokeLinecap="round" />
+                      <ellipse cx={x} cy={y} rx={NOTE_RADIUS} ry={NOTE_RADIUS * 0.65} fill="currentColor" transform={`rotate(-18 ${x} ${y})`} />
+                      <line x1={stemX} y1={yAttach} x2={stemX} y2={yEnd} stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" />
                     </>
                   )
                 })()}
               </g>
               {showNoteName && (
-                <text x={x} y={y - 24} textAnchor="middle" fontSize={14} fill="#666">
+                <text x={x} y={y - 24} textAnchor="middle" fontSize={14} className="fill-muted-foreground">
                   {note.name}{note.octave}
                 </text>
               )}
