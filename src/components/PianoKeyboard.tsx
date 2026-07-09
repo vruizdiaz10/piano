@@ -2,6 +2,18 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Note } from '../types'
 import { cn } from '../lib/utils'
 
+function useIsMobile(): boolean {
+  const [mobile, setMobile] = useState(false)
+  useLayoutEffect(() => {
+    const mq = window.matchMedia('(orientation: landscape) and (max-height: 600px)')
+    setMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+  return mobile
+}
+
 interface PianoKeyboardProps {
   onPlayNote: (note: Note) => void
   highlightKey?: number | null
@@ -20,18 +32,22 @@ function isBlack(midi: number): boolean {
 const KEYBOARD_RANGE = { start: 48, count: 37 }
 
 export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wrongKey, startMidi, count: countProp }: PianoKeyboardProps) {
+  const isMobile = useIsMobile()
   const start = startMidi ?? KEYBOARD_RANGE.start
   const count = countProp ?? KEYBOARD_RANGE.count
-  const keys = useMemo(() => Array.from({ length: count }, (_, i) => start + i), [start, count])
+  const [actualStart, actualCount] = isMobile ? [48, 24] : [start, count]
+  const keys = useMemo(() => Array.from({ length: actualCount }, (_, i) => actualStart + i), [actualStart, actualCount])
   const whiteKeys = useMemo(() => keys.filter(m => !isBlack(m)), [keys])
 
   const containerRef = useRef<HTMLDivElement>(null)
   const [keyW, setKeyW] = useState(44)
+  const [ready, setReady] = useState(false)
 
   useLayoutEffect(() => {
     const update = () => {
       if (containerRef.current) {
         setKeyW(containerRef.current.clientWidth / whiteKeys.length)
+        setReady(true)
       }
     }
     update()
@@ -52,7 +68,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
 
   return (
     <div className="border border-[var(--gold-dim)]/50 rounded-lg shadow-inner shadow-[var(--ebony)]/10">
-      <div ref={containerRef} className="py-2 select-none">
+      <div ref={containerRef} className={`py-2 select-none transition-opacity duration-300 ${ready ? 'opacity-100' : 'opacity-0'}`}>
         <div className="flex relative h-36 mx-auto" role="group" aria-label="Teclado de piano">
         {whiteKeys.map(midi => {
           const octave = Math.floor(midi / 12) - 1
@@ -67,7 +83,8 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
                 'h-36 border border-[var(--gold-dim)] rounded-b-[4px] bg-gradient-to-b from-white to-[var(--ivory)] cursor-pointer flex flex-col justify-end items-center pb-1 text-xs text-muted-foreground transition-colors duration-100 hover:bg-gradient-to-b hover:from-white hover:to-[var(--gold-light)]/10 active:bg-primary/10 key-press',
                 isHighlighted && '!bg-gradient-to-b !from-primary !to-primary/80 !text-white',
                 isCorrect && '!bg-success animate-key-correct',
-                isWrong && 'animate-pulse-glow'
+                isWrong && 'animate-pulse-glow',
+                isCorrect && 'key-sparkle relative'
               )}
               style={{ width: keyW }}
               role="button"
@@ -96,7 +113,8 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
                   'border border-[var(--ebony)] rounded-b-[4px] bg-gradient-to-b from-[var(--ebony)] to-black cursor-pointer transition-colors duration-100 hover:bg-foreground/60 key-press-black',
                   isHighlighted && '!bg-accent',
                   isCorrect && '!bg-success animate-key-correct',
-                  isWrong && 'animate-pulse-glow'
+                  isWrong && 'animate-pulse-glow',
+                  isCorrect && 'key-sparkle relative'
                 )}
                 style={{ width: blackKeyW, height: blackKeyH }}
                 role="button"

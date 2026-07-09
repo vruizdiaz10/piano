@@ -21,10 +21,10 @@ export default function Feedback({ isCorrect, note, recovering, errorType }: Fee
         role="status"
         aria-live="polite"
         aria-atomic="true"
-        className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl text-base font-bold ${
+        className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl text-base font-bold shadow-lg ${
           isCorrect
-            ? 'bg-success/10 text-success border border-success/30 animate-bounce-once'
-            : 'bg-destructive/10 text-destructive border border-destructive/30 animate-shake'
+            ? 'bg-success/10 text-success border-2 border-success/30 animate-slide-up'
+            : 'bg-destructive/10 text-destructive border-2 border-destructive/30 animate-slide-up'
         }`}
       >
         <span className="text-xl">{isCorrect ? '\u2713' : '\u2717'}</span>

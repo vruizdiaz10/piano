@@ -5,13 +5,15 @@ import { Checkbox } from './ui/checkbox'
 interface ToolbarProps {
   lessonId: string
   showNoteName: boolean
+  isTimed: boolean
   onLessonChange: (id: string) => void
   onShowNoteNameChange: (v: boolean) => void
+  onTimedChange: (v: boolean) => void
 }
 
 export default function Toolbar({
-  lessonId, showNoteName,
-  onLessonChange, onShowNoteNameChange,
+  lessonId, showNoteName, isTimed,
+  onLessonChange, onShowNoteNameChange, onTimedChange,
 }: ToolbarProps) {
   const current = LESSONS.find(l => l.id === lessonId)
 
@@ -35,6 +37,10 @@ export default function Toolbar({
       <label className="flex items-center gap-2 text-sm cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
         <Checkbox checked={showNoteName} onCheckedChange={(v) => onShowNoteNameChange(!!v)} />
         Mostrar nota
+      </label>
+      <label className="flex items-center gap-2 text-sm cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
+        <Checkbox checked={isTimed} onCheckedChange={(v) => onTimedChange(!!v)} />
+        Temporizador
       </label>
     </div>
   )

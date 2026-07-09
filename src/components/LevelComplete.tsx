@@ -9,6 +9,7 @@ interface LevelCompleteProps {
   onRetry: () => void
   onNext: () => void
   answeredNotes?: number[]
+  responseTimes?: number[]
 }
 
 function getStars(accuracy: number): number {
@@ -38,7 +39,7 @@ function midiToConstellationPos(midi: number, index: number, total: number): { x
   }
 }
 
-export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapsedMs, lessonId, onRetry, onNext, answeredNotes }: LevelCompleteProps) {
+export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapsedMs, lessonId, onRetry, onNext, answeredNotes, responseTimes }: LevelCompleteProps) {
   const stars = getStars(accuracy)
   const lesson = LESSONS.find(l => l.id === lessonId)
   const mastery = lesson?.mastery
@@ -47,6 +48,13 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
       && bestStreak >= mastery.minStreak
       && totalNotes >= mastery.minNotes
     : false
+
+  const avgTime = responseTimes && responseTimes.length > 0
+    ? Math.round(responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length)
+    : 0
+  const bestTime = responseTimes && responseTimes.length > 0
+    ? Math.min(...responseTimes)
+    : 0
 
   const constellationPoints = answeredNotes && answeredNotes.length >= 2
     ? answeredNotes.map((midi, i) => ({
@@ -115,22 +123,30 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-3 mb-6 text-center">
-          <div className="rounded-xl bg-primary/5 p-3">
+        <div className="grid grid-cols-3 gap-2 mb-6 text-center">
+          <div className={`rounded-xl p-2 ${accuracy >= 75 ? 'bg-success/10 animate-gold-pulse' : accuracy >= 50 ? 'bg-primary/5 animate-gold-pulse' : 'bg-primary/5'}`}>
             <div className="text-xs text-muted-foreground font-medium">Precisión</div>
             <div className="text-lg font-bold text-foreground">{Math.round(accuracy)}%</div>
           </div>
-          <div className="rounded-xl bg-accent/5 p-3">
+          <div className="rounded-xl bg-accent/5 p-2">
             <div className="text-xs text-muted-foreground font-medium">Mejor Racha</div>
             <div className="text-lg font-bold text-foreground">{'\uD83D\uDD25'} {bestStreak}</div>
           </div>
-          <div className="rounded-xl bg-secondary/5 p-3">
+          <div className="rounded-xl bg-secondary/5 p-2">
             <div className="text-xs text-muted-foreground font-medium">Notas</div>
             <div className="text-lg font-bold text-foreground">{totalNotes}</div>
           </div>
-          <div className="rounded-xl bg-success/5 p-3">
-            <div className="text-xs text-muted-foreground font-medium">Tiempo</div>
+          <div className="rounded-xl bg-success/5 p-2">
+            <div className="text-xs text-muted-foreground font-medium">Tiempo Total</div>
             <div className="text-lg font-bold text-foreground">{formatTime(elapsedMs)}</div>
+          </div>
+          <div className="rounded-xl bg-primary/5 p-2">
+            <div className="text-xs text-muted-foreground font-medium">Respuesta Prom.</div>
+            <div className="text-lg font-bold text-foreground">{avgTime > 0 ? `${avgTime}ms` : '--'}</div>
+          </div>
+          <div className="rounded-xl bg-accent/5 p-2">
+            <div className="text-xs text-muted-foreground font-medium">Mejor Tiempo</div>
+            <div className="text-lg font-bold text-foreground">{bestTime > 0 ? `${bestTime}ms` : '--'}</div>
           </div>
         </div>
 

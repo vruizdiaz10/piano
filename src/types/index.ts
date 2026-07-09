@@ -43,4 +43,8 @@ export interface GameState {
   startTime: number | null
   isMuted: boolean
   theme: 'light' | 'dark'
+  noteShownAt: number
+  responseTimes: number[]
+  lastCorrectNote?: Note | null
+  isTimed: boolean
 }

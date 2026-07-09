@@ -19,11 +19,15 @@ const INITIAL_STATE: GameState = {
   totalAttempts: 0,
   correctAttempts: 0,
   lessonId: 'lines',
-  showNoteName: true,
+  showNoteName: false,
   sessionTarget: SESSION_TARGET,
   startTime: null,
   isMuted: false,
   theme: (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light',
+  noteShownAt: 0,
+  responseTimes: [],
+  lastCorrectNote: null,
+  isTimed: false,
 }
 
 function selectNote(lessonId: string, excludeMidi?: number): Note {
@@ -48,6 +52,7 @@ export function useGameState() {
         lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null,
         startTime: Date.now(), recovering: false,
         sessionTarget: target ?? SESSION_TARGET,
+        noteShownAt: Date.now(), responseTimes: [], lastCorrectNote: null,
       }
     })
   }, [])
@@ -64,6 +69,7 @@ export function useGameState() {
         const sessionDone = newTotal >= prev.sessionTarget
 
         const errorType: ErrorType | null = isCorrect ? null : analyzeError(prev.currentNote, midi)
+        const responseTime = Date.now() - prev.noteShownAt
 
         return {
           ...prev,
@@ -76,10 +82,13 @@ export function useGameState() {
           bestStreak: newBestStreak,
           totalAttempts: newTotal,
           correctAttempts: newCorrect,
+          responseTimes: [...prev.responseTimes, responseTime],
+          lastCorrectNote: isCorrect ? null : prev.currentNote,
         }
       }
       if (prev.phase === 'feedback' && prev.recovering && !prev.lastAnswerCorrect && prev.currentNote) {
         if (midi !== prev.currentNote.midi) return prev
+        const responseTime = Date.now() - prev.noteShownAt
         return {
           ...prev,
           lastAnswerCorrect: true,
@@ -87,6 +96,7 @@ export function useGameState() {
           lastErrorType: null,
           recovering: false,
           correctAttempts: prev.correctAttempts + 1,
+          responseTimes: [...prev.responseTimes, responseTime],
         }
       }
       return prev
@@ -96,7 +106,7 @@ export function useGameState() {
   const nextNote = useCallback(() => {
     setState(prev => {
       const note = selectNote(prev.lessonId, prev.currentNote?.midi)
-      return { ...prev, phase: 'waiting', currentNote: note, lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null, recovering: false }
+      return { ...prev, phase: 'waiting', currentNote: note, lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null, recovering: false, noteShownAt: Date.now(), lastCorrectNote: null }
     })
   }, [])
 
@@ -112,6 +122,10 @@ export function useGameState() {
     setState(prev => ({ ...prev, isMuted: muted }))
   }, [])
 
+  const setTimed = useCallback((timed: boolean) => {
+    setState(prev => ({ ...prev, isTimed: timed }))
+  }, [])
+
   const setTheme = useCallback((theme: 'light' | 'dark') => {
     setState(prev => ({ ...prev, theme }))
   }, [])
@@ -124,12 +138,13 @@ export function useGameState() {
         streak: 0, bestStreak: 0, totalAttempts: 0, correctAttempts: 0,
         lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null,
         startTime: Date.now(), recovering: false,
+        noteShownAt: Date.now(), responseTimes: [], lastCorrectNote: null,
       }
     })
   }, [])
 
   return {
     state, startGame, submitAnswer, nextNote,
-    setLesson, setShowNoteName, setMuted, setTheme, restartGame,
+    setLesson, setShowNoteName, setMuted, setTimed, setTheme, restartGame,
   }
 }

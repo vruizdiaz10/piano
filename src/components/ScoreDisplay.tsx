@@ -1,9 +1,11 @@
 interface ScoreDisplayProps {
   accuracy: number
   totalAttempts: number
+  timerDisplay?: number
+  isTimed?: boolean
 }
 
-export default function ScoreDisplay({ accuracy, totalAttempts }: ScoreDisplayProps) {
+export default function ScoreDisplay({ accuracy, totalAttempts, timerDisplay, isTimed }: ScoreDisplayProps) {
   const color = accuracy >= 80
     ? 'text-success'
     : accuracy >= 50
@@ -18,6 +20,12 @@ export default function ScoreDisplay({ accuracy, totalAttempts }: ScoreDisplayPr
 
   return (
     <div className="flex flex-col items-center gap-1">
+      {isTimed && timerDisplay !== undefined && (
+        <div className="flex items-center gap-1 text-xs font-mono text-muted-foreground">
+          <span className={`inline-block w-2 h-2 rounded-full ${timerDisplay <= 2 ? 'bg-red-400 animate-pulse' : 'bg-amber-400'}`} />
+          {timerDisplay}s
+        </div>
+      )}
       <div className={`text-2xl font-bold tabular-nums ${color}`}>
         {totalAttempts > 0 ? `${Math.round(accuracy)}%` : '--'}
       </div>

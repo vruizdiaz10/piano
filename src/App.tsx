@@ -22,7 +22,7 @@ import ProgressChart from './components/ProgressChart'
 import Spotlight from './components/Spotlight'
 
 export default function App() {
-  const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTheme, restartGame } = useGameState()
+  const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTimed, setTheme, restartGame } = useGameState()
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
   const [correctKey, setCorrectKey] = useState<number | null>(null)
   const [wrongKey, setWrongKey] = useState<number | null>(null)
@@ -154,6 +154,25 @@ export default function App() {
     }
   }, [state.phase])
 
+  // Countdown timer
+  const tickRef = useRef(0)
+  const [timerDisplay, setTimerDisplay] = useState(5)
+  useEffect(() => {
+    tickRef.current = 0
+    const duration = state.sessionTarget > 10 ? 8 : 5
+    setTimerDisplay(duration)
+    if (!state.isTimed || state.phase !== 'waiting') return
+    const interval = setInterval(() => {
+      tickRef.current += 1
+      setTimerDisplay(duration - tickRef.current)
+      if (tickRef.current >= duration) {
+        clearInterval(interval)
+        submitAnswer(-1)
+      }
+    }, 1000)
+    return () => { clearInterval(interval) }
+  }, [state.isTimed, state.phase, state.noteShownAt])
+
   const handleKeyboardPlay = useCallback((note: { name: string; octave: number; midi: number }) => {
     if (state.phase === 'waiting' || (state.phase === 'feedback' && state.recovering)) {
       submitAnswer(note.midi)
@@ -201,6 +220,7 @@ export default function App() {
           onRetry={restartGame}
           onNext={() => { restartGame() }}
           answeredNotes={answeredNotes}
+          responseTimes={state.responseTimes}
         />
       )}
 
@@ -255,11 +275,13 @@ export default function App() {
                 <Toolbar
                   lessonId={state.lessonId}
                   showNoteName={state.showNoteName}
+                  isTimed={state.isTimed}
                   onLessonChange={setLesson}
                   onShowNoteNameChange={setShowNoteName}
+                  onTimedChange={setTimed}
                 />
                 <div className="mt-4">
-                  <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} />
+                  <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} lastCorrectNote={state.lastCorrectNote} />
                 </div>
               </div>
             </OrnateFrame>
@@ -269,14 +291,14 @@ export default function App() {
                 <StreakBadge streak={state.streak} />
                 <StreakOwl streak={state.streak} />
                 {dailyStreak > 1 && (
-                  <div className="px-2.5 py-1.5 rounded-full text-xs font-bold bg-card border border-[var(--gold-dim)]/40 text-muted-foreground shadow-sm">
+                  <div className="px-2 py-1 rounded-full text-xs font-bold bg-card border border-[var(--gold-dim)]/40 text-muted-foreground shadow-sm">
                     {'\uD83D\uDD25'} {dailyStreak}d
                   </div>
                 )}
-                <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/60 shadow-sm text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
-                  <ScoreDisplay accuracy={accuracy} totalAttempts={state.totalAttempts} />
+                <div className="px-2 py-1 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/60 shadow-sm text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
+                  <ScoreDisplay accuracy={accuracy} totalAttempts={state.totalAttempts} timerDisplay={state.isTimed ? timerDisplay : undefined} isTimed={state.isTimed} />
                 </div>
-                <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/60 shadow-sm text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
+                <div className="px-2 py-1 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/60 shadow-sm text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
                   <span className="hidden sm:inline">Intentos </span>
                   <span className="text-destructive text-sm sm:text-base">{state.totalAttempts}</span>
                 </div>

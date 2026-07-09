@@ -5,7 +5,7 @@ interface ConcertCurtainsProps {
 export default function ConcertCurtains({ isOpen }: ConcertCurtainsProps) {
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 z-40 pointer-events-none" style={{ height: '64px' }}>
+      <div className="fixed top-0 left-0 right-0 z-40 pointer-events-none" style={{ height: 'var(--valance-h, 64px)' }}>
         <svg viewBox="0 0 1200 64" className="w-full h-full" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <linearGradient id="valance-grad" x1="0" y1="0" x2="0" y2="1">
