@@ -234,45 +234,65 @@ export default function App() {
           <ProgressBar current={state.totalAttempts} total={state.sessionTarget} label="Progreso" />
         )}
 
-        <OrnateFrame>
-          <div className={`bg-card rounded-2xl border border-border p-4 sm:p-6 mb-4 animate-slide-up transition-colors duration-300 ${staffClass} ${sleepyClass}`}>
-            <Toolbar
-              lessonId={state.lessonId}
-              showNoteName={state.showNoteName}
-              onLessonChange={setLesson}
-              onShowNoteNameChange={setShowNoteName}
-            />
-            <div className="mt-4">
-              <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} />
-            </div>
-          </div>
-        </OrnateFrame>
+        <div className="game-layout flex flex-col">
+          <div className="game-layout-staff">
+            <OrnateFrame>
+              <div className={`bg-card rounded-2xl border border-border p-4 sm:p-6 mb-4 animate-slide-up transition-colors duration-300 ${staffClass} ${sleepyClass}`}>
+                <Toolbar
+                  lessonId={state.lessonId}
+                  showNoteName={state.showNoteName}
+                  onLessonChange={setLesson}
+                  onShowNoteNameChange={setShowNoteName}
+                />
+                <div className="mt-4">
+                  <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} />
+                </div>
+              </div>
+            </OrnateFrame>
 
-        {state.phase !== 'idle' && (
-          <div className="flex justify-center items-center gap-2 sm:gap-3 mb-4 animate-slide-up flex-wrap">
-            <StreakBadge streak={state.streak} />
-            <StreakOwl streak={state.streak} />
-            {dailyStreak > 1 && (
-              <div className="px-2.5 py-1.5 rounded-full text-xs font-bold bg-card border border-[var(--gold-dim)]/40 text-muted-foreground shadow-sm">
-                {'\uD83D\uDD25'} {dailyStreak}d
+            {state.phase !== 'idle' && (
+              <div className="flex justify-center items-center gap-2 sm:gap-3 mb-4 animate-slide-up flex-wrap">
+                <StreakBadge streak={state.streak} />
+                <StreakOwl streak={state.streak} />
+                {dailyStreak > 1 && (
+                  <div className="px-2.5 py-1.5 rounded-full text-xs font-bold bg-card border border-[var(--gold-dim)]/40 text-muted-foreground shadow-sm">
+                    {'\uD83D\uDD25'} {dailyStreak}d
+                  </div>
+                )}
+                <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/60 shadow-sm text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
+                  <ScoreDisplay accuracy={accuracy} totalAttempts={state.totalAttempts} />
+                </div>
+                <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/60 shadow-sm text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
+                  <span className="hidden sm:inline">Intentos </span>
+                  <span className="text-destructive text-sm sm:text-base">{state.totalAttempts}</span>
+                </div>
               </div>
             )}
-            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/60 shadow-sm text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
-              <ScoreDisplay accuracy={accuracy} totalAttempts={state.totalAttempts} />
-            </div>
-            <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/60 shadow-sm text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
-              <span className="hidden sm:inline">Intentos </span>
-              <span className="text-destructive text-sm sm:text-base">{state.totalAttempts}</span>
+          </div>
+
+          <div className="game-layout-keyboard">
+            <div className="bg-card rounded-2xl border border-border p-4 mb-4 animate-slide-up transition-colors duration-300">
+              <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} startMidi={keyboardStart} />
             </div>
           </div>
-        )}
-
-        <div className="bg-card rounded-2xl border border-border p-4 mb-4 animate-slide-up transition-colors duration-300">
-          <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} startMidi={keyboardStart} />
         </div>
 
         {state.phase === 'idle' ? (
           <div className="text-center animate-slide-up">
+            <div className="flex justify-center gap-3 mb-4">
+              {[5, 10, 20].map(n => (
+                <button key={n}
+                  className={`px-4 py-2 rounded-xl font-semibold transition-all cursor-pointer border-2 btn-3d text-sm ${
+                    state.sessionTarget === n
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-card text-muted-foreground border-border hover:text-foreground hover:border-primary/50'
+                  }`}
+                  onClick={() => { markToday(); startGame(n) }}
+                >
+                  {n} notas
+                </button>
+              ))}
+            </div>
             <button
               className="px-12 py-4 text-lg font-bold rounded-2xl bg-primary text-primary-foreground hover:opacity-90 active:opacity-80 transition-all duration-150 cursor-pointer border-none btn-3d"
               onClick={() => { markToday(); startGame() }}

@@ -237,6 +237,13 @@
   50% { opacity: 1; }
 }
 
+@media (orientation: landscape) and (max-height: 600px) {
+  .game-layout { flex-direction: row; align-items: flex-start; }
+  .game-layout-staff { width: 50%; }
+  .game-layout-keyboard { width: 50%; position: sticky; top: 0; }
+  .game-layout-keyboard > div { margin-bottom: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

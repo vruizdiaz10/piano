@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { GameState, Note, ErrorType } from '../types'
 import { midiToNote } from '../utils/midiToNote'
 import { analyzeError } from '../utils/errorAnalysis'
+import { addWeakNote, getWeakNotes } from '../utils/weakPool'
 import { getLessonPool } from '../data/lessons'
 
 const SESSION_TARGET = 10
@@ -28,14 +29,17 @@ const INITIAL_STATE: GameState = {
 function selectNote(lessonId: string, excludeMidi?: number): Note {
   const pool = getLessonPool(lessonId)
   const filtered = pool.length > 1 ? pool.filter(m => m !== excludeMidi) : pool
-  const midi = filtered[Math.floor(Math.random() * filtered.length)]
+  const weak = getWeakNotes().filter(m => filtered.includes(m))
+  // ponytail: 2:1 bias for weak notes, simple random switch
+  const src = weak.length > 0 && Math.random() < 0.66 ? weak : filtered
+  const midi = src[Math.floor(Math.random() * src.length)]
   return midiToNote(midi)
 }
 
 export function useGameState() {
   const [state, setState] = useState<GameState>(INITIAL_STATE)
 
-  const startGame = useCallback(() => {
+  const startGame = useCallback((target?: number) => {
     setState(prev => {
       const note = selectNote(prev.lessonId)
       return {
@@ -43,6 +47,7 @@ export function useGameState() {
         streak: 0, bestStreak: 0, totalAttempts: 0, correctAttempts: 0,
         lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null,
         startTime: Date.now(), recovering: false,
+        sessionTarget: target ?? SESSION_TARGET,
       }
     })
   }, [])
@@ -51,6 +56,7 @@ export function useGameState() {
     setState(prev => {
       if (prev.phase === 'waiting' && prev.currentNote) {
         const isCorrect = midi === prev.currentNote.midi
+        if (!isCorrect) addWeakNote(midi)
         const newStreak = isCorrect ? prev.streak + 1 : 0
         const newTotal = prev.totalAttempts + 1
         const newCorrect = prev.correctAttempts + (isCorrect ? 1 : 0)
