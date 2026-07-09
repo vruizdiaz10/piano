@@ -1,6 +1,7 @@
 import { Note, Clef } from '../types'
 import { noteToPosition } from '../utils/noteToPosition'
 import { midiToNote } from '../utils/midiToNote'
+import { displayNoteName } from '../utils/notation'
 
 const LINE_SPACING = 16
 const STAFF_TOP = 60
@@ -32,6 +33,7 @@ interface StaffProps {
   isMuted?: boolean
   clef?: Clef
   lastCorrectNote?: Note | null
+  notation: 'american' | 'latino'
 }
 
 function getAccidental(name: string): string | null {
@@ -39,7 +41,7 @@ function getAccidental(name: string): string | null {
   return null
 }
 
-export default function Staff({ note, showNoteName, lessonPool, trail, noteExpression, isMuted, clef = 'treble', lastCorrectNote }: StaffProps) {
+export default function Staff({ note, showNoteName, lessonPool, trail, noteExpression, isMuted, clef = 'treble', lastCorrectNote, notation }: StaffProps) {
   const SVG_TOP_PAD = 20
   const height = STAFF_TOP + LINE_SPACING * 8 + 40
 
@@ -139,7 +141,7 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
               </g>
               {showNoteName && (
                 <text x={x} y={y - 24} textAnchor="middle" fontSize={14} className="fill-muted-foreground">
-                  {note.name}{note.octave}
+                  {displayNoteName(note.name, notation)}{note.octave}
                 </text>
               )}
               {noteExpression && (() => {

@@ -1,6 +1,7 @@
-import { Note, ErrorType } from '../types'
+import { Note, ErrorType, Notation } from '../types'
 import { midiToNote } from './midiToNote'
 import { noteToPosition } from './noteToPosition'
+import { displayNoteName } from './notation'
 
 export function analyzeError(correct: Note, answerMidi: number): ErrorType {
   const answer = midiToNote(answerMidi)
@@ -32,15 +33,15 @@ export function analyzeError(correct: Note, answerMidi: number): ErrorType {
   return 'random'
 }
 
-export function getErrorTip(type: ErrorType, note: Note): string {
+export function getErrorTip(type: ErrorType, note: Note, notation: Notation = 'american'): string {
   const tips: Record<ErrorType, string> = {
-    'line-space': `Has confundido línea con espacio. Las notas en LÍNEAS son E-G-B-D-F, los ESPACIOS son F-A-C-E. "${note.name}${note.octave}" está en un ${noteToPosition(note) % 2 === 0 ? 'línea' : 'espacio'}.`,
+    'line-space': `Has confundido línea con espacio. Las notas en LÍNEAS son E-G-B-D-F, los ESPACIOS son F-A-C-E. "${displayNoteName(note.name, notation)}${note.octave}" está en un ${noteToPosition(note) % 2 === 0 ? 'línea' : 'espacio'}.`,
     'step': '¡Estuviste cerca! Solo un tono de distancia. Practica la secuencia ascendente y descendente.',
     'skip': 'Te saltaste varias notas. Cuenta desde la nota que tocaste hasta la correcta en el pentagrama.',
-    'octave': `La nota correcta, pero en la octava equivocada. "${note.name}${note.octave}" está más ${note.octave < 5 ? 'abajo' : 'arriba'} en el pentagrama.`,
+    'octave': `La nota correcta, pero en la octava equivocada. "${displayNoteName(note.name, notation)}${note.octave}" está más ${note.octave < 5 ? 'abajo' : 'arriba'} en el pentagrama.`,
     'accidental': 'Error de sostenido. El # sube medio tono. Las teclas negras están entre las blancas.',
     'ledger-line': 'Las líneas adicionales son confusas. Cuenta desde el pentagrama hacia afuera.',
-    'random': `Era ${note.name}${note.octave}. Sigue practicando.`,
+    'random': `Era ${displayNoteName(note.name, notation)}${note.octave}. Sigue practicando.`,
   }
   return tips[type]
 }

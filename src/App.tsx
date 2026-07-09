@@ -5,6 +5,7 @@ import { saveSession } from './utils/sessionHistory'
 import { useMidi } from './hooks/useMidi'
 import { useSound } from './hooks/useSound'
 import { getLessonPool, LESSONS } from './data/lessons'
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './components/ui/select'
 import Staff from './components/Staff'
 import PianoKeyboard from './components/PianoKeyboard'
 import Feedback from './components/Feedback'
@@ -20,9 +21,10 @@ import OrnateFrame from './components/OrnateFrame'
 import ConcertCurtains from './components/ConcertCurtains'
 import ProgressChart from './components/ProgressChart'
 import Spotlight from './components/Spotlight'
+import { Music } from 'lucide-react'
 
 export default function App() {
-  const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTimed, setTheme, restartGame } = useGameState()
+  const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTimed, setTheme, setNotation, restartGame } = useGameState()
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
   const [correctKey, setCorrectKey] = useState<number | null>(null)
   const [wrongKey, setWrongKey] = useState<number | null>(null)
@@ -251,6 +253,16 @@ export default function App() {
                 </svg>
               )}
             </button>
+            <Select value={state.notation} onValueChange={(v: 'american' | 'latino') => setNotation(v)}>
+              <SelectTrigger className="w-28 h-9 border-amber-200 dark:border-gray-600 text-amber-700 dark:text-amber-300 bg-white/80 dark:bg-gray-700/80 hover:bg-amber-50 dark:hover:bg-gray-600 text-xs">
+                <Music className="w-3.5 h-3.5 mr-1" />
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="american">A♭ C D E</SelectItem>
+                <SelectItem value="latino">Do Re Mi Fa</SelectItem>
+              </SelectContent>
+            </Select>
             <ThemeToggle theme={state.theme} onToggle={setTheme} />
             <div className={`flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-full text-xs font-semibold ${
               midiConnected
@@ -281,7 +293,7 @@ export default function App() {
                   onTimedChange={setTimed}
                 />
                 <div className="mt-4">
-                  <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} lastCorrectNote={state.lastCorrectNote} />
+                  <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} lastCorrectNote={state.lastCorrectNote} notation={state.notation} />
                 </div>
               </div>
             </OrnateFrame>
@@ -338,7 +350,7 @@ export default function App() {
             </button>
           </div>
         ) : (
-          <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} errorType={state.lastErrorType} />
+          <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} errorType={state.lastErrorType} notation={state.notation} />
         )}
 
         {state.phase === 'feedback' && (

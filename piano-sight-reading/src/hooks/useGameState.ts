@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { GameState, Note, ErrorType } from '../types'
+import { GameState, Note, ErrorType, Notation } from '../types'
 import { midiToNote } from '../utils/midiToNote'
 import { analyzeError } from '../utils/errorAnalysis'
 import { addWeakNote, getWeakNotes } from '../utils/weakPool'
@@ -7,7 +7,13 @@ import { getLessonPool } from '../data/lessons'
 
 const SESSION_TARGET = 10
 
+function loadNotation(): Notation {
+  if (typeof window === 'undefined') return 'american'
+  return (localStorage.getItem('piano-notation') as Notation) ?? 'american'
+}
+
 const INITIAL_STATE: GameState = {
+  notation: loadNotation(),
   phase: 'idle',
   currentNote: null,
   lastAnswerCorrect: null,
@@ -130,6 +136,11 @@ export function useGameState() {
     setState(prev => ({ ...prev, theme }))
   }, [])
 
+  const setNotation = useCallback((notation: Notation) => {
+    localStorage.setItem('piano-notation', notation)
+    setState(prev => ({ ...prev, notation }))
+  }, [])
+
   const restartGame = useCallback(() => {
     setState(prev => {
       const note = selectNote(prev.lessonId)
@@ -145,6 +156,6 @@ export function useGameState() {
 
   return {
     state, startGame, submitAnswer, nextNote,
-    setLesson, setShowNoteName, setMuted, setTimed, setTheme, restartGame,
+    setLesson, setShowNoteName, setMuted, setTimed, setTheme, setNotation, restartGame,
   }
 }

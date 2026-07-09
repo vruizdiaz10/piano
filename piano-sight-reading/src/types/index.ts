@@ -1,3 +1,5 @@
+export type Notation = 'american' | 'latino'
+
 export type Clef = 'treble' | 'bass'
 
 export type NoteName = 'C' | 'C#' | 'D' | 'D#' | 'E' | 'F' | 'F#' | 'G' | 'G#' | 'A' | 'A#' | 'B'
@@ -27,6 +29,7 @@ export interface MasteryCriteria {
 }
 
 export interface GameState {
+  notation: Notation
   phase: GamePhase
   currentNote: Note | null
   lastAnswerCorrect: boolean | null
