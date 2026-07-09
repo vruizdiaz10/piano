@@ -9,7 +9,7 @@ export default function StreakOwl({ streak }: StreakOwlProps) {
     ? 'animate-bounce-once'
     : streak >= 8
       ? 'animate-pulse-glow'
-      : ''
+      : 'owl-bob'
 
   const eyes = streak >= 8
     ? <><circle cx="12" cy="9" r="3" fill="#D97706" /><circle cx="24" cy="9" r="3" fill="#D97706" /></>

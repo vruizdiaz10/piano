@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useGameState } from './hooks/useGameState'
 import { useDailyStreak } from './hooks/useDailyStreak'
+import { saveSession } from './utils/sessionHistory'
 import { useMidi } from './hooks/useMidi'
 import { useSound } from './hooks/useSound'
 import { getLessonPool, LESSONS } from './data/lessons'
@@ -17,6 +18,7 @@ import LevelComplete from './components/LevelComplete'
 import ThemeToggle from './components/ThemeToggle'
 import OrnateFrame from './components/OrnateFrame'
 import ConcertCurtains from './components/ConcertCurtains'
+import ProgressChart from './components/ProgressChart'
 import Spotlight from './components/Spotlight'
 
 export default function App() {
@@ -145,6 +147,13 @@ export default function App() {
     }
   }, [state.streak])
 
+  // Save session history on level complete
+  useEffect(() => {
+    if (state.phase === 'levelComplete') {
+      saveSession({ accuracy, notes: state.totalAttempts, lessonId: state.lessonId, date: new Date().toISOString() })
+    }
+  }, [state.phase])
+
   const handleKeyboardPlay = useCallback((note: { name: string; octave: number; midi: number }) => {
     if (state.phase === 'waiting' || (state.phase === 'feedback' && state.recovering)) {
       submitAnswer(note.midi)
@@ -167,6 +176,11 @@ export default function App() {
       }}>
       <Confetti active={showConfetti} />
       <div aria-live="polite" aria-atomic="true" className="sr-only" ref={liveRegionRef} />
+      <div className="stage-mote" aria-hidden="true" />
+      <div className="stage-mote" aria-hidden="true" />
+      <div className="stage-mote" aria-hidden="true" />
+      <div className="stage-mote" aria-hidden="true" />
+      <div className="stage-mote" aria-hidden="true" />
       <ConcertCurtains isOpen={state.phase !== 'idle'} />
       <Spotlight active={state.phase === 'feedback' || state.phase === 'levelComplete'} />
       {themeTransition && (
@@ -279,6 +293,7 @@ export default function App() {
 
         {state.phase === 'idle' ? (
           <div className="text-center animate-slide-up">
+            <ProgressChart />
             <div className="flex justify-center gap-3 mb-4">
               {[5, 10, 20].map(n => (
                 <button key={n}

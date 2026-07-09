@@ -1,21 +1,23 @@
-# Task 7 Report: App Integration + Feedback + Toolbar
+# Task 7 Report: Gold-border Stats + Badges
 
-**Status:** Complete
+**Commit:** `4c32ee2`
+**Branch:** `main`
+**Status:** ✅ Done
 
-**Commits:**
-- `e0a8938` feat: integrate game with App, Feedback, and Toolbar
+## Changes
 
-**Build:** Passed (tsc + vite build)
+| File | Change |
+|------|--------|
+| `src/App.tsx` | Stat pill borders: `border border-[var(--gold-dim)]/40` |
+| `piano-sight-reading/src/App.tsx` | Stat pill borders: `border border-[var(--gold-dim)]/40` |
+| `src/components/StreakBadge.tsx` | Lowest level: `border-[var(--gold-dim)]/40 bg-[var(--gold-dim)]/10` |
+| `piano-sight-reading/src/components/StreakBadge.tsx` | Lowest level: `border-[var(--gold-dim)]/40 bg-[var(--gold-dim)]/10` |
 
-**Files created:**
-- `src/components/ui/select.tsx` - shadcn/ui Select primitive wrapping @radix-ui/react-select
-- `src/components/ui/checkbox.tsx` - shadcn/ui Checkbox primitive wrapping @radix-ui/react-checkbox
-- `src/components/Feedback.tsx` - Correct/wrong feedback display
-- `src/components/Toolbar.tsx` - Difficulty select + show note name toggle
-- `src/App.tsx` - Main game integration: game state, MIDI input, Staff, PianoKeyboard, Toolbar, Feedback
+## Verification
 
-**Dependencies added:**
-- `@radix-ui/react-checkbox@^1.1.0`
-- `@radix-ui/react-select@^2.1.0`
+- `npx tsc --noEmit` — ✅ clean
+- `npm run build` — ✅ passes (all modules transformed)
 
-**Concerns:** None
+## Report
+
+Path: `.superpowers/sdd/task-7-report.md`
