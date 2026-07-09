@@ -71,20 +71,9 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
           />
         ))}
         <g transform={`translate(8, ${STAFF_TOP + LINE_SPACING * 3 - 10})`} className={isMuted ? 'animate-sleepy-sway' : ''} style={{ transformOrigin: '24px 20px' }}>
-          {clef === 'bass' ? (
-            <g fill="var(--staff-line, #4B3F2B)" aria-label="Clave de Fa">
-              <path d="M8,32 C4,28 2,22 2,16 C2,7 7,0 14,0 C20,0 24,5 24,12 C24,18 20,22 16,22 C13,22 10,20 8,17 C6,14 6,10 8,7" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-              <circle cx="4" cy="36" r="3" fill="currentColor" />
-              <circle cx="4" cy="42" r="3" fill="currentColor" />
-              <circle cx="10" cy="39" r="3" fill="currentColor" />
-            </g>
-          ) : (
-            <g fill="var(--staff-line, #4B3F2B)" aria-label="Clave de Sol">
-              <path d="M16,30 C16,26 18,22 22,18 C26,14 30,10 30,6 C30,2 27,0 24,0 C21,0 18,2 18,5 C18,8 20,10 22,10 C24,10 25,8 25,6 C25,4 24,3 22,3 C21,3 20,4 20,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M20,5 L20,40" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-              <path d="M20,40 C18,38 16,34 16,30 C16,24 22,20 28,20 C32,20 34,24 34,28 C34,32 30,36 26,36 C23,36 21,34 20,32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </g>
-          )}
+          <text className="font-music" fill="var(--staff-line, #4B3F2B)" aria-label={clef === 'bass' ? 'Clave de Fa' : 'Clave de Sol'} fontSize="44" y="16">
+            {clef === 'bass' ? '\u{1D122}' : '\u{1D11E}'}
+          </text>
         </g>
         {isMuted && (
           <text x={6} y={STAFF_TOP + LINE_SPACING * 5 + 8} fontSize={14} fill="#9CA3AF" opacity={0.6} aria-hidden="true">

@@ -247,6 +247,7 @@
   50% { opacity: 1; }
 }
 
+.font-music { font-family: 'Noto Music', 'Segoe UI Symbol', 'Apple Symbols', 'Bravura', 'Finale Maestro', serif; }
 .owl-bob { animation: owl-bob 3s ease-in-out infinite; }
 @keyframes owl-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
 .stage-mote { position: fixed; border-radius: 50%; pointer-events: none; z-index: 1; background: var(--gold); opacity: 0.06; animation: mote-float 6s ease-in-out infinite; }
