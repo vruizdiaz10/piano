@@ -1,30 +1,57 @@
 # Lectura Musical al Piano
 
-> Un juego de entrenamiento de lectura musical a primera vista para piano. Aparece una nota en el pentagrama en clave de sol y el jugador debe presionar la tecla correcta, ya sea en un teclado MIDI conectado o en el piano en pantalla.
+> Un juego de entrenamiento de lectura musical a primera vista para piano. Aparece una nota en el pentagrama y el jugador debe presionar la tecla correcta, ya sea en un teclado MIDI conectado o en el piano en pantalla.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![Screenshot](screenshot.png)
-<!-- Reemplazar screenshot.png con una captura del juego en accion. Incluir el pentagrama, el teclado en pantalla y la barra de herramientas para una vista previa rapida. -->
+<!-- Reemplazar screenshot.png con una captura del juego en accion. Incluir el pentagrama, el teclado en pantalla, las cortinas y el marco ornamentado para una vista previa rapida. -->
 
 ---
 
 ## Caracteristicas
 
-- **Entrada MIDI** -- Conecta cualquier teclado USB/MIDI via la Web MIDI API. El juego detecta dispositivos conectados automaticamente y muestra el estado de conexion.
-- **Piano en pantalla** -- Un piano interactivo de 37 teclas (rango MIDI 48-84) se renderiza en pantalla para entrada tactil, con raton o teclado. No requiere dispositivo MIDI.
-- **Pentagrama SVG** -- La clave de sol, cabeza de nota, plica, lineas adicionales y alteraciones se dibujan en SVG. La posicion de la nota sigue las convenciones de notacion musical estandar.
+### Juego y Progresion
 - **9 lecciones progresivas** -- Desde lineas simples hasta el rango cromatico completo (C4-C6). Cada leccion apunta a una region o concepto especifico. Ver [tabla de lecciones](#lecciones).
-- **Sintesis de sonido** -- Construida con la Web Audio API. Cada nota se reproduce con armonicos superpuestos (onda triangular + sinusoidal). Las respuestas correctas activan un arpegio de acorde mayor, las incorrectas un acorde menor, y la finalizacion del nivel una fanfarria.
-- **Ventana de recuperacion** -- Despues de una respuesta incorrecta, el juego entra en una ventana de recuperacion de 2.5 segundos con una barra de cuenta atras visual. Responder correctamente dentro de la ventana otorga credito parcial.
-- **Sistema de racha** -- Las respuestas correctas consecutivas construyen una racha. Una insignia de "buho" aparece al alcanzar 3+ racha, intensificandose visualmente en 5, 8 y 10. Los hitos de racha reproducen una escala ascendente celebratoria.
-- **Notas fantasma** -- Las ultimas tres notas respondidas flotan hacia arriba en el pentagrama como cabezas de nota fantasma traslucidas.
-- **Barra de progreso con patito nadador** -- Un emoji de patito se desliza a lo largo de una barra de progreso gradientada que muestra el conteo actual hacia el objetivo de 10 notas por sesion.
-- **Pantalla de nivel completado** -- Despues de 10 respuestas correctas, un modal muestra el porcentaje de precision, mejor racha, total de notas, tiempo transcurrido, calificacion de estrellas (1-3) y una constelacion SVG que dibuja lineas entre los valores MIDI de las notas respondidas.
+- **Sistema de racha** -- Las respuestas correctas consecutivas construyen una racha. Una insignia de buho aparece al alcanzar 3+ racha, intensificandose visualmente en 5, 8 y 10. Los hitos de racha reproducen una escala ascendente celebratoria.
+- **Racha diaria** -- Seguimiento de racha por dia via localStorage. Se mantiene si practicas dias consecutivos.
+- **Ventana de recuperacion** -- Despues de una respuesta incorrecta, el juego entra en una ventana de recuperacion de 2.5 segundos con barra de cuenta atras visual. Responder correctamente dentro de la ventana otorga credito parcial.
+- **Modo temporizado** -- Activa un contador regresivo por nota en la barra de herramientas. Muestra cuenta atras en el panel de puntuacion. El indicador se vuelve rojo y pulsa cuando quedan 2 segundos.
+- **Notas fantasma** -- La ultima nota correcta se muestra como cabeza de nota fantasma traslucida en el pentagrama despues de un error, ayudando al jugador a visualizar la diferencia.
+- **Barra de progreso con patito nadador** -- Un patito se desliza a lo largo de una barra de progreso gradientada que muestra el conteo actual hacia el objetivo de 10 notas por sesion.
+- **Animacion oro-pulso** -- Animacion especial al alcanzar 50% y 75% de progreso.
+- **Pantalla de nivel completado** -- Despues de 10 respuestas correctas, un modal muestra: porcentaje de precision, mejor racha, total de notas, tiempo transcurrido, tiempo de respuesta promedio, mejor tiempo, calificacion de estrellas (1-3) y una constelacion SVG que dibuja lineas entre los valores MIDI de las notas respondidas.
 - **Confeti** -- Efecto de particulas de confeti en respuestas correctas.
-- **Modo oscuro / Claro** -- Alternador de tema con icono de sol/luna. La transicion activa una animacion de "teatro crepuscular" -- un gran sol o luna brillante aparece y desaparece. Respeta `prefers-color-scheme` en la carga inicial.
-- **Silencio / Teatro de sueno** -- Silenciar el audio oscurece la interfaz, muestra indicadores "Zzz" flotantes y activa una animacion de balanceo sutil en la clave de sol. El pentagrama se oscurece al 70% de opacidad.
-- **Accesibilidad** -- Las regiones ARIA live anuncian aciertos/fallos e hitos de racha. Piano en pantalla navegable por teclado. El SVG del pentagrama tiene un `aria-label` descriptivo. Respeta `prefers-reduced-motion`.
+
+### Entrada y Sonido
+- **Entrada MIDI** -- Conecta cualquier teclado USB/MIDI via la Web MIDI API. El juego detecta dispositivos conectados automaticamente y muestra el estado de conexion.
+- **Piano en pantalla** -- Piano interactivo con efecto 3D (box-shadow, teclas marfil/ebano, detalles dorados). Teclas con cursor pointer y efecto sparkle en aciertos. En movil se reducen a rango C3-C5.
+- **Sintesis de sonido** -- Construida con la Web Audio API. Cada nota se reproduce con armonicos superpuestos (onda triangular + sinusoidal). Respuestas correctas activan arpegio de acorde mayor, incorrectas acorde menor, finalizacion de nivel fanfarria.
+- **Tiempo de respuesta** -- Seguimiento del tiempo que tarda el jugador en responder cada nota. Se muestra en el modal de nivel completado.
+
+### Visuales y Tema Sala de Conciertos
+- **Cortinas de concierto** -- Cortinas de teatro con SVG valance, borlas y animacion de apertura/cierre al iniciar sesion. Altura 40px en movil.
+- **Marco ornamentado** -- Marco decorativo con esquinas doradas que envuelve el pentagrama.
+- **Foco de escenario** -- Superposicion de foco radial con gradiente que se activa durante feedback y nivel completado.
+- **Fondo sala de conciertos** -- Tema oscuro con maderas oscuras, paleta ambar/dorada. Particulas de luz (stage-motes) flotando en la escena.
+- **Pentagrama SVG** -- Clave de sol (𝄞) y clave de fa (𝄢) con fuente Noto Music (reemplaza SVG paths). Cabeza de nota, plica, lineas adicionales y alteraciones. Intervalos etiquetados en el pentagrama. viewBox responsivo.
+- **Buho animado** -- SVG de buho con animacion de balanceo (owl-bob keyframe) y estados de animo: somnoliento, neutral, feliz, emocionado. Siempre visible.
+- **Progreso historico** -- ProgressChart: mini grafico SVG que muestra las ultimas 20 sesiones desde localStorage. Persistencia de historial de sesiones.
+- **Modo oscuro / Claro** -- Alternador de tema con icono de sol/luna. Transicion con animacion de "teatro crepuscular" (sol o luna brillante). Respeta `prefers-color-scheme`.
+- **Silencio / Teatro de sueno** -- Silenciar el audio oscurece la interfaz, muestra indicadores "Zzz" flotantes y animacion de balanceo en la clave. Pentagrama se oscurece al 70%.
+
+### Sistema de Notacion
+- **Selector de notacion** -- Menu desplegable junto al boton de silencio. Alterna entre notacion americana (C D E F G A B) y latina (Do Re Mi Fa Sol La Si).
+- **Nombres de nota en pentagrama** -- Se muestra el nombre de la nota en la cabeza de nota (configurable). Por defecto desactivado (`showNoteName: false`).
+- **Consejos de error con notacion** -- Los mensajes de error usan la notacion activa.
+
+### Accesibilidad y Movil
+- **Accesibilidad** -- Regiones ARIA live anuncian aciertos/fallos e hitos de racha. Piano navegable por teclado. SVG del pentagrama con `aria-label` descriptivo. Respeta `prefers-reduced-motion`.
+- **Adaptacion movil** -- Barra de stats compacta. Correccion touch-action. Teclas reducidas a C3-C5 en movil. Cortinas con altura reducida.
+- **Toast feedback** -- Componente Feedback con banner visual correcto/incorrecto + toast + temporizador.
+
+### PWA
+- **Aplicacion Web Progresiva** -- `manifest.json` con icono SVG. Service worker para soporte offline. Instalable como aplicacion.
 
 ---
 
@@ -37,9 +64,11 @@
 | [Vite](https://vitejs.dev) | Herramienta de compilacion y servidor de desarrollo |
 | [Tailwind CSS](https://tailwindcss.com) | Estilos utilitarios |
 | [shadcn/ui](https://ui.shadcn.com) | Primitivas Select y Checkbox basadas en Radix |
+| [Noto Music](https://fonts.google.com/noto/specimen/Noto+Music) | Fuente para simbolos musicales Unicode (𝄞 𝄢) |
 | [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) | Sintesis y reproduccion de sonido |
 | [Web MIDI API](https://developer.mozilla.org/en-US/docs/Web/API/Web_MIDI_API) | Entrada de teclado MIDI |
-| SVG | Renderizado de pentagrama y notacion |
+| SVG | Renderizado de pentagrama, cortinas, grafico de progreso, confeti |
+| PWA | Manifest + Service Worker para instalacion y offline |
 
 ---
 
@@ -53,38 +82,51 @@ piano-sight-reading/
 ├── postcss.config.js           # Pipeline PostCSS + Tailwind
 ├── tsconfig.json               # Configuracion de TypeScript
 ├── package.json                # Dependencias y scripts
+├── public/
+│   ├── manifest.json           # Manifest PWA
+│   ├── pwa-icon.svg            # Icono PWA
+│   └── sw.js                   # Service worker offline
 ├── src/
 │   ├── main.tsx                # Punto de entrada de React
 │   ├── App.tsx                 # Componente raiz: orquestacion del juego, estado, efectos
-│   ├── index.css               # Directivas de Tailwind, variables CSS (claro/oscuro), keyframes
+│   ├── index.css               # Directivas de Tailwind, variables CSS (claro/oscuro), keyframes, stage-motes
 │   ├── types/
-│   │   └── index.ts            # Definiciones de tipos Note, GameState, GamePhase
+│   │   └── index.ts            # Definiciones de tipos Note, GameState, GamePhase, Notation
 │   ├── data/
 │   │   └── lessons.ts          # Definiciones de lecciones (9 lecciones, pools de notas MIDI)
 │   ├── hooks/
-│   │   ├── useGameState.ts     # Reducer de estado del juego (fase, puntuacion, recuperacion, racha)
-│   │   ├── useSound.ts         # Sintesis de osciladores Web Audio (notas, efectos, fanfarria)
-│   │   └── useMidi.ts          # Conexion Web MIDI API y manejo de eventos
+│   │   ├── useDailyStreak.ts   # Racha diaria persistente en localStorage
+│   │   ├── useGameState.ts     # Reducer de estado del juego (fase, puntuacion, recuperacion, racha, notacion, temporizador)
+│   │   ├── useMidi.ts          # Conexion Web MIDI API y manejo de eventos
+│   │   └── useSound.ts         # Sintesis de osciladores Web Audio (notas, efectos, fanfarria)
 │   ├── utils/
+│   │   ├── errorAnalysis.ts    # Analisis de errores y consejos
 │   │   ├── midiToNote.ts       # Conversion de numero MIDI a objeto Note
-│   │   └── noteToPosition.ts   # Mapeo de nota a posicion Y en SVG (clave de sol)
+│   │   ├── notation.ts         # Mapeo americano (C D E) ↔ latino (Do Re Mi)
+│   │   ├── noteToPosition.ts   # Mapeo de nota a posicion Y en SVG (clave de sol/fa)
+│   │   ├── sessionHistory.ts   # Historial de sesiones en localStorage
+│   │   └── weakPool.ts         # Pool de notas debiles
 │   ├── lib/
 │   │   └── utils.ts            # Utilidad cn() (clsx + tailwind-merge)
 │   └── components/
-│       ├── Staff.tsx           # Pentagrama SVG, cabeza de nota, lineas adicionales, alteraciones, fantasmas
-│       ├── PianoKeyboard.tsx   # Piano interactivo de 37 teclas en pantalla
-│       ├── Feedback.tsx        # Banner de correcto/incorrecto con temporizador de recuperacion
-│       ├── LevelComplete.tsx   # Modal de puntuacion con visualizacion de constelacion
-│       ├── Toolbar.tsx         # Selector de lecciones y checkbox "mostrar nombre de nota"
-│       ├── ProgressBar.tsx     # Barra de progreso de sesion con indicador de patito
-│       ├── ScoreDisplay.tsx    # Porcentaje de precision con barra codificada por color
-│       ├── StreakBadge.tsx     # Insignia de conteo de racha (emoji de fuego + multiplicador)
-│       ├── StreakOwl.tsx       # Insignia SVG de buho que aparece en racha 3+
-│       ├── ThemeToggle.tsx     # Alternador de modo oscuro sol/luna
-│       ├── Confetti.tsx        # Explosion de particulas en respuestas correctas
+│       ├── ConcertCurtains.tsx # Cortinas de teatro con SVG valance, borlas, animacion
+│       ├── Confetti.tsx        # Particulas de confeti
+│       ├── Feedback.tsx        # Banner correcto/incorrecto + toast + temporizador
+│       ├── LevelComplete.tsx   # Modal de puntuacion + constelacion + stats de sesion
+│       ├── OrnateFrame.tsx     # Marco decorativo con esquinas doradas
+│       ├── PianoKeyboard.tsx   # Piano interactivo 3D con teclas marfil/ebano
+│       ├── ProgressBar.tsx     # Barra de progreso con patito y animacion oro-pulso
+│       ├── ProgressChart.tsx   # Mini grafico SVG de progreso historico
+│       ├── ScoreDisplay.tsx    # Precision con barra de color + temporizador
+│       ├── Spotlight.tsx       # Foco radial de escenario
+│       ├── Staff.tsx           # Pentagrama SVG con clave Unicode, notas, fantasmas, intervalos
+│       ├── StreakBadge.tsx     # Insignia de racha
+│       ├── StreakOwl.tsx       # Buho SVG animado con estados de animo
+│       ├── ThemeToggle.tsx     # Alternador claro/oscuro
+│       ├── Toolbar.tsx         # Selector de lecciones + mostrar nota + temporizador
 │       └── ui/
-│           ├── select.tsx      # Primitiva Select de shadcn/ui (Radix)
-│           └── checkbox.tsx    # Primitiva Checkbox de shadcn/ui (Radix)
+│           ├── select.tsx      # Select Radix
+│           └── checkbox.tsx    # Checkbox Radix
 ```
 
 ---
@@ -136,14 +178,26 @@ Sin dispositivo MIDI? Usa el piano en pantalla haciendo clic o tocando las tecla
 
 ### Como Jugar
 
-1. Haz clic en **Iniciar Juego** para comenzar una sesion.
-2. Aparece una nota en el pentagrama en clave de sol.
+1. Haz clic en **Iniciar Juego** para comenzar una sesion. Las cortinas de concierto se abren.
+2. Aparece una nota en el pentagrama. La nota se reproduce auditivamente.
 3. Identifica la nota y presiona la tecla correspondiente en tu teclado MIDI o en el piano en pantalla.
-4. **Correcto**: El pentagrama parpadea en verde, aparece "¡Correcto!" y suena un arpegio de acorde mayor. Una breve explosion de confeti se activa.
-5. **Incorrecto**: El pentagrama parpadea en rojo y tiembla. Aparece "Incorrecto" junto con la respuesta correcta. Comienza una ventana de recuperacion de 2.5 segundos -- responde correctamente dentro de la ventana para obtener credito parcial.
-6. Despues de la retroalimentacion, el juego avanza automaticamente a la siguiente nota (con una variacion aleatoria de +/-200ms).
-7. Despues de 10 respuestas correctas, aparece el modal de **Nivel Completado** con tu puntuacion y una constelacion de las notas respondidas.
+4. **Correcto**: El pentagrama parpadea en verde, aparece "¡Correcto!" y suena un arpegio de acorde mayor. Confeti se activa. La tecla del piano muestra un efecto sparkle.
+5. **Incorrecto**: El pentagrama parpadea en rojo y tiembla. Aparece "Incorrecto" junto con la respuesta correcta y un consejo. Comienza una ventana de recuperacion de 2.5 segundos. La ultima nota correcta aparece como fantasma en el pentagrama.
+6. Despues de la retroalimentacion, el juego avanza automaticamente a la siguiente nota (con variacion aleatoria de +/-200ms).
+7. Despues de 10 respuestas correctas, aparece el modal de **Nivel Completado** con puntuacion, estrellas, tiempo de respuesta promedio y constelacion de notas respondidas.
 8. Elige **Reintentar** para repetir la misma leccion o **Siguiente Leccion** para avanzar.
+
+### Modo Temporizado
+
+Activa el checkbox "Temporizador" en la barra de herramientas para activar el modo con cuenta atras. Cada nota tiene un limite de tiempo para responder. El temporizador se muestra en el panel de puntuacion.
+
+### Selector de Notacion
+
+Usa el menu desplegable de notacion (junto al boton de silencio) para alternar entre:
+- **Americana**: C, D, E, F, G, A, B
+- **Latina**: Do, Re, Mi, Fa, Sol, La, Si
+
+La notacion seleccionada afecta los nombres de nota en el pentagrama y los consejos de error. Se persiste en localStorage.
 
 ### Lecciones
 
@@ -173,10 +227,40 @@ Usa el menu desplegable en la barra de herramientas para cambiar de leccion en c
 - **Puntuacion**: La precision se calcula como `correctAttempts / totalAttempts * 100`.
 - **Calificacion de estrellas**: 3 estrellas para 90%+ de precision, 2 estrellas para 70%+, 1 estrella para 50%+, 0 estrellas por debajo del 50%.
 - **Rachas**: Las respuestas correctas consecutivas incrementan el contador de racha. Una respuesta incorrecta lo reinicia a 0. La mejor racha de la sesion se registra.
+- **Modo temporizado**: Activa un contador regresivo por nota. Si el tiempo se agota, se cuenta como incorrecto.
 - **Recuperacion**: Despues de una respuesta incorrecta, el juego permanece en modo de retroalimentacion durante 2.5 segundos. Una barra de temporizador cuenta visualmente hacia atras. Presionar la tecla correcta durante esta ventana marca la respuesta como correcta (recuperacion exitosa) y otorga credito.
 - **Saltar**: El boton "Siguiente Nota" permite avanzar mas alla de la pantalla de retroalimentacion en cualquier momento.
 - **Avance automatico**: El juego pasa automaticamente a la siguiente nota despues de la ventana de retroalimentacion. El tiempo incluye una variacion aleatoria de +/-200ms para evitar la dependencia ritmica.
 - **Seleccion de notas**: Aleatoria dentro del pool de la leccion. Se evitan repeticiones consecutivas cuando el pool tiene mas de una nota.
+
+---
+
+## Temas Sala de Conciertos
+
+El juego presenta una estetica de teatro/sala de conciertos que envuelve toda la experiencia:
+
+### Cortinas de Concierto (ConcertCurtains)
+- Cortinas laterales SVG con valance (dosel) decorativo en la parte superior.
+- Borlas colgantes con cuerda de retorno.
+- Animacion de apertura al iniciar sesion y cierre al volver al idle.
+- Adaptacion movil: altura de valance reducida a 40px.
+
+### Marco Ornamentado (OrnateFrame)
+- Marco decorativo alrededor del pentagrama con esquinas doradas ornamentales.
+- Envuelve el area del pentagrama dandole presencia escenica.
+
+### Foco de Escenario (Spotlight)
+- Superposicion con gradiente radial que simula un foco de teatro.
+- Se activa durante el feedback y la pantalla de nivel completado.
+
+### Particulas de Luz (Stage-motes)
+- Elementos flotantes CSS que simulan particulas de luz en el ambiente.
+- Definidos en `index.css` con animaciones de flotacion.
+
+### Paleta de Colores
+- Fondos oscuros con tonos maderados y paleta ambar/dorado.
+- Teclas de piano en marfil y ebano con acentos dorados.
+- Coherente con los temas claro y oscuro.
 
 ---
 
@@ -191,10 +275,10 @@ idle -> waiting -> feedback -> levelComplete
                 -> waiting (auto-advance)
 ```
 
-- **idle**: Estado inicial. Solo se muestra el boton "Iniciar Juego".
+- **idle**: Estado inicial. Solo se muestra el boton "Iniciar Juego". Cortinas cerradas.
 - **waiting**: Se muestra una nota en el pentagrama. El jugador debe presionar la tecla correcta. Se acepta entrada MIDI y del teclado en pantalla.
 - **feedback**: Muestra el resultado (correcto/incorrecto). Si es incorrecto, `recovering` se establece en `true` durante 2.5 segundos, durante los cuales se puede presionar la tecla correcta para credito de recuperacion. Avanza automaticamente despues de un tiempo de espera con variacion.
-- **levelComplete**: Despues de 10 respuestas correctas. Muestra puntuacion, estrellas, estadisticas y la superposicion de constelacion.
+- **levelComplete**: Despues de 10 respuestas correctas. Muestra puntuacion, estrellas, estadisticas (incluyendo tiempo de respuesta) y la superposicion de constelacion.
 
 El estado se gestiona mediante `useState` con un objeto `GameState` inmutable. Todas las transiciones de estado ocurren a traves de funciones nombradas (`startGame`, `submitAnswer`, `nextNote`, `restartGame`).
 
@@ -202,16 +286,23 @@ El estado se gestiona mediante `useState` con un objeto `GameState` inmutable. T
 
 ```
 <App>
-  <Confetti />
-  <LevelComplete />          (superposicion, se muestra cuando phase === 'levelComplete')
-  <Toolbar />                (selector de leccion + alternar mostrar nombre de nota)
-  <Staff />                  (pentagrama SVG, nota, notas fantasma, puntos de rango)
-  <ProgressBar />            (patito nadador, progreso de sesion)
-  <StreakBadge />            (contador de racha de fuego)
-  <StreakOwl />              (SVG de buho, se muestra en racha 3+)
-  <ScoreDisplay />           (porcentaje de precision)
-  <PianoKeyboard />          (teclado interactivo de 37 teclas)
-  <Feedback />               (banner de correcto/incorrecto + temporizador de recuperacion)
+  <ConcertCurtains />          (apertura/cierre al iniciar)
+  <Spotlight />                (foco radial en feedback/levelComplete)
+  <Confetti />                 (particulas en aciertos)
+  <LevelComplete />            (modal, phase === 'levelComplete')
+  <Toolbar />                  (selector leccion + mostrar nota + temporizador)
+  <ThemeToggle />              (alternador claro/oscuro)
+  <NotationSelector />         (alternador americana/latina, en barra)
+  <OrnateFrame>                (marco decorativo)
+    <Staff />                  (pentagrama SVG, nota, fantasma, intervalos)
+  </OrnateFrame>
+  <ProgressBar />              (patito nadador, progreso sesion)
+  <ProgressChart />            (mini grafico historico)
+  <StreakBadge />              (contador racha fuego)
+  <StreakOwl />                (SVG buho con estados de animo)
+  <ScoreDisplay />             (precision + temporizador)
+  <PianoKeyboard />            (teclado 3D interactivo)
+  <Feedback />                 (banner correcto/incorrecto + toast)
 ```
 
 ### Sistema de Sonido
