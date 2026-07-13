@@ -1,56 +1,33 @@
-### Task 4: OrnateFrame Component
+### Task 4: Launch UX Architect — Mobile Responsive Audit
 
 **Files:**
-- Create: `src/components/OrnateFrame.tsx`
-- Create: `piano-sight-reading/src/components/OrnateFrame.tsx`
-- Modify: `src/App.tsx`, `piano-sight-reading/src/App.tsx`
+- Output: `docs/superpowers/plans/reports/ux-architect-report.md`
 
-- [ ] **Step 1: Write component**
+**Brief for agent:**
+Analyze mobile landscape support for piano game at `/mnt/d/www/piano/src/`. Examine:
+1. `src/App.tsx` — main layout structure
+2. `src/index.css` — mobile landscape media queries, existing responsive rules
+3. `src/components/PianoKeyboard.tsx` — keyboard sizing, key count on mobile
+4. `src/components/Staff.tsx` — note/clef sizing on small screens
+5. `src/components/ConcertCurtains.tsx` — curtain size in viewport
+6. `src/components/ScoreDisplay.tsx` — stat readability on mobile
+7. `src/hooks/useGameState.ts` — touch event handling, interaction model
 
-```tsx
-import { ReactNode } from 'react'
+Current mobile state:
+- Media query: `@media (orientation: landscape) and (max-height: 600px)`
+- Staff + keyboard side-by-side in landscape
+- Existing CSS vars for sizing
 
-interface OrnateFrameProps {
-  children: ReactNode
-}
+Evaluate:
+- Touch target sizes (minimum 44px for fingers)
+- Layout reflow (does the game work in landscape 360x640 to 932x430?)
+- Readability (text size, note size at smallest viewport)
+- Interaction (touch events, accidental taps, key spacing)
+- What breaks or feels bad on mobile currently
+- Specific recommendations with file:line, effort estimate
 
-export default function OrnateFrame({ children }: OrnateFrameProps) {
-  return (
-    <div className="relative">
-      <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-20">
-        <svg width="120" height="12" viewBox="0 0 120 12" aria-hidden="true">
-          <path d="M0,6 Q15,0 30,6 Q45,12 60,6 Q75,0 90,6 Q105,12 120,6" fill="none" stroke="var(--gold)" strokeWidth="1" />
-          <circle cx="60" cy="6" r="2" fill="var(--gold)" />
-        </svg>
-      </div>
-      {[0,1,2,3].map(i => (
-        <div key={i} className={`absolute ${['-top-2 -left-2','-top-2 -right-2','-bottom-2 -left-2','-bottom-2 -right-2'][i]} z-20`}>
-          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
-            <path d={[
-              'M0,24 L0,0 L24,0',
-              'M24,24 L24,0 L0,0',
-              'M0,0 L0,24 L24,24',
-              'M24,0 L24,24 L0,24',
-            ][i]} fill="none" stroke="var(--gold)" strokeWidth="1.5" />
-            <path d={[
-              'M4,20 L4,4 L20,4',
-              'M20,20 L20,4 L4,4',
-              'M4,4 L4,20 L20,20',
-              'M20,4 L20,20 L4,20',
-            ][i]} fill="none" stroke="var(--gold-dim)" strokeWidth="0.5" />
-            <circle cx={[4,20,4,20][i]} cy={[4,4,20,20][i]} r="1.5" fill="var(--gold)" />
-          </svg>
-        </div>
-      ))}
-      {children}
-    </div>
-  )
-}
-```
-
-- [ ] **Step 2: Modify App.tsx** — import OrnateFrame, wrap staff card `<div>` with `<OrnateFrame>...</OrnateFrame>`
-- [ ] **Step 3: Verify build**
-- [ ] **Step 4: Commit**
+- [ ] **Step 1: Write the UX Architect brief and dispatch agent**
+- [ ] **Step 2: Collect report**
 
 ---
 

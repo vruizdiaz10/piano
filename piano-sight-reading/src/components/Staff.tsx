@@ -53,7 +53,7 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
         const maxPos = noteToPosition(midiToNote(maxMidi), clef)
         const minY = STAFF_TOP - minPos * LINE_SPACING / 2 + LINE_SPACING * 4
         const maxY = STAFF_TOP - maxPos * LINE_SPACING / 2 + LINE_SPACING * 4
-        return <><circle cx={STAFF_LEFT - 12} cy={minY} r={4} fill="#9CA3AF" opacity={0.35} /><circle cx={STAFF_LEFT - 12} cy={maxY} r={4} fill="#9CA3AF" opacity={0.35} /></>
+        return <><circle cx={STAFF_LEFT - 12} cy={minY} r={4} fill="var(--neon-blue)" opacity={0.35} /><circle cx={STAFF_LEFT - 12} cy={maxY} r={4} fill="var(--neon-blue)" opacity={0.35} /></>
       })()
     : null
 
@@ -68,17 +68,17 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
             x2={STAFF_LEFT + 340}
             y2={STAFF_TOP + i * LINE_SPACING}
             className="dark:stroke-slate-300"
-            stroke="var(--staff-line, #4B3F2B)"
+            stroke="var(--staff-line, var(--neon-purple))"
             strokeWidth={1.5}
           />
         ))}
         <g transform={`translate(8, ${STAFF_TOP + LINE_SPACING * 3 - 10})`} className={isMuted ? 'animate-sleepy-sway' : ''} style={{ transformOrigin: '24px 20px' }}>
-          <text className="font-music" fill="var(--staff-line, #4B3F2B)" aria-label={clef === 'bass' ? 'Clave de Fa' : 'Clave de Sol'} fontSize="44" y="16">
+          <text className="font-music" fill="var(--staff-line, var(--neon-purple))" aria-label={clef === 'bass' ? 'Clave de Fa' : 'Clave de Sol'} fontSize="44" y="16">
             {clef === 'bass' ? '\u{1D122}' : '\u{1D11E}'}
           </text>
         </g>
         {isMuted && (
-          <text x={6} y={STAFF_TOP + LINE_SPACING * 5 + 8} fontSize={14} fill="#9CA3AF" opacity={0.6} aria-hidden="true">
+          <text x={6} y={STAFF_TOP + LINE_SPACING * 5 + 8} fontSize={14} fill="var(--neon-blue)" opacity={0.6} aria-hidden="true">
             {'\uD83D\uDCA4'}
           </text>
         )}
@@ -117,13 +117,13 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
           }
 
           return (
-            <g key={note.midi}>
+            <g key={note.midi} className="note-enter">
               {ledgerLines.map(lp => {
                 const ly = STAFF_TOP - lp * LINE_SPACING / 2 + LINE_SPACING * 4
-                return <line key={lp} x1={x - LEDGER_EXTEND} y1={ly} x2={x + LEDGER_EXTEND} y2={ly} stroke="var(--staff-line, #4B3F2B)" strokeWidth={1.5} />
+                return <line key={lp} x1={x - LEDGER_EXTEND} y1={ly} x2={x + LEDGER_EXTEND} y2={ly} stroke="var(--staff-line, var(--neon-purple))" strokeWidth={1.5} />
               })}
               {accidental && (
-                <text x={x - 22} y={y + 6} fontSize={20} fill="var(--staff-line, #4B3F2B)">{accidental}</text>
+                <text x={x - 22} y={y + 6} fontSize={20} fill="var(--staff-line, var(--neon-purple))">{accidental}</text>
               )}
               <g className="text-primary">
                 {(() => {

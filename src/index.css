@@ -26,6 +26,9 @@
     --input: 35 20% 86%;
     --ring: 38 92% 50%;
     --radius: 0.75rem;
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: var(--radius);
+    --radius-lg: calc(var(--radius) + 4px);
     --staff-line: #4B3F2B;
     --curtain-primary: #6B1A1A;
     --curtain-fold: #4A0E0E;
@@ -82,6 +85,9 @@
     -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3, h4 { @apply font-heading; }
+  button:focus-visible, [role="button"]:focus-visible, [tabindex]:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
 }
 
 @layer utilities {
@@ -99,6 +105,7 @@
   .animate-twilight-theater { animation: twilight-theater 1.5s ease-out forwards; }
   .animate-theatre-glow { animation: theatre-glow 1.5s ease-out; }
   .animate-zzz-float { animation: zzz-float 2s ease-out infinite; }
+  .animate-timer-urgent { animation: timer-urgent 0.5s ease-in-out infinite; }
   .animate-sleepy-sway { animation: sleepy-sway 3s ease-in-out infinite; }
   .animate-constellation-draw { animation: constellation-draw 1s ease-out forwards; }
   .animate-curtain-slide { animation: curtain-slide 0.8s ease-out; }
@@ -140,8 +147,13 @@
 }
 
 @keyframes flash-green {
-  0% { background-color: rgba(34, 197, 94, 0.3); }
-  100% { background-color: transparent; }
+  0%, 100% { box-shadow: inset 0 0 0 9999px transparent; }
+  50% { box-shadow: inset 0 0 0 9999px rgba(34, 197, 94, 0.3); }
+}
+
+@keyframes flash-red {
+  0%, 100% { box-shadow: inset 0 0 0 9999px transparent; }
+  50% { box-shadow: inset 0 0 0 9999px rgba(239, 68, 68, 0.3); }
 }
 
 @keyframes flash-red {
@@ -174,6 +186,11 @@
 @keyframes ghost-drift {
   0% { transform: translateY(0); opacity: 0.5; }
   100% { transform: translateY(-20px); opacity: 0; }
+}
+
+@keyframes timer-urgent {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
 @keyframes timer-shrink {
@@ -267,6 +284,12 @@
   .game-layout-keyboard { width: 50%; position: sticky; top: 0; }
   .game-layout-keyboard > div { margin-bottom: 0; }
   :root { --valance-h: 40px; }
+}
+
+@media (min-width: 1024px) {
+  .game-layout-staff svg {
+    max-height: 160px;
+  }
 }
 
 .game-layout { touch-action: manipulation; }

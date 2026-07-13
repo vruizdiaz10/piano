@@ -120,13 +120,17 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
                 </text>
               ))}
             </svg>
+            <span className="sr-only">Notas respondidas: {answeredNotes?.join(', ')}</span>
           </div>
         )}
 
         <div className="grid grid-cols-3 gap-2 mb-6 text-center">
           <div className={`rounded-xl p-2 ${accuracy >= 75 ? 'bg-success/10 animate-gold-pulse' : accuracy >= 50 ? 'bg-primary/5 animate-gold-pulse' : 'bg-primary/5'}`}>
             <div className="text-xs text-muted-foreground font-medium">Precisión</div>
-            <div className="text-lg font-bold text-foreground">{Math.round(accuracy)}%</div>
+            <div className="text-lg font-bold text-foreground">
+              {accuracy >= 90 ? '\u2713 ' : accuracy >= 70 ? '\u26A0 ' : '\u2717 '}
+              {Math.round(accuracy)}%
+            </div>
           </div>
           <div className="rounded-xl bg-accent/5 p-2">
             <div className="text-xs text-muted-foreground font-medium">Mejor Racha</div>

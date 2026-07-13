@@ -6,8 +6,10 @@ export default {
     container: { center: true, padding: '2rem', screens: { '2xl': '1400px' } },
     extend: {
       fontFamily: {
-        heading: ['"Baloo 2"', 'system-ui', 'sans-serif'],
+        display: ['"Orbitron"', 'system-ui', 'sans-serif'],
+        heading: ['"Outfit"', 'system-ui', 'sans-serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -23,6 +25,17 @@ export default {
         accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
         popover: { DEFAULT: 'hsl(var(--popover))', foreground: 'hsl(var(--popover-foreground))' },
         card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
+        // Arcade neon tokens
+        'stage': { DEFAULT: 'var(--stage-bg)', surface: 'var(--stage-surface)', elevated: 'var(--stage-elevated)' },
+        'neon-blue': 'var(--neon-blue)',
+        'neon-pink': 'var(--neon-pink)',
+        'neon-green': 'var(--neon-green)',
+        'neon-amber': 'var(--neon-amber)',
+        'neon-cyan': 'var(--neon-cyan)',
+        'neon-purple': 'var(--neon-purple)',
+        'game-text': { DEFAULT: 'var(--text-game)', muted: 'var(--text-game-muted)', dim: 'var(--text-game-dim)' },
+        'correct': 'var(--color-correct)',
+        'wrong': 'var(--color-wrong)',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -34,12 +47,37 @@ export default {
         'accordion-up': { from: { height: 'var(--radix-accordion-content-height)' }, to: { height: '0' } },
         'pop-in': { '0%': { transform: 'scale(0.9)', opacity: '0' }, '100%': { transform: 'scale(1)', opacity: '1' } },
         'slide-up': { '0%': { transform: 'translateY(8px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } },
+        'neon-pulse': {
+          '0%, 100%': { boxShadow: '0 0 5px var(--glow-blue), 0 0 20px var(--glow-blue)' },
+          '50%': { boxShadow: '0 0 10px var(--glow-blue), 0 0 40px var(--glow-blue), 0 0 80px var(--glow-blue)' },
+        },
+        'shimmer': {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+        'score-pop': {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.3)', textShadow: '0 0 20px var(--neon-blue)' },
+          '100%': { transform: 'scale(1)' },
+        },
+        'wrong-shake': {
+          '0%, 100%': { transform: 'translateX(0)', boxShadow: '0 0 0 var(--glow-pink)' },
+          '20%': { transform: 'translateX(-8px)', boxShadow: '0 0 20px var(--glow-pink)' },
+          '40%': { transform: 'translateX(8px)', boxShadow: '0 0 20px var(--glow-pink)' },
+          '60%': { transform: 'translateX(-4px)' },
+          '80%': { transform: 'translateX(4px)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'pop-in': 'pop-in 0.3s ease-out',
         'slide-up': 'slide-up 0.3s ease-out',
+        timerUrgent: 'timer-urgent 0.5s ease-in-out infinite',
+        'neon-pulse': 'neon-pulse 2s ease-in-out infinite',
+        'shimmer': 'shimmer 2s linear infinite',
+        'score-pop': 'score-pop 0.4s ease-out',
+        'wrong-shake': 'wrong-shake 0.5s ease-in-out',
       },
     },
   },

@@ -22,7 +22,11 @@ export default function ProgressChart() {
           <line key={`l${i}`} x1={pts[i-1].x} y1={pts[i-1].y} x2={p.x} y2={p.y} stroke="var(--gold)" strokeWidth="1.5" opacity={0.4} />
         ))}
         {pts.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={4} fill={p.acc >= 80 ? 'var(--success, #22C55E)' : p.acc >= 50 ? 'var(--gold)' : 'var(--destructive)'} opacity={0.8}>
+          <circle key={i} cx={p.x} cy={p.y} r={p.acc >= 80 ? 4 : p.acc >= 50 ? 4 : 3}
+            fill={p.acc >= 80 ? 'var(--success, #22C55E)' : 'none'}
+            stroke={p.acc >= 50 && p.acc < 80 ? 'var(--gold)' : p.acc < 50 ? 'var(--destructive)' : 'none'}
+            strokeWidth={1.5}
+            opacity={p.acc >= 80 ? 0.9 : p.acc >= 50 ? 0.7 : 0.5}>
             <title>{Math.round(p.acc)}%</title>
           </circle>
         ))}

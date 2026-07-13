@@ -203,6 +203,9 @@ export default function App() {
       <div className="stage-mote" aria-hidden="true" />
       <div className="stage-mote" aria-hidden="true" />
       <ConcertCurtains isOpen={state.phase !== 'idle'} />
+      <a href="#game-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-card focus:text-foreground focus:rounded-lg focus:ring-2 focus:ring-ring">
+        Saltar al juego
+      </a>
       <Spotlight active={state.phase === 'feedback' || state.phase === 'levelComplete'} />
       {themeTransition && (
         <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center" aria-hidden="true">
@@ -226,64 +229,88 @@ export default function App() {
         />
       )}
 
-      <div className="max-w-2xl mx-auto px-4 pt-20 pb-6 sm:pt-24 sm:pb-8 relative z-10">
-        <div className="flex items-center justify-between mb-6">
+        <div id="game-content" className="max-w-2xl mx-auto px-4 pt-20 pb-4 sm:pt-24 sm:pb-6 lg:pt-[68px] lg:pb-1 relative z-10">
+          <div className="flex items-center justify-between mb-4 lg:mb-0">
           <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
             Lectura Musical
           </h1>
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setMuted(!state.isMuted)}
-              className="p-2 rounded-xl bg-white/80 dark:bg-gray-700/80 border border-amber-200 dark:border-gray-600 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-gray-600 transition-all cursor-pointer shadow-sm relative"
-              aria-label={state.isMuted ? 'Activar sonido' : 'Silenciar sonido'}
-            >
-              {state.isMuted ? (
-                <>
+            <div className="flex items-center gap-1 rounded-xl bg-white/80 dark:bg-gray-700/80 border border-amber-200 dark:border-gray-600 p-1">
+              <button
+                onClick={() => setMuted(!state.isMuted)}
+                className="p-1.5 rounded-lg hover:bg-amber-50 dark:hover:bg-gray-600 text-amber-700 dark:text-amber-300 transition-all cursor-pointer relative"
+                aria-label={state.isMuted ? 'Activar sonido' : 'Silenciar sonido'}
+              >
+                {state.isMuted ? (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                    </svg>
+                    <span className="absolute -top-2 -right-1 text-xs font-bold text-blue-400 animate-zzz-float" aria-hidden="true">Z</span>
+                    <span className="absolute -top-3 right-2 text-[10px] font-bold text-blue-300 animate-zzz-float" style={{ animationDelay: '0.3s' }} aria-hidden="true">z</span>
+                    <span className="absolute -top-4 right-4 text-[8px] font-bold text-blue-200 animate-zzz-float" style={{ animationDelay: '0.6s' }} aria-hidden="true">z</span>
+                  </>
+                ) : (
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                   </svg>
-                  <span className="absolute -top-2 -right-1 text-xs font-bold text-blue-400 animate-zzz-float" aria-hidden="true">Z</span>
-                  <span className="absolute -top-3 right-2 text-[10px] font-bold text-blue-300 animate-zzz-float" style={{ animationDelay: '0.3s' }} aria-hidden="true">z</span>
-                  <span className="absolute -top-4 right-4 text-[8px] font-bold text-blue-200 animate-zzz-float" style={{ animationDelay: '0.6s' }} aria-hidden="true">z</span>
-                </>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                </svg>
-              )}
-            </button>
-            <Select value={state.notation} onValueChange={(v: 'american' | 'latino') => setNotation(v)}>
-              <SelectTrigger className="w-28 h-9 border-amber-200 dark:border-gray-600 text-amber-700 dark:text-amber-300 bg-white/80 dark:bg-gray-700/80 hover:bg-amber-50 dark:hover:bg-gray-600 text-xs">
-                <Music className="w-3.5 h-3.5 mr-1" />
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="american">A♭ C D E</SelectItem>
-                <SelectItem value="latino">Do Re Mi Fa</SelectItem>
-              </SelectContent>
-            </Select>
-            <ThemeToggle theme={state.theme} onToggle={setTheme} />
-            <div className={`flex items-center gap-2 px-2 sm:px-3 py-1.5 rounded-full text-xs font-semibold ${
-              midiConnected
-                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800'
-                : 'bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'
-            }`}>
-              <span className={`inline-block w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500' : 'bg-red-400'}`} />
-              <span className="hidden sm:inline">MIDI: {midiConnected ? 'Conectado' : 'Sin conexión'}</span>
-              <span className="sm:hidden">MIDI</span>
+                )}
+              </button>
+              <div className="w-px h-5 bg-amber-200/50 dark:bg-gray-600" />
+              <Select value={state.notation} onValueChange={(v: 'american' | 'latino') => setNotation(v)}>
+                <SelectTrigger className="w-28 h-8 border-0 bg-transparent text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-gray-600 text-xs rounded-lg">
+                  <Music className="w-3.5 h-3.5 mr-1" />
+                  <SelectValue placeholder="A B C D E" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="american">A B C D E</SelectItem>
+                  <SelectItem value="latino">Do Re Mi Fa</SelectItem>
+                </SelectContent>
+              </Select>
+              <div className="w-px h-5 bg-amber-200/50 dark:bg-gray-600" />
+              <ThemeToggle theme={state.theme} onToggle={setTheme} className="p-1.5 rounded-lg hover:bg-amber-50 dark:hover:bg-gray-600 text-amber-700 dark:text-amber-300 transition-all cursor-pointer" />
             </div>
+            <span
+              className={`inline-block w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500' : 'bg-red-400'}`}
+              title={midiConnected ? 'MIDI: Conectado' : 'MIDI: Sin conexión'}
+              role="img"
+              aria-label={midiConnected ? 'MIDI conectado' : 'MIDI sin conexión'}
+            />
           </div>
         </div>
 
         {state.phase !== 'idle' && (
-          <ProgressBar current={state.totalAttempts} total={state.sessionTarget} label="Progreso" />
+          <div className="bg-card rounded-xl border border-border shadow-sm mb-2 lg:mb-3 overflow-hidden">
+            <div className="px-3 py-1 lg:py-0.5 border-b border-border/50">
+              <ProgressBar current={state.totalAttempts} total={state.sessionTarget} label="Progreso" />
+            </div>
+            <div className="flex items-center divide-x divide-border/50 text-xs sm:text-sm">
+              <div className="flex items-center gap-2 px-3 py-2 lg:py-1.5 flex-1 justify-center">
+                <StreakBadge streak={state.streak} />
+                <StreakOwl streak={state.streak} />
+              </div>
+              <div className="px-3 py-2 lg:py-1.5 flex-1 text-center font-semibold">
+                <ScoreDisplay accuracy={accuracy} totalAttempts={state.totalAttempts} timerDisplay={state.isTimed ? timerDisplay : undefined} isTimed={state.isTimed} />
+              </div>
+              <div className="px-3 py-2 lg:py-1.5 flex-1 text-center">
+                <span className="text-muted-foreground">Intentos </span>
+                <span className="text-destructive font-bold">{state.totalAttempts}</span>
+              </div>
+              {dailyStreak > 1 && (
+                <div className="px-3 py-2 lg:py-1.5 flex-1 text-center">
+                  <span className="text-xs">{'\uD83D\uDD25'} {dailyStreak}d</span>
+                </div>
+              )}
+            </div>
+          </div>
         )}
 
+        {state.phase !== 'idle' && (
         <div className="game-layout flex flex-col">
           <div className="game-layout-staff">
             <OrnateFrame>
-              <div className={`bg-card rounded-2xl border border-border p-4 sm:p-6 mb-4 animate-slide-up transition-colors duration-300 ${staffClass} ${sleepyClass}`}>
+              <div className={`bg-card rounded-2xl border border-border p-3 sm:p-4 mb-3 lg:p-1.5 lg:mb-3 transition-colors duration-300 ${staffClass} ${sleepyClass}`}>
                 <Toolbar
                   lessonId={state.lessonId}
                   showNoteName={state.showNoteName}
@@ -292,43 +319,26 @@ export default function App() {
                   onShowNoteNameChange={setShowNoteName}
                   onTimedChange={setTimed}
                 />
-                <div className="mt-4">
+                <div className="mt-2 lg:mt-0.5">
                   <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} lastCorrectNote={state.lastCorrectNote} notation={state.notation} />
                 </div>
               </div>
             </OrnateFrame>
 
-            {state.phase !== 'idle' && (
-              <div className="flex justify-center items-center gap-2 sm:gap-3 mb-4 animate-slide-up flex-wrap">
-                <StreakBadge streak={state.streak} />
-                <StreakOwl streak={state.streak} />
-                {dailyStreak > 1 && (
-                  <div className="px-2 py-1 rounded-full text-xs font-bold bg-card border border-[var(--gold-dim)]/40 text-muted-foreground shadow-sm">
-                    {'\uD83D\uDD25'} {dailyStreak}d
-                  </div>
-                )}
-                <div className="px-2 py-1 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/60 shadow-sm text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
-                  <ScoreDisplay accuracy={accuracy} totalAttempts={state.totalAttempts} timerDisplay={state.isTimed ? timerDisplay : undefined} isTimed={state.isTimed} />
-                </div>
-                <div className="px-2 py-1 sm:px-4 sm:py-2 rounded-xl bg-card border border-[var(--gold-dim)]/60 shadow-sm text-xs sm:text-sm font-semibold text-muted-foreground transition-colors">
-                  <span className="hidden sm:inline">Intentos </span>
-                  <span className="text-destructive text-sm sm:text-base">{state.totalAttempts}</span>
-                </div>
-              </div>
-            )}
           </div>
 
           <div className="game-layout-keyboard">
-            <div className="bg-card rounded-2xl border border-border p-4 mb-4 animate-slide-up transition-colors duration-300">
+            <div className="bg-card rounded-2xl border border-border p-3 mb-3 lg:p-1.5 lg:mb-2 transition-colors duration-300">
               <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} startMidi={keyboardStart} />
             </div>
           </div>
         </div>
+        )}
 
         {state.phase === 'idle' ? (
           <div className="text-center animate-slide-up">
             <ProgressChart />
-            <div className="flex justify-center gap-3 mb-4">
+            <div className="flex justify-center gap-3 mb-4 lg:mb-1">
               {[5, 10, 20].map(n => (
                 <button key={n}
                   className={`px-4 py-2 rounded-xl font-semibold transition-all cursor-pointer border-2 btn-3d text-sm ${
@@ -350,13 +360,15 @@ export default function App() {
             </button>
           </div>
         ) : (
-          <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} errorType={state.lastErrorType} notation={state.notation} />
+          <div className="max-sm:fixed max-sm:inset-x-0 max-sm:bottom-20 max-sm:z-30 max-sm:px-4">
+            <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} errorType={state.lastErrorType} notation={state.notation} />
+          </div>
         )}
 
         {state.phase === 'feedback' && (
-          <div className="text-center mt-3 animate-slide-up">
+          <div className="text-center mt-3 lg:mt-0">
             <button
-              className="px-8 py-3 text-base font-semibold rounded-xl border-2 border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted active:bg-card transition-all duration-150 cursor-pointer btn-3d"
+              className="px-8 py-3 text-base font-semibold rounded-xl border-2 bg-[var(--gold-dim)]/20 border-[var(--gold)] text-amber-700 dark:text-amber-300 hover:bg-[var(--gold-dim)]/30 transition-all duration-150 cursor-pointer btn-3d"
               onClick={() => { setHighlightKey(null); nextNote() }}
             >
               Siguiente Nota &rarr;

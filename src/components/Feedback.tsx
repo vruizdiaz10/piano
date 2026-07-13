@@ -10,14 +10,14 @@ interface FeedbackProps {
 }
 
 export default function Feedback({ isCorrect, note, recovering, errorType, notation }: FeedbackProps) {
-  if (isCorrect === null || !note) return <div className="h-14" />
+  if (isCorrect === null || !note) return <div className="h-6" />
 
   const announcement = isCorrect
     ? '\u00A1Correcto!'
     : `Incorrecto. Era ${note.name}${note.octave}`
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 mt-2">
+    <div className="flex flex-col items-center justify-center gap-2 lg:gap-1 mt-2 lg:mt-1">
       <div
         role="status"
         aria-live="polite"

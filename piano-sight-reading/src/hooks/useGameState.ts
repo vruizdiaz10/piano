@@ -38,10 +38,12 @@ const INITIAL_STATE: GameState = {
 
 function selectNote(lessonId: string, excludeMidi?: number): Note {
   const pool = getLessonPool(lessonId)
+  if (pool.length === 0) return midiToNote(60) // C4 fallback
   const filtered = pool.length > 1 ? pool.filter(m => m !== excludeMidi) : pool
-  const weak = getWeakNotes().filter(m => filtered.includes(m))
+  const safe = filtered.length > 0 ? filtered : pool
+  const weak = getWeakNotes().filter(m => safe.includes(m))
   // ponytail: 2:1 bias for weak notes, simple random switch
-  const src = weak.length > 0 && Math.random() < 0.66 ? weak : filtered
+  const src = weak.length > 0 && Math.random() < 0.66 ? weak : safe
   const midi = src[Math.floor(Math.random() * src.length)]
   return midiToNote(midi)
 }

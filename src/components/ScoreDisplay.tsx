@@ -28,6 +28,11 @@ export default function ScoreDisplay({ accuracy, totalAttempts, timerDisplay, is
       )}
       <div className={`text-2xl font-bold tabular-nums ${color}`}>
         {totalAttempts > 0 ? `${Math.round(accuracy)}%` : '--'}
+        {totalAttempts > 0 && (
+          <span className="ml-1">
+            {accuracy >= 90 ? '\u2713' : accuracy >= 70 ? '\u26A0' : '\u2717'}
+          </span>
+        )}
       </div>
       <div className="w-16 h-1.5 rounded-full bg-muted overflow-hidden">
         <div

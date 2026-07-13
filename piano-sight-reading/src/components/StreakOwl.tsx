@@ -9,36 +9,39 @@ export default function StreakOwl({ streak }: StreakOwlProps) {
       ? 'animate-pulse-glow owl-bob'
       : streak >= 2
         ? 'owl-bob'
-        : 'animate-sleepy-sway opacity-60'
+        : 'animate-sleepy-sway'
+
+  const bodyFill = streak >= 10 ? '#FF2E97' : streak >= 5 ? '#FFB800' : '#B24BF3'
+  const innerFill = streak >= 10 ? '#FF6BC1' : streak >= 5 ? '#FFD966' : '#D28EFF'
 
   const eyes = streak >= 10
-    ? <><circle cx="12" cy="9" r="3" fill="#D97706" /><circle cx="24" cy="9" r="3" fill="#D97706" /></>
+    ? <><circle cx="16" cy="12" r="4.5" fill="#FFF" /><circle cx="16" cy="12" r="2.5" fill="#FF2E97" /><circle cx="17" cy="11" r="1" fill="#FFF" /><circle cx="32" cy="12" r="4.5" fill="#FFF" /><circle cx="32" cy="12" r="2.5" fill="#FF2E97" /><circle cx="33" cy="11" r="1" fill="#FFF" /></>
     : streak >= 5
-      ? <><circle cx="12" cy="9" r="2.5" fill="#D97706" /><circle cx="24" cy="9" r="2.5" fill="#D97706" /></>
+      ? <><circle cx="16" cy="12" r="4" fill="#FFF" /><circle cx="16" cy="12" r="2" fill="#FFB800" /><circle cx="32" cy="12" r="4" fill="#FFF" /><circle cx="32" cy="12" r="2" fill="#FFB800" /></>
       : streak >= 2
-        ? <><circle cx="12" cy="9" r="2.5" fill="#92400E" /><circle cx="24" cy="9" r="2.5" fill="#92400E" /></>
-        : <><circle cx="12" cy="9" r="1.5" fill="#92400E" /><circle cx="24" cy="9" r="1.5" fill="#92400E" /><line x1="9" y1="11" x2="15" y2="7" stroke="#92400E" strokeWidth="1" /><line x1="21" y1="11" x2="27" y2="7" stroke="#92400E" strokeWidth="1" /></>
+        ? <><circle cx="16" cy="12" r="2.5" fill="#7B3FA0" /><circle cx="32" cy="12" r="2.5" fill="#7B3FA0" /></>
+        : <><circle cx="16" cy="12" r="1.5" fill="#7B3FA0" /><circle cx="32" cy="12" r="1.5" fill="#7B3FA0" /><line x1="12" y1="15" x2="20" y2="9" stroke="#7B3FA0" strokeWidth="1.5" /><line x1="28" y1="15" x2="36" y2="9" stroke="#7B3FA0" strokeWidth="1.5" /></>
 
   const chest = streak >= 5
-    ? <ellipse cx="18" cy="16" rx="5" ry="4" fill="#FBBF24" opacity="0.6" />
+    ? <ellipse cx="24" cy="21" rx="5" ry="4" fill={innerFill} opacity="0.6" />
     : null
 
   return (
-    <div className={`inline-flex items-center gap-1 text-xs font-bold text-amber-700 dark:text-amber-300 ${moodClass}`} aria-label={`Búho racha ${streak}`}>
-      <svg width="36" height="28" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <ellipse cx="18" cy="16" rx="12" ry="10" fill="#A16207" />
-        <ellipse cx="18" cy="12" rx="10" ry="7" fill="#D97706" />
-        <circle cx="12" cy="13" r="4" fill="#FEF3C7" />
-        <circle cx="24" cy="13" r="4" fill="#FEF3C7" />
+    <div className={`inline-flex items-center gap-1 text-xs font-bold ${streak >= 5 ? 'text-neon-amber' : 'text-neon-purple'} ${moodClass}`} aria-label={`Búho racha ${streak}`}>
+      <svg width="48" height="36" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="24" cy="21" rx="16" ry="13" fill={bodyFill} />
+        <ellipse cx="24" cy="16" rx="13" ry="9" fill={innerFill} />
+        <circle cx="16" cy="17" r="5.5" fill="#2A1A4E" />
+        <circle cx="32" cy="17" r="5.5" fill="#2A1A4E" />
         {eyes}
         {chest}
-        <polygon points="14,5 12,1 10,5" fill="#D97706" />
-        <polygon points="26,5 24,1 22,5" fill="#D97706" />
-        <line x1="8" y1="22" x2="4" y2="26" stroke="#A16207" strokeWidth="1.5" strokeLinecap="round" />
-        <line x1="28" y1="22" x2="32" y2="26" stroke="#A16207" strokeWidth="1.5" strokeLinecap="round" />
+        <polygon points="19,7 16,1 13,7" fill={innerFill} />
+        <polygon points="35,7 32,1 29,7" fill={innerFill} />
+        <line x1="11" y1="28" x2="5" y2="34" stroke={bodyFill} strokeWidth="2" strokeLinecap="round" />
+        <line x1="37" y1="28" x2="43" y2="34" stroke={bodyFill} strokeWidth="2" strokeLinecap="round" />
       </svg>
-      <span className="hidden sm:inline">
-        {streak >= 10 ? '\u00A1B\u00FAho furioso!' : streak >= 5 ? '\u00A1B\u00FAho!' : streak >= 2 ? 'B\u00FAho' : '\uD83D\uDCA4 B\u00FAho'}
+      <span>
+        {streak >= 10 ? '¡Búho furioso!' : streak >= 5 ? '¡Búho!' : streak >= 2 ? 'Búho' : '💤 Búho'}
       </span>
     </div>
   )

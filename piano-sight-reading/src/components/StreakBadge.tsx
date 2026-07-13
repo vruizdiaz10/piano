@@ -6,17 +6,20 @@ export default function StreakBadge({ streak }: StreakBadgeProps) {
   if (streak === 0) return null
 
   const color = streak >= 8
-    ? 'text-secondary border-secondary/30 bg-secondary/10'
+    ? 'text-neon-pink border-neon-pink/40 bg-neon-pink/10'
     : streak >= 5
-      ? 'text-accent border-accent/30 bg-accent/10'
+      ? 'text-neon-amber border-neon-amber/40 bg-neon-amber/10'
       : streak >= 3
-        ? 'text-primary border-primary/30 bg-primary/10'
-        : 'text-muted-foreground border-[var(--gold-dim)]/40 bg-[var(--gold-dim)]/10'
+        ? 'text-neon-cyan border-neon-cyan/40 bg-neon-cyan/10'
+        : 'text-neon-blue/60 border-neon-blue/20 bg-neon-blue/5'
 
-  const glowClass = streak >= 5 ? 'animate-pulse-glow' : ''
+  const glowStyle = streak >= 5
+    ? { boxShadow: `0 0 12px ${streak >= 8 ? 'rgba(255,46,151,0.3)' : 'rgba(255,184,0,0.3)'}` }
+    : undefined
 
   return (
-    <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 text-sm font-bold ${color} ${glowClass}`}>
+    <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-sm font-display font-bold ${color}`}
+         style={glowStyle}>
       <span className="text-base">{'\uD83D\uDD25'}</span>
       <span>x{streak}</span>
       {streak >= 5 && <span className="text-xs font-medium hidden sm:inline">{'\u00A1'}Racha</span>}

@@ -8,7 +8,7 @@ export default function ProgressBar({ current, total, label }: ProgressBarProps)
   const pct = Math.min((current / total) * 100, 100)
 
   return (
-    <div className="mb-4 animate-slide-up">
+    <div className="mb-2">
       {label && (
         <div className="flex justify-between items-center mb-1.5">
           <span className="text-xs font-semibold text-muted-foreground">{label}</span>

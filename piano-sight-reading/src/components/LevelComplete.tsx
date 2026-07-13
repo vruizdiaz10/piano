@@ -65,9 +65,11 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Lección completada">
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onRetry} />
-      <div className="relative bg-card rounded-2xl p-6 sm:p-8 max-w-sm w-full animate-slide-up border border-border">
-        <h2 className="text-xl font-bold text-center text-foreground mb-4">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={onRetry} />
+      <div className="relative bg-[var(--stage-surface)] rounded-2xl p-6 sm:p-8 max-w-sm w-full animate-slide-up border border-neon-purple/30"
+           style={{ boxShadow: '0 0 40px rgba(178,75,243,0.15), 0 20px 60px rgba(0,0,0,0.5)' }}>
+        <h2 className="text-xl font-display font-bold text-center text-neon-cyan mb-4"
+            style={{ textShadow: '0 0 10px rgba(0,212,255,0.3)' }}>
           {'\u00A1'}Lección Completada!
         </h2>
 
@@ -86,8 +88,8 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
         {mastery && (
           <div className={`text-center mb-3 px-3 py-2 rounded-xl text-sm font-semibold ${
             masteryAchieved
-              ? 'bg-success/10 text-success border border-success/30'
-              : 'bg-muted text-muted-foreground border border-border'
+              ? 'bg-neon-green/10 text-neon-green border border-neon-green/30'
+              : 'bg-white/5 text-neon-blue/60 border border-neon-blue/15'
           }`}>
             {masteryAchieved
               ? '\u2714 Maestría alcanzada'
@@ -98,8 +100,8 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
         {constellationPoints && (
           <div className="flex justify-center mb-3">
             <svg viewBox="0 0 200 140" className="w-full max-w-[200px] h-auto" aria-hidden="true">
-              <rect width="200" height="140" rx={8} fill="var(--constellation-bg, #0F172A)" opacity={0.15} className="dark:opacity-30" />
-              <g className="text-primary">
+              <rect width="200" height="140" rx={8} fill="var(--stage-bg, #0F172A)" opacity={0.3} />
+              <g className="text-neon-cyan">
                 {constellationPoints.map((p, i) => {
                   if (i === 0) return null
                   const prev = constellationPoints[i - 1]
@@ -120,40 +122,44 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
                 </text>
               ))}
             </svg>
+            <span className="sr-only">Notas respondidas: {answeredNotes?.join(', ')}</span>
           </div>
         )}
 
         <div className="grid grid-cols-3 gap-2 mb-6 text-center">
-          <div className={`rounded-xl p-2 ${accuracy >= 75 ? 'bg-success/10 animate-gold-pulse' : accuracy >= 50 ? 'bg-primary/5 animate-gold-pulse' : 'bg-primary/5'}`}>
-            <div className="text-xs text-muted-foreground font-medium">Precisión</div>
-            <div className="text-lg font-bold text-foreground">{Math.round(accuracy)}%</div>
+          <div className={`rounded-xl p-2 ${accuracy >= 75 ? 'bg-neon-green/5' : accuracy >= 50 ? 'bg-neon-green/5' : 'bg-neon-blue/5'}`}>
+            <div className="text-xs text-neon-blue/60 font-medium">Precisión</div>
+            <div className="text-lg font-display font-bold">
+              {accuracy >= 90 ? '\u2713 ' : accuracy >= 70 ? '\u26A0 ' : '\u2717 '}
+              {Math.round(accuracy)}%
+            </div>
           </div>
-          <div className="rounded-xl bg-accent/5 p-2">
-            <div className="text-xs text-muted-foreground font-medium">Mejor Racha</div>
-            <div className="text-lg font-bold text-foreground">{'\uD83D\uDD25'} {bestStreak}</div>
+          <div className="rounded-xl bg-neon-amber/5 p-2">
+            <div className="text-xs text-neon-blue/60 font-medium">Mejor Racha</div>
+            <div className="text-lg font-display font-bold">{'\uD83D\uDD25'} {bestStreak}</div>
           </div>
-          <div className="rounded-xl bg-secondary/5 p-2">
-            <div className="text-xs text-muted-foreground font-medium">Notas</div>
-            <div className="text-lg font-bold text-foreground">{totalNotes}</div>
+          <div className="rounded-xl bg-neon-purple/5 p-2">
+            <div className="text-xs text-neon-blue/60 font-medium">Notas</div>
+            <div className="text-lg font-display font-bold">{totalNotes}</div>
           </div>
-          <div className="rounded-xl bg-success/5 p-2">
-            <div className="text-xs text-muted-foreground font-medium">Tiempo Total</div>
-            <div className="text-lg font-bold text-foreground">{formatTime(elapsedMs)}</div>
+          <div className="rounded-xl bg-neon-green/5 p-2">
+            <div className="text-xs text-neon-blue/60 font-medium">Tiempo Total</div>
+            <div className="text-lg font-display font-bold">{formatTime(elapsedMs)}</div>
           </div>
-          <div className="rounded-xl bg-primary/5 p-2">
-            <div className="text-xs text-muted-foreground font-medium">Respuesta Prom.</div>
-            <div className="text-lg font-bold text-foreground">{avgTime > 0 ? `${avgTime}ms` : '--'}</div>
+          <div className="rounded-xl bg-neon-blue/5 p-2">
+            <div className="text-xs text-neon-blue/60 font-medium">Respuesta Prom.</div>
+            <div className="text-lg font-display font-bold">{avgTime > 0 ? `${avgTime}ms` : '--'}</div>
           </div>
-          <div className="rounded-xl bg-accent/5 p-2">
-            <div className="text-xs text-muted-foreground font-medium">Mejor Tiempo</div>
-            <div className="text-lg font-bold text-foreground">{bestTime > 0 ? `${bestTime}ms` : '--'}</div>
+          <div className="rounded-xl bg-neon-amber/5 p-2">
+            <div className="text-xs text-neon-blue/60 font-medium">Mejor Tiempo</div>
+            <div className="text-lg font-display font-bold">{bestTime > 0 ? `${bestTime}ms` : '--'}</div>
           </div>
         </div>
 
         <div className="flex gap-3">
           <button
             onClick={onRetry}
-            className="flex-1 px-4 py-2.5 rounded-xl border-2 border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted font-semibold transition-all cursor-pointer"
+            className="flex-1 px-4 py-2.5 rounded-xl border border-neon-blue/30 bg-transparent text-neon-blue/70 hover:text-neon-cyan hover:border-neon-blue/50 font-semibold transition-all cursor-pointer"
           >
             Reintentar
           </button>
@@ -162,8 +168,8 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
             disabled={mastery && mastery.unlockNext && !masteryAchieved}
             className={`flex-1 px-4 py-2.5 rounded-xl font-semibold transition-all cursor-pointer ${
               mastery && mastery.unlockNext && !masteryAchieved
-                ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                : 'bg-primary text-primary-foreground hover:opacity-90'
+                ? 'bg-white/5 text-neon-blue/30 cursor-not-allowed border border-neon-blue/10'
+                : 'text-neon-cyan border border-neon-cyan/40 hover:border-neon-cyan/70'
             }`}
             title={mastery && mastery.unlockNext && !masteryAchieved ? 'Alcanza la maestría para desbloquear' : ''}
           >

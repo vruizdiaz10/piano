@@ -18,11 +18,11 @@ export default function Toolbar({
   const current = LESSONS.find(l => l.id === lessonId)
 
   return (
-    <div className="flex justify-center gap-3 flex-wrap items-center">
-      <div className="flex flex-col items-start gap-1">
+    <div className="flex justify-center gap-3 flex-wrap items-center flex-col sm:flex-row text-neon-blue/70">
+      <div className="flex flex-col items-start gap-1 w-full sm:w-auto">
         <Select value={lessonId} onValueChange={onLessonChange}>
-          <SelectTrigger className="w-44">
-            <SelectValue />
+          <SelectTrigger className="w-full sm:w-44">
+            <SelectValue placeholder="Seleccionar lección" />
           </SelectTrigger>
           <SelectContent>
             {LESSONS.map(l => (
@@ -31,14 +31,14 @@ export default function Toolbar({
           </SelectContent>
         </Select>
         {current && (
-          <span className="text-xs text-muted-foreground ml-1">{current.desc}</span>
+          <span className="text-xs text-neon-blue/50 ml-1 mt-1 sm:mt-0">{current.desc}</span>
         )}
       </div>
-      <label className="flex items-center gap-2 text-sm cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
+      <label className="flex items-center gap-2 text-sm cursor-pointer text-neon-blue/60 hover:text-neon-cyan transition-colors flex-row">
         <Checkbox checked={showNoteName} onCheckedChange={(v) => onShowNoteNameChange(!!v)} />
         Mostrar nota
       </label>
-      <label className="flex items-center gap-2 text-sm cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
+      <label className="flex items-center gap-2 text-sm cursor-pointer text-neon-blue/60 hover:text-neon-cyan transition-colors flex-row">
         <Checkbox checked={isTimed} onCheckedChange={(v) => onTimedChange(!!v)} />
         Temporizador
       </label>
