@@ -95,6 +95,7 @@ export default function ParticleCanvas({ active, streak }: Props) {
     const DURATION = 1500 // ms
 
     function tick() {
+      if (!ctx || !canvas) return
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       const now = performance.now()
