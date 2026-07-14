@@ -12,23 +12,18 @@ import Feedback from './components/Feedback'
 import Toolbar from './components/Toolbar'
 import ProgressBar from './components/ProgressBar'
 import StreakBadge from './components/StreakBadge'
-import StreakOwl from './components/StreakOwl'
 import ScoreDisplay from './components/ScoreDisplay'
 import Confetti from './components/Confetti'
 import LevelComplete from './components/LevelComplete'
 import ThemeToggle from './components/ThemeToggle'
-import OrnateFrame from './components/OrnateFrame'
-import ConcertCurtains from './components/ConcertCurtains'
 import ProgressChart from './components/ProgressChart'
-import Spotlight from './components/Spotlight'
 import AuthProvider from './hooks/useAuthProvider'
 import { useAuth } from './hooks/useAuth'
 import { useSessionSync } from './hooks/useSessionSync'
 import { useConfigSync } from './hooks/useConfigSync'
 import UserMenu from './components/UserMenu'
-import LoginModal from './components/LoginModal'
 import Toast from './components/Toast'
-import { Music } from 'lucide-react'
+import { Music, RotateCcw, Pause, Play } from 'lucide-react'
 
 function AppContent() {
   const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTimed, setTheme, setNotation, restartGame } = useGameState()
@@ -40,7 +35,6 @@ function AppContent() {
   const [trail, setTrail] = useState<Array<{ note: import('./types').Note; id: number }>>([])
   const trailIdRef = useRef(0)
   const [noteExpression, setNoteExpression] = useState<'happy' | 'sad' | null>(null)
-  const [themeTransition, setThemeTransition] = useState(false)
   const [answeredNotes, setAnsweredNotes] = useState<number[]>([])
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
   const { dailyStreak, markToday } = useDailyStreak()
@@ -48,7 +42,7 @@ function AppContent() {
   const { user, signOut } = useAuth()
   const { syncState, saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
   const { config, updateConfig } = useConfigSync(user)
-  const [showLoginModal, setShowLoginModal] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'warning' | 'error' } | null>(null)
 
   const handleDeleteAccount = async () => {
@@ -106,12 +100,9 @@ function AppContent() {
 
   const accuracy = state.totalAttempts > 0 ? (state.correctAttempts / state.totalAttempts) * 100 : 0
 
-  // Apply dark mode class + twilight theater
+  // Apply dark mode class
   useEffect(() => {
     document.documentElement.classList.toggle('dark', state.theme === 'dark')
-    setThemeTransition(true)
-    const timer = setTimeout(() => setThemeTransition(false), 1500)
-    return () => clearTimeout(timer)
   }, [state.theme])
 
   const { midiConnected } = useMidi(
@@ -210,6 +201,22 @@ function AppContent() {
     }
   }, [state.streak])
 
+  // Keyboard shortcuts: R=restart, P=pause, Space=next
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement) return
+      if (e.key === 'r' || e.key === 'R') restartGame()
+      if (e.key === 'p' || e.key === 'P') setIsPaused(p => !p)
+      if (e.key === ' ' && state.phase === 'feedback') {
+        e.preventDefault()
+        if (state.lastAnswerCorrect === false && state.currentNote) playNote(state.currentNote.midi)
+        nextNote()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [state.phase, state.lastAnswerCorrect, state.currentNote, nextNote, restartGame, playNote])
+
   // Safety: if phase is waiting/feedback but no note, recover
   useEffect(() => {
     if ((state.phase === 'waiting' || state.phase === 'feedback') && !state.currentNote) {
@@ -257,33 +264,13 @@ function AppContent() {
       ? 'animate-flash-red animate-shake'
       : ''
 
-  const sleepyClass = state.isMuted ? 'opacity-70 animate-sleepy-sway' : ''
-
   return (
-    <div
-      className={`min-h-screen transition-colors duration-300 ${themeTransition ? 'animate-theatre-glow' : ''}`}
-      style={{
-        background: 'radial-gradient(ellipse at 50% 30%, var(--stage-floor) 0%, var(--stage-bg) 100%)',
-      }}>
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <Confetti active={showConfetti} />
       <div aria-live="polite" aria-atomic="true" className="sr-only" ref={liveRegionRef} />
-      <div className="stage-mote" aria-hidden="true" />
-      <div className="stage-mote" aria-hidden="true" />
-      <div className="stage-mote" aria-hidden="true" />
-      <div className="stage-mote" aria-hidden="true" />
-      <div className="stage-mote" aria-hidden="true" />
-      <ConcertCurtains isOpen={state.phase !== 'idle'} />
       <a href="#game-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-card focus:text-foreground focus:rounded-lg focus:ring-2 focus:ring-ring">
         Saltar al juego
       </a>
-      <Spotlight active={state.phase === 'feedback' || state.phase === 'levelComplete'} />
-      {themeTransition && (
-        <div className="fixed inset-0 z-50 pointer-events-none flex items-center justify-center" aria-hidden="true">
-          <span className={`text-6xl animate-twilight-theater ${state.theme === 'light' ? 'text-yellow-400' : 'text-blue-200'}`}>
-            {state.theme === 'light' ? '\u2600\uFE0F' : '\uD83C\uDF19'}
-          </span>
-        </div>
-      )}
 
       {state.phase === 'levelComplete' && (
         <LevelComplete
@@ -299,37 +286,32 @@ function AppContent() {
         />
       )}
 
-        <div id="game-content" className="max-w-2xl mx-auto px-4 pt-20 pb-4 sm:pt-24 sm:pb-6 lg:pt-[68px] lg:pb-1 relative z-10">
-          <div className="flex items-center justify-between mb-4 lg:mb-0">
+        <div id="game-content" className="max-w-2xl mx-auto px-3 pt-2 pb-2 sm:pt-4 sm:pb-4 lg:pt-[68px] lg:pb-1 relative z-10">
+          <div className="flex items-center justify-between mb-2 lg:mb-0">
           <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
             Lectura Musical
           </h1>
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 rounded-xl bg-white/80 dark:bg-gray-700/80 border border-amber-200 dark:border-gray-600 p-1">
+              <div className="flex items-center gap-1 rounded-xl bg-accent/30 border border-border p-1">
               <button
                 onClick={() => setMuted(!state.isMuted)}
-                className="p-1.5 rounded-lg hover:bg-amber-50 dark:hover:bg-gray-600 text-amber-700 dark:text-amber-300 transition-all cursor-pointer relative"
+                className="p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
                 aria-label={state.isMuted ? 'Activar sonido' : 'Silenciar sonido'}
               >
-                {state.isMuted ? (
-                  <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                    </svg>
-                    <span className="absolute -top-2 -right-1 text-xs font-bold text-blue-400 animate-zzz-float" aria-hidden="true">Z</span>
-                    <span className="absolute -top-3 right-2 text-[10px] font-bold text-blue-300 animate-zzz-float" style={{ animationDelay: '0.3s' }} aria-hidden="true">z</span>
-                    <span className="absolute -top-4 right-4 text-[8px] font-bold text-blue-200 animate-zzz-float" style={{ animationDelay: '0.6s' }} aria-hidden="true">z</span>
-                  </>
-                ) : (
+                {!state.isMuted ? (
                   <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
                   </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                  </svg>
                 )}
               </button>
-              <div className="w-px h-5 bg-amber-200/50 dark:bg-gray-600" />
+              <div className="w-px h-5 bg-border" />
               <Select value={state.notation} onValueChange={(v: 'american' | 'latino') => setNotation(v)}>
-                <SelectTrigger className="w-28 h-8 border-0 bg-transparent text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-gray-600 text-xs rounded-lg" aria-label="Notación musical">
+                <SelectTrigger className="w-28 h-8 border-0 bg-transparent text-foreground hover:bg-accent text-xs rounded-lg" aria-label="Notación musical">
                   <Music className="w-3.5 h-3.5 mr-1" />
                   <SelectValue placeholder="A B C D E" />
                 </SelectTrigger>
@@ -338,9 +320,27 @@ function AppContent() {
                   <SelectItem value="latino">Do Re Mi Fa</SelectItem>
                 </SelectContent>
               </Select>
-              <div className="w-px h-5 bg-amber-200/50 dark:bg-gray-600" />
-              <ThemeToggle theme={state.theme} onToggle={setTheme} className="p-1.5 rounded-lg hover:bg-amber-50 dark:hover:bg-gray-600 text-amber-700 dark:text-amber-300 transition-all cursor-pointer" />
-              <div className="w-px h-5 bg-amber-200/50 dark:bg-gray-600" />
+              <div className="w-px h-5 bg-border" />
+              <ThemeToggle theme={state.theme} onToggle={setTheme} className="p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer" />
+              <div className="w-px h-5 bg-border" />
+              <button
+                onClick={() => restartGame()}
+                className="p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
+                aria-label="Reiniciar"
+                title="Reiniciar (R)"
+              >
+                <RotateCcw className="w-4 h-4" />
+              </button>
+              <div className="w-px h-5 bg-border" />
+              <button
+                onClick={() => setIsPaused(p => !p)}
+                className="p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
+                aria-label={isPaused ? 'Reanudar' : 'Pausar'}
+                title={isPaused ? 'Reanudar (P)' : 'Pausar (P)'}
+              >
+                {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+              </button>
+              <div className="w-px h-5 bg-border" />
               <UserMenu syncState={syncState} onDeleteAccount={handleDeleteAccount} />
             </div>
             <span
@@ -360,7 +360,6 @@ function AppContent() {
             <div className="flex items-center divide-x divide-border/50 text-xs sm:text-sm">
               <div className="flex items-center gap-2 px-3 py-2 lg:py-1.5 flex-1 justify-center">
                 <StreakBadge streak={state.streak} />
-                <StreakOwl streak={state.streak} />
               </div>
               <div className="px-3 py-2 lg:py-1.5 flex-1 text-center font-semibold">
                 <ScoreDisplay accuracy={accuracy} totalAttempts={state.totalAttempts} timerDisplay={state.isTimed ? timerDisplay : undefined} isTimed={state.isTimed} />
@@ -381,8 +380,7 @@ function AppContent() {
         {state.phase !== 'idle' && (
         <div className="game-layout flex flex-col">
           <div className="game-layout-staff">
-            <OrnateFrame>
-              <div className={`bg-card rounded-2xl border border-border p-3 sm:p-4 mb-3 lg:p-1.5 lg:mb-3 transition-colors duration-300 ${staffClass} ${sleepyClass}`}>
+            <div className={`bg-card rounded-2xl border border-border p-3 sm:p-4 mb-3 lg:p-1.5 lg:mb-3 transition-colors duration-300 ${staffClass}`}>
                 <Toolbar
                   lessonId={state.lessonId}
                   showNoteName={state.showNoteName}
@@ -395,9 +393,7 @@ function AppContent() {
                   <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} lastCorrectNote={state.lastCorrectNote} notation={state.notation} />
                 </div>
               </div>
-            </OrnateFrame>
-
-          </div>
+            </div>
 
           <div className="game-layout-keyboard">
             <div className="bg-card rounded-2xl border border-border p-3 mb-3 lg:p-1.5 lg:mb-2 transition-colors duration-300">
@@ -440,16 +436,26 @@ function AppContent() {
         {state.phase === 'feedback' && (
           <div className="text-center mt-3 lg:mt-0">
             <button
-              className="px-8 py-3 text-base font-semibold rounded-xl border-2 bg-[var(--gold-dim)]/20 border-[var(--gold)] text-amber-700 dark:text-amber-300 hover:bg-[var(--gold-dim)]/30 transition-all duration-150 cursor-pointer btn-3d"
-              onClick={() => { setHighlightKey(null); nextNote() }}
+              className="px-8 py-3 text-base font-semibold rounded-xl border-2 bg-primary/10 border-primary text-primary hover:bg-primary/20 transition-all duration-150 cursor-pointer btn-3d"
+              onClick={() => { setHighlightKey(null); if (state.lastAnswerCorrect === false && state.currentNote) playNote(state.currentNote.midi); nextNote() }}
             >
               Siguiente Nota &rarr;
             </button>
           </div>
         )}
       </div>
-      <div className="fixed bottom-0 left-0 right-0 h-2 z-30 pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent, var(--stage-floor))' }} aria-hidden="true" />
-      <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
+
+      {isPaused && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <button
+            onClick={() => setIsPaused(false)}
+            className="p-6 rounded-full bg-primary text-primary-foreground shadow-lg hover:opacity-90 transition-all cursor-pointer"
+            aria-label="Reanudar"
+          >
+            <Play className="w-10 h-10" />
+          </button>
+        </div>
+      )}
       {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
     </div>
   )

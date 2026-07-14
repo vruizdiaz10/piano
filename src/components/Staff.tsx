@@ -144,14 +144,9 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
                   {displayNoteName(note.name, notation)}{note.octave}
                 </text>
               )}
-              {noteExpression && (() => {
-                const ey = noteExpression === 'happy' ? y - NOTE_RADIUS * 1.2 : y - NOTE_RADIUS * 0.8
-                return (
-                  <text x={x + NOTE_RADIUS + 18} y={ey + 4} fontSize={18} textAnchor="middle" className="animate-face-pop">
-                    {noteExpression === 'happy' ? '\u263A' : '\u2639'}
-                  </text>
-                )
-              })()}
+{noteExpression && (
+  <circle cx={x + NOTE_RADIUS + 18} cy={y} r={6} className={noteExpression === 'happy' ? 'fill-green-500' : 'fill-red-500'} />
+)}
             </g>
           )
         })()}
