@@ -2,12 +2,11 @@
 
 > A tu ritmo, nota a nota.
 
-Un juego de entrenamiento de lectura musical a primera vista para piano. Aparece una nota en el pentagrama en clave de sol y el jugador debe presionar la tecla correcta, ya sea en un teclado MIDI conectado o en el piano en pantalla. Atraves de un escenario de concierto inmersivo con cortinas, focos y un marco ornamental dorado.
+Un juego de entrenamiento de lectura musical a primera vista para piano. Aparece una nota en el pentagrama en clave de sol y el jugador debe presionar la tecla correcta, ya sea en un teclado MIDI conectado o en el piano en pantalla. A traves de un escenario de concierto inmersivo con cortinas, focos y un marco ornamental dorado.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ![Screenshot](screenshot.png)
-<!-- Reemplazar screenshot.png con una captura del juego en accion. Incluir el pentagrama, el teclado en pantalla y la barra de herramientas para una vista previa rapida. -->
 
 ---
 
@@ -50,6 +49,14 @@ Un juego de entrenamiento de lectura musical a primera vista para piano. Aparece
 - **PWA** -- Manifest.json con nombre "NoteDojo", color de tema #6B1A1A, fondo #0D0704. Instalable en escritorio y movil.
 - **Modo paisaje movil** -- Optimizado para orientacion horizontal en dispositivos moviles con interfaz compacta.
 
+### Nube (Firebase)
+- **Autenticacion con Google** -- Inicio de sesion rapido con cuenta de Google via popup. En movil, fallback automatico a redirect.
+- **Sincronizacion de sesiones** -- Las sesiones se guardan en Firestore y se sincronizan automaticamente entre dispositivos. Deduplicacion por fecha+leccion+precision, mantener ultimas 20.
+- **Sincronizacion de configuracion** -- Notacion, tema, temporizador, mostrar nota y objetivo de sesion se sincronizan con Firestore (debounced 500ms).
+- **Migracion automatica** -- Al iniciar sesion por primera vez, los datos locales se migran automaticamente a Firestore.
+- **Indicador de estado** -- UserMenu muestra estado de sincronizacion: sincronizado (verde), reintentando (ambar), sin sincronizar (gris).
+- **Eliminacion de datos** -- Opcion para eliminar todos los datos de Firestore desde el menu de usuario.
+
 ### Accesibilidad
 - Las regiones ARIA live anuncian aciertos/fallos e hitos de racha.
 - Piano en pantalla navegable por teclado.
@@ -67,7 +74,9 @@ Un juego de entrenamiento de lectura musical a primera vista para piano. Aparece
 | [Vite](https://vitejs.dev) | Herramienta de compilacion y servidor de desarrollo |
 | [Tailwind CSS](https://tailwindcss.com) | Estilos utilitarios |
 | [shadcn/ui](https://ui.shadcn.com) | Primitivas Select y Checkbox basadas en Radix |
-| [lucide-react](https://lucide.dev) | Iconos (Volume2, VolumeX, ChevronLeft, ChevronRight) |
+| [lucide-react](https://lucide.dev) | Iconos (Volume2, VolumeX, ChevronLeft, ChevronRight, User) |
+| [Firebase Auth](https://firebase.google.com/docs/auth) | Autenticacion con Google |
+| [Cloud Firestore](https://firebase.google.com/docs/firestore) | Base de datos en la nube para sesiones y configuracion |
 | [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) | Sintesis y reproduccion de sonido |
 | [Web MIDI API](https://developer.mozilla.org/en-US/docs/Web/API/Web_MIDI_API) | Entrada de teclado MIDI |
 | SVG | Renderizado de pentagrama, notacion, cortinas, foco, marco ornamental, grafico de progreso, buho |
@@ -84,20 +93,33 @@ piano-sight-reading/
 ├── postcss.config.js           # Pipeline PostCSS + Tailwind
 ├── tsconfig.json               # Configuracion de TypeScript
 ├── package.json                # Dependencias y scripts
+├── firestore.rules             # Reglas de seguridad de Firestore
+├── firestore.indexes.json      # Indices de Firestore
+├── firebase.json               # Configuracion del proyecto Firebase
+├── .firebaserc                 # Alias del proyecto Firebase
+├── .env                        # Variables de entorno Firebase (no commitear)
 ├── public/
 │   ├── manifest.json           # Manifest PWA (NoteDojo)
 │   └── pwa-icon.svg            # Icono de la PWA
 ├── src/
 │   ├── main.tsx                # Punto de entrada de React
-│   ├── App.tsx                 # Componente raiz: orquestacion del juego, estado, efectos
+│   ├── App.tsx                 # Componente raiz: orquestacion del juego, estado, efectos, sincronizacion
 │   ├── index.css               # Directivas de Tailwind, variables CSS (claro/oscuro/teatro), keyframes
 │   ├── types.ts                # Definiciones de tipos Note, GameState, GamePhase, Notation
 │   ├── data/
 │   │   └── lessons.ts          # Definiciones de lecciones (9 lecciones, pools de notas MIDI, requisitos de maestria)
+│   ├── firebase/
+│   │   ├── config.ts           # Inicializacion de Firebase (apiKey, authDomain, projectId, etc.)
+│   │   ├── auth.ts             # Funciones de autenticacion (signInWithGoogle, signOutUser)
+│   │   └── firestore.ts        # CRUD de Firestore (loadUserDoc, saveUserDoc, deleteUserDoc)
 │   ├── hooks/
 │   │   ├── useGameState.ts     # Reducer de estado del juego (fase, puntuacion, recuperacion, racha)
 │   │   ├── useSound.ts         # Sintesis de osciladores Web Audio (notas, efectos, fanfarria)
-│   │   └── useMidi.ts          # Conexion Web MIDI API y manejo de eventos
+│   │   ├── useMidi.ts          # Conexion Web MIDI API y manejo de eventos
+│   │   ├── useAuthProvider.tsx # AuthProvider con contexto React para estado de autenticacion
+│   │   ├── useAuth.ts          # Hook simple para acceder al contexto de autenticacion
+│   │   ├── useSessionSync.ts   # Sincronizacion de sesiones con Firestore (carga, guardado, migracion)
+│   │   └── useConfigSync.ts    # Sincronizacion de configuracion con Firestore (debounced 500ms)
 │   ├── utils/
 │   │   ├── midiToNote.ts       # Conversion de numero MIDI a objeto Note
 │   │   ├── noteToPosition.ts   # Mapeo de nota a posicion Y en SVG (clave de sol)
@@ -126,9 +148,14 @@ piano-sight-reading/
 │       ├── ConcertCurtains.tsx     # Cortinas SVG del escenario (telon, laterales, flecos dorados)
 │       ├── Spotlight.tsx           # Foco radial de luz sobre el pentagrama
 │       ├── OrnateFrame.tsx         # Marco ornamental dorado con esquinas SVG y barra decorativa
+│       ├── UserMenu.tsx            # Menu desplegable de usuario (avatar, sesion, sincronizacion, cerrar sesion)
+│       ├── LoginModal.tsx          # Modal de inicio de sesion con Google (Radix Dialog)
+│       ├── Toast.tsx               # Notificaciones auto-dismiss (exito, advertencia, error)
 │       └── ui/
 │           ├── select.tsx          # Primitiva Select de shadcn/ui (Radix)
-│           └── checkbox.tsx        # Primitiva Checkbox de shadcn/ui (Radix)
+│           ├── checkbox.tsx        # Primitiva Checkbox de shadcn/ui (Radix)
+│           ├── dropdown-menu.tsx   # Primitiva DropdownMenu de Radix (para UserMenu)
+│           └── dialog.tsx          # Primitiva Dialog de Radix (para LoginModal)
 ```
 
 ---
@@ -146,6 +173,32 @@ piano-sight-reading/
 git clone https://github.com/vruizdiaz10/piano-sight-reading.git
 cd piano-sight-reading
 npm install
+```
+
+### Configuracion de Firebase
+
+1. Crea un proyecto en [Firebase Console](https://console.firebase.google.com)
+2. Habilita **Authentication** >Proveedor **Google**
+3. Crea una base de datos **Cloud Firestore** en la region de tu preferencia
+4. Copia `.env.example` a `.env` y completa las credenciales de tu proyecto:
+
+```bash
+cp .env.example .env
+```
+
+```
+VITE_FIREBASE_API_KEY=tu-api-key
+VITE_FIREBASE_AUTH_DOMAIN=tu-proyecto.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=tu-proyecto-id
+VITE_FIREBASE_STORAGE_BUCKET=tu-proyecto.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=tu-sender-id
+VITE_FIREBASE_APP_ID=tu-app-id
+```
+
+5. Despliega las reglas de Firestore:
+
+```bash
+firebase deploy --only firestore:rules
 ```
 
 ### Desarrollo
@@ -195,6 +248,7 @@ Sin dispositivo MIDI? Usa el piano en pantalla haciendo clic o tocando las tecla
 - **Mostrar nota**: Activa/desactiva el nombre de la nota debajo de la cabeza en el pentagrama.
 - **Temporizador**: Activa un cronometro que registra tiempo total y tiempo de respuesta por nota.
 - **Silenciar**: Boton de volumen en ScoreDisplay para silenciar el audio y activar el modo "teatro de sueno".
+- **Guardar progreso**: Haz clic en el icono de usuario (arriba a la derecha) para iniciar sesion con Google y sincronizar tu progreso en la nube.
 
 ### Lecciones
 
@@ -253,27 +307,47 @@ El estado se gestiona mediante `useState` con un objeto `GameState` inmutable. T
 ### Jerarquia de Componentes
 
 ```
-<App>
-  <ConcertCurtains />        # Cortinas SVG del escenario
-  <Spotlight />              # Foco radial de luz
-  <OrnateFrame>              # Marco ornamental dorado
-    <Toolbar />              # Selector de leccion, mostrar nota, temporizador
-    <Staff />                # Pentagrama SVG, nota, notas fantasma, puntos de rango
-    <ProgressBar />          # Patito nadador, progreso de sesion
-    <StreakBadge />          # Contador de racha de fuego
-    <StreakOwl />            # SVG de buho animado
-    <ScoreDisplay />         # Porcentaje de precision + boton mute
-    <HitRipple />            # Efecto de onda expandiendose
-    <ScoreFlyUp />           # Texto flotante de puntos
-    <PianoKeyboard />        # Teclado interactivo de 37 teclas
-    <Feedback />             # Banner de correcto/incorrecto + temporizador de recuperacion
-  </OrnateFrame>
-  <LevelComplete />          # Superposicion de nivel completado
-  <Confetti />               # Particulas de confeti CSS
-  <ParticleCanvas />         # Canvas de particulas de luz
-  <ProgressChart />          # Grafico de precision de sesiones anteriores
-  <ThemeToggle />            # Alternador de modo oscuro sol/luna
-</App>
+<AuthProvider>
+  <App>
+    <ConcertCurtains />        # Cortinas SVG del escenario
+    <Spotlight />              # Foco radial de luz
+    <OrnateFrame>              # Marco ornamental dorado
+      <Toolbar />              # Selector de leccion, mostrar nota, temporizador
+      <Staff />                # Pentagrama SVG, nota, notas fantasma, puntos de rango
+      <ProgressBar />          # Patito nadador, progreso de sesion
+      <StreakBadge />          # Contador de racha de fuego
+      <StreakOwl />            # SVG de buho animado
+      <ScoreDisplay />         # Porcentaje de precision + boton mute
+      <HitRipple />            # Efecto de onda expandiendose
+      <ScoreFlyUp />           # Texto flotante de puntos
+      <PianoKeyboard />        # Teclado interactivo de 37 teclas
+      <Feedback />             # Banner de correcto/incorrecto + temporizador de recuperacion
+    </OrnateFrame>
+    <LevelComplete />          # Superposicion de nivel completado
+    <Confetti />               # Particulas de confeti CSS
+    <ParticleCanvas />         # Canvas de particulas de luz
+    <ProgressChart />          # Grafico de precision de sesiones anteriores
+    <ThemeToggle />            # Alternador de modo oscuro sol/luna
+    <UserMenu />               # Menu de usuario (avatar, sesion, sincronizacion)
+    <LoginModal />             # Modal de inicio de sesion con Google
+    <Toast />                  # Notificaciones de estado
+  </App>
+</AuthProvider>
+```
+
+### Sincronizacion Nube
+
+La sincronizacion se gestiona a traves de dos hooks especializados:
+
+- **useSessionSync**: Carga sesiones desde Firestore al iniciar sesion, encola guardados mientras carga, y flushea la cola despues. Deduplica por fecha+leccion+precision, mantiene las ultimas 20.
+- **useConfigSync**: Aplica cambios localmente inmediatamente, luego debuncia el escrito a Firestore (500ms). Evita exhaust de escrituras en el tier gratuito.
+
+```
+user logs in → useSessionSync loads from Firestore
+             → useConfigSync loads config from Firestore
+             → App applies config differences to local state
+             → Local state changes push back via updateConfig (debounced)
+             → Session saves queue until Firestore loads, then flush
 ```
 
 ### Escenario de Concierto
@@ -311,6 +385,7 @@ El hook `useMidi` solicita `MIDIAccess` a traves de la Web MIDI API. Itera sobre
 - **Sesiones**: `sessionHistory.ts` guarda las ultimas 20 sesiones en localStorage con accuracy, numero de notas, leccion y fecha.
 - **Progresion**: El nivel de leccion seleccionado se persiste en localStorage.
 - **Tema**: La preferencia de tema (claro/oscuro) se guarda en `GameState.theme` y se restaura desde `prefers-color-scheme` en la carga inicial.
+- **Firebase**: Las sesiones y configuracion se sincronizan con Firestore cuando el usuario esta autenticado. La migracion local→nube ocurre automaticamente en el primer inicio de sesion.
 
 ---
 
