@@ -131,9 +131,8 @@ function mergeSessions(existing: UserDoc['sessions'], incoming: SessionRecord[])
 async function saveToFirestore(uid: string, record: SessionRecord) {
   try {
     const doc = await loadUserDoc(uid)
-    if (!doc) return
-    const merged = mergeSessions(doc.sessions, [record])
-    await saveUserDoc(uid, { ...doc, sessions: merged })
+    const sessions = mergeSessions(doc?.sessions ?? [], [record])
+    await saveUserDoc(uid, { ...(doc ?? defaultUserDoc()), sessions })
   } catch {
     // Firestore not available; will retry on next save
   }
