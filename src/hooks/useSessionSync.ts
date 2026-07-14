@@ -33,14 +33,17 @@ export function useSessionSync(user: User | null): UseSessionSyncReturn {
     }
 
     let cancelled = false
+    let retryCount = 0
+    const MAX_RETRIES = 6
+    const RETRY_DELAY = 5000
 
-    async function load() {
+    async function load(): Promise<void> {
       try {
         const doc = await loadUserDoc(user!.uid)
         if (cancelled) return
 
         loadedRef.current = true
-        setSyncState(prev => ({ ...prev, isLoading: false }))
+        setSyncState(prev => ({ ...prev, isLoading: false, syncError: false }))
 
         if (queueRef.current.length > 0) {
           const merged = mergeSessions(doc?.sessions ?? [], queueRef.current)
@@ -52,7 +55,14 @@ export function useSessionSync(user: User | null): UseSessionSyncReturn {
           setSyncState(prev => ({ ...prev, lastSyncTime: new Date().toISOString() }))
         }
       } catch {
-        if (!cancelled) setSyncState(prev => ({ ...prev, isLoading: false, syncError: true }))
+        if (cancelled) return
+        retryCount++
+        if (retryCount < MAX_RETRIES) {
+          setSyncState(prev => ({ ...prev, isLoading: false, syncError: true }))
+          setTimeout(load, RETRY_DELAY)
+        } else {
+          setSyncState(prev => ({ ...prev, isLoading: false, syncError: true }))
+        }
       }
     }
 
@@ -119,10 +129,14 @@ function mergeSessions(existing: UserDoc['sessions'], incoming: SessionRecord[])
 }
 
 async function saveToFirestore(uid: string, record: SessionRecord) {
-  const doc = await loadUserDoc(uid)
-  if (!doc) return
-  const merged = mergeSessions(doc.sessions, [record])
-  await saveUserDoc(uid, { ...doc, sessions: merged })
+  try {
+    const doc = await loadUserDoc(uid)
+    if (!doc) return
+    const merged = mergeSessions(doc.sessions, [record])
+    await saveUserDoc(uid, { ...doc, sessions: merged })
+  } catch {
+    // Firestore not available; will retry on next save
+  }
 }
 
 function defaultUserDoc(): UserDoc {
