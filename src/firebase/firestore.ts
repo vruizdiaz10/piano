@@ -7,7 +7,7 @@ import {
 } from 'firebase/firestore'
 import { auth } from './config'
 
-const db = getFirestore(auth.app)
+const db = getFirestore(auth.app, 'default')
 
 export interface UserDoc {
   level: number
