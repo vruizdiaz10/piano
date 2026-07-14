@@ -21,7 +21,7 @@ export default function Toolbar({
     <div className="flex justify-center gap-3 flex-wrap items-center flex-col sm:flex-row text-neon-blue/70">
       <div className="flex flex-col items-start gap-1 w-full sm:w-auto">
         <Select value={lessonId} onValueChange={onLessonChange}>
-          <SelectTrigger className="w-full sm:w-44">
+          <SelectTrigger className="w-full sm:w-44" aria-label="Seleccionar lección">
             <SelectValue placeholder="Seleccionar lección" />
           </SelectTrigger>
           <SelectContent>

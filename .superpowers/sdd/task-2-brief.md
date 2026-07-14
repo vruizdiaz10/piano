@@ -1,35 +1,30 @@
-### Task 2: Launch UI Designer — Visual Design Audit
+### Task 2: Install Dependencies
 
 **Files:**
-- Output: `docs/superpowers/plans/reports/ui-designer-report.md`
+- Modify: `package.json` (via npm)
 
-**Brief for agent:**
-Analyze visual design of React piano game at `/mnt/d/www/piano/src/`. Examine:
-1. `src/index.css` — CSS variables, color system, typography, animations
-2. `src/App.tsx` — layout, containers, stat pills
-3. All components in `src/components/`:
-   - `ConcertCurtains.tsx` — SVG valance, tassels
-   - `OrnateFrame.tsx` — gold corner decorations
-   - `Spotlight.tsx` — radial gradient overlay
-   - `PianoKeyboard.tsx` — ivory/ebony keys with gold
-   - `Staff.tsx` — musical staff rendering
-   - `StreakOwl.tsx`, `StreakBadge.tsx` — gamification visuals
-   - `ScoreDisplay.tsx`, `LevelComplete.tsx` — feedback
-   - `ThemeToggle.tsx` — dark/light mode
-   - `Confetti.tsx` — celebration effect
-   - `ProgressChart.tsx` — session history SVG
-4. Current CSS vars: `--gold`, `--gold-dim`, `--gold-light`, `--stage-bg`, `--stage-floor`, `--ivory`, `--ebony`, `--curtain`, `--curtain-fold`
+**Interfaces:**
+- Consumes: nothing
+- Produces: firebase, @radix-ui/react-dropdown-menu, @radix-ui/react-dialog available
 
-Evaluate:
-- Color harmony (gold + maroon + ivory palette, does it work?)
-- Typography (font choices, hierarchy, readability)
-- Component polish (shadows, borders, radius, spacing consistency)
-- Light/dark mode (do all colors work in both?)
-- Overall visual coherence (concert hall theme, does it deliver?)
-- Specific improvement recommendations with file:line, effort estimate
+- [ ] **Step 1: Install Firebase + Radix UI**
 
-- [ ] **Step 1: Write the UI Designer brief and dispatch agent**
-- [ ] **Step 2: Collect report**
+Run:
+```bash
+npm install firebase @radix-ui/react-dropdown-menu @radix-ui/react-dialog
+```
+
+- [ ] **Step 2: Verify installation**
+
+Run: `npm ls firebase @radix-ui/react-dropdown-menu @radix-ui/react-dialog`
+Expected: all three listed with no errors
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add package.json package-lock.json
+git commit -m "deps: add firebase, radix dropdown-menu, radix dialog"
+```
 
 ---
 

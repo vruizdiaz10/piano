@@ -1,29 +1,68 @@
-### Task 1: Launch Game Designer — Pedagogical Analysis
+### Task 1: Infrastructure Setup (.gitignore, env vars, vite-env.d.ts)
 
 **Files:**
-- Output: `docs/superpowers/plans/reports/game-designer-report.md`
+- Modify: `.gitignore`
+- Create: `src/vite-env.d.ts`
+- Create: `.env.example`
 
-**Brief for agent:**
-Analyze `/mnt/d/www/piano/src/` — a React piano sight-reading game. Examine:
-1. `src/hooks/useGameState.ts` — game state machine, scoring, streak logic
-2. `src/components/Staff.tsx` — note rendering, clef display, StaffNote interaction
-3. `src/components/PianoKeyboard.tsx` — key interaction, highlight
-4. `src/components/LevelComplete.tsx` — feedback screen
-5. `src/data/lessons.ts` — lesson structure, note pools
-6. `src/utils/weakPool.ts` — wrong-note tracking
+**Interfaces:**
+- Consumes: nothing
+- Produces: typed `import.meta.env.VITE_FIREBASE_*` variables available app-wide
 
-Evaluate pedagogical effectiveness for sight-reading:
-- Error feedback clarity (wrong note vs right note, what to improve)
-- Progression design (do lessons build on each other?)
-- Difficulty curve (too steep? too shallow?)
-- Motivation mechanics (streaks, scores, level-up feel)
-- Sight-reading specific pedagogy (note recognition speed, hand-eye coordination)
-- Gaps: what's missing that would actually improve sight-reading ability?
+- [ ] **Step 1: Update .gitignore**
 
-Recommendations must be specific (file:line), actionable, with effort estimate.
+Append these lines to the existing `.gitignore`:
 
-- [ ] **Step 1: Write the Game Designer brief and dispatch agent**
-- [ ] **Step 2: Collect report into docs/supervisors/plans/reports/game-designer-report.md**
+```gitignore
+# Firebase config (contains API keys — not secrets but keep for hygiene)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+```
+
+- [ ] **Step 2: Create src/vite-env.d.ts**
+
+```typescript
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+  readonly VITE_FIREBASE_API_KEY: string
+  readonly VITE_FIREBASE_AUTH_DOMAIN: string
+  readonly VITE_FIREBASE_PROJECT_ID: string
+  readonly VITE_FIREBASE_STORAGE_BUCKET: string
+  readonly VITE_FIREBASE_MESSAGING_SENDER_ID: string
+  readonly VITE_FIREBASE_APP_ID: string
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv
+}
+```
+
+- [ ] **Step 3: Create .env.example**
+
+```bash
+VITE_FIREBASE_API_KEY=your_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+```
+
+- [ ] **Step 4: Verify TypeScript picks up env types**
+
+Run: `npx tsc --noEmit`
+Expected: no new errors
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add .gitignore src/vite-env.d.ts .env.example
+git commit -m "chore: add .gitignore env patterns, vite-env.d.ts, .env.example"
+```
 
 ---
 

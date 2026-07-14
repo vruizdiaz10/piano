@@ -259,7 +259,7 @@ export default function App() {
               </button>
               <div className="w-px h-5 bg-amber-200/50 dark:bg-gray-600" />
               <Select value={state.notation} onValueChange={(v: 'american' | 'latino') => setNotation(v)}>
-                <SelectTrigger className="w-28 h-8 border-0 bg-transparent text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-gray-600 text-xs rounded-lg">
+                <SelectTrigger className="w-28 h-8 border-0 bg-transparent text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-gray-600 text-xs rounded-lg" aria-label="Notación musical">
                   <Music className="w-3.5 h-3.5 mr-1" />
                   <SelectValue placeholder="A B C D E" />
                 </SelectTrigger>

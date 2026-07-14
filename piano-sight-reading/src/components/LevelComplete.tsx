@@ -1,3 +1,4 @@
+import { useEffect, useCallback } from 'react'
 import { LESSONS } from '../data/lessons'
 
 interface LevelCompleteProps {
@@ -63,8 +64,39 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
       }))
     : null
 
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onRetry?.()
+    }
+    if (e.key === 'Tab') {
+      const dialog = document.getElementById('level-complete-dialog')
+      if (!dialog) return
+      const focusable = dialog.querySelectorAll<HTMLElement>(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      )
+      if (focusable.length === 0) return
+      const first = focusable[0]
+      const last = focusable[focusable.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+  }, [onRetry])
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown)
+    const dialog = document.getElementById('level-complete-dialog')
+    const firstBtn = dialog?.querySelector('button')
+    firstBtn?.focus()
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [handleKeyDown])
+
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Lección completada">
+    <div id="level-complete-dialog" className="fixed inset-0 z-40 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Lección completada">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={onRetry} />
       <div className="relative bg-[var(--stage-surface)] rounded-2xl p-6 sm:p-8 max-w-sm w-full animate-slide-up border border-neon-purple/30"
            style={{ boxShadow: '0 0 40px rgba(178,75,243,0.15), 0 20px 60px rgba(0,0,0,0.5)' }}>

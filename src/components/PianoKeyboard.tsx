@@ -130,6 +130,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
           <button
             type="button"
             className="px-3 py-1 text-sm rounded bg-[var(--gold-dim)]/30 text-foreground active:bg-[var(--gold-dim)]/50"
+            aria-label="Octava anterior"
             onClick={() => shiftOctave(-1)}
           >
             &#9664;
@@ -140,6 +141,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
           <button
             type="button"
             className="px-3 py-1 text-sm rounded bg-[var(--gold-dim)]/30 text-foreground active:bg-[var(--gold-dim)]/50"
+            aria-label="Octava siguiente"
             onClick={() => shiftOctave(1)}
           >
             &#9654;
