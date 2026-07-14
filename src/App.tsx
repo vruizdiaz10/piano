@@ -21,9 +21,16 @@ import OrnateFrame from './components/OrnateFrame'
 import ConcertCurtains from './components/ConcertCurtains'
 import ProgressChart from './components/ProgressChart'
 import Spotlight from './components/Spotlight'
+import AuthProvider from './hooks/useAuthProvider'
+import { useAuth } from './hooks/useAuth'
+import { useSessionSync } from './hooks/useSessionSync'
+import { useConfigSync } from './hooks/useConfigSync'
+import UserMenu from './components/UserMenu'
+import LoginModal from './components/LoginModal'
+import Toast from './components/Toast'
 import { Music } from 'lucide-react'
 
-export default function App() {
+function AppContent() {
   const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTimed, setTheme, setNotation, restartGame } = useGameState()
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
   const [correctKey, setCorrectKey] = useState<number | null>(null)
@@ -38,6 +45,60 @@ export default function App() {
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
   const { dailyStreak, markToday } = useDailyStreak()
   const liveRegionRef = useRef<HTMLDivElement>(null)
+  const { user, signOut } = useAuth()
+  const { syncState, saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
+  const { config, updateConfig } = useConfigSync(user)
+  const [showLoginModal, setShowLoginModal] = useState(false)
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'warning' | 'error' } | null>(null)
+
+  const handleDeleteAccount = async () => {
+    if (!user) return
+    if (!window.confirm('¿Eliminar tu progreso de la nube? Esta acción no se puede deshacer.')) return
+    try {
+      const { deleteUserDoc } = await import('./firebase/firestore')
+      await deleteUserDoc(user.uid)
+      await signOut()
+      setToast({ message: 'Datos eliminados correctamente', type: 'success' })
+    } catch {
+      setToast({ message: 'Error al eliminar datos', type: 'error' })
+    }
+  }
+
+  // First-login migration: localStorage → Firestore
+  useEffect(() => {
+    if (user && config) {
+      migrateIfNeeded({
+        notation: config.notation,
+        theme: config.theme,
+        timed: config.timed,
+        showNoteName: config.showNoteName,
+        sessionTarget: config.sessionTarget,
+        dailyStreak: config.dailyStreak,
+      })
+    }
+  }, [user?.uid, !!config])
+
+  // Sync Firestore config → local state on login
+  useEffect(() => {
+    if (!config || !user) return
+    if (config.notation !== state.notation) setNotation(config.notation)
+    if (config.theme !== state.theme) setTheme(config.theme)
+    if (config.showNoteName !== state.showNoteName) setShowNoteName(config.showNoteName)
+    if (config.timed !== state.isTimed) setTimed(config.timed)
+    if (config.sessionTarget !== state.sessionTarget) startGame(config.sessionTarget)
+  }, [!!user, !!config])
+
+  // Push local config changes to Firestore when logged in
+  useEffect(() => {
+    if (!user || !config) return
+    updateConfig({
+      notation: state.notation,
+      theme: state.theme,
+      showNoteName: state.showNoteName,
+      timed: state.isTimed,
+      sessionTarget: state.sessionTarget,
+    })
+  }, [state.notation, state.theme, state.showNoteName, state.isTimed, state.sessionTarget, !!user])
 
   const currentLesson = LESSONS.find(l => l.id === state.lessonId)
   const clef = currentLesson?.clef ?? 'treble'
@@ -149,12 +210,21 @@ export default function App() {
     }
   }, [state.streak])
 
-  // Save session history on level complete
+  // Safety: if phase is waiting/feedback but no note, recover
+  useEffect(() => {
+    if ((state.phase === 'waiting' || state.phase === 'feedback') && !state.currentNote) {
+      nextNote()
+    }
+  }, [state.phase, state.currentNote, nextNote])
+
+  // Save session history on level complete (localStorage + cloud if logged in)
   useEffect(() => {
     if (state.phase === 'levelComplete') {
-      saveSession({ accuracy, notes: state.totalAttempts, lessonId: state.lessonId, date: new Date().toISOString() })
+      const session = { accuracy, notes: state.totalAttempts, lessonId: state.lessonId, date: new Date().toISOString(), elapsedMs: state.startTime ? Date.now() - state.startTime : undefined }
+      saveSession(session)
+      if (user) saveSessionCloud(session)
     }
-  }, [state.phase])
+  }, [state.phase, user])
 
   // Countdown timer
   const tickRef = useRef(0)
@@ -270,6 +340,8 @@ export default function App() {
               </Select>
               <div className="w-px h-5 bg-amber-200/50 dark:bg-gray-600" />
               <ThemeToggle theme={state.theme} onToggle={setTheme} className="p-1.5 rounded-lg hover:bg-amber-50 dark:hover:bg-gray-600 text-amber-700 dark:text-amber-300 transition-all cursor-pointer" />
+              <div className="w-px h-5 bg-amber-200/50 dark:bg-gray-600" />
+              <UserMenu syncState={syncState} onDeleteAccount={handleDeleteAccount} />
             </div>
             <span
               className={`inline-block w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500' : 'bg-red-400'}`}
@@ -377,6 +449,16 @@ export default function App() {
         )}
       </div>
       <div className="fixed bottom-0 left-0 right-0 h-2 z-30 pointer-events-none" style={{ background: 'linear-gradient(180deg, transparent, var(--stage-floor))' }} aria-hidden="true" />
+      <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
+      {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   )
 }

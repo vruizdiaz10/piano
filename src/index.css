@@ -40,6 +40,24 @@
     --spotlight-color: rgba(255, 220, 150, 0.2);
     --ebony: #2C1810;
     --ivory: #F5F0E5;
+    --stage-surface: hsl(38 20% 96%);
+    --stage-elevated: hsl(38 18% 92%);
+    --neon-blue: #8B7355;
+    --neon-pink: #C47A9E;
+    --neon-green: #7A9E7A;
+    --neon-amber: #C9922B;
+    --neon-cyan: #C9922B;
+    --neon-purple: #9B8AB8;
+    --glow-blue: rgba(139, 115, 85, 0.3);
+    --glow-pink: rgba(196, 122, 158, 0.3);
+    --glow-green: rgba(122, 158, 122, 0.3);
+    --glow-amber: rgba(201, 146, 43, 0.3);
+    --glow-purple: rgba(155, 138, 184, 0.3);
+    --color-correct: #7A9E7A;
+    --color-wrong: #C47A9E;
+    --text-game: #3C3020;
+    --text-game-muted: #8B7355;
+    --text-game-dim: #B8A88A;
   }
 
   .dark {
@@ -67,6 +85,24 @@
     --staff-line: #94A3B8;
     --curtain-primary: #4A0E0E;
     --curtain-fold: #2D0808;
+    --stage-surface: hsl(0 0% 11%);
+    --stage-elevated: hsl(0 0% 15%);
+    --neon-blue: #788FA8;
+    --neon-pink: #C47A9E;
+    --neon-green: #7A9E7A;
+    --neon-amber: #E2B84D;
+    --neon-cyan: #E2B84D;
+    --neon-purple: #9B8AB8;
+    --glow-blue: rgba(120, 143, 168, 0.4);
+    --glow-pink: rgba(196, 122, 158, 0.35);
+    --glow-green: rgba(122, 158, 122, 0.35);
+    --glow-amber: rgba(226, 184, 77, 0.35);
+    --glow-purple: rgba(155, 138, 184, 0.35);
+    --color-correct: #6B9E7A;
+    --color-wrong: #C47A9E;
+    --text-game: #E8DDCF;
+    --text-game-muted: #9B8A78;
+    --text-game-dim: #6B5A48;
     --gold: #D4A533;
     --gold-light: #E8C55A;
     --gold-dim: rgba(212, 165, 51, 0.25);
@@ -258,6 +294,12 @@
   0%, 100% { opacity: 0.6; }
   50% { opacity: 1; }
 }
+@keyframes avatar-glow {
+  0% { box-shadow: 0 0 0 0 var(--glow-blue); }
+  50% { box-shadow: 0 0 16px 4px var(--glow-blue); }
+  100% { box-shadow: 0 0 0 0 var(--glow-blue); }
+}
+.animate-avatar-glow { animation: avatar-glow 1s ease-out; }
 
 .font-music { font-family: 'Noto Music', 'Segoe UI Symbol', 'Apple Symbols', 'Bravura', 'Finale Maestro', serif; }
 .owl-bob { animation: owl-bob 3s ease-in-out infinite; }
