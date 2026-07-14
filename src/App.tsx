@@ -13,7 +13,6 @@ import Toolbar from './components/Toolbar'
 import ProgressBar from './components/ProgressBar'
 import StreakBadge from './components/StreakBadge'
 import ScoreDisplay from './components/ScoreDisplay'
-import Confetti from './components/Confetti'
 import LevelComplete from './components/LevelComplete'
 import ThemeToggle from './components/ThemeToggle'
 import ProgressChart from './components/ProgressChart'
@@ -30,7 +29,7 @@ function AppContent() {
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
   const [correctKey, setCorrectKey] = useState<number | null>(null)
   const [wrongKey, setWrongKey] = useState<number | null>(null)
-  const [showConfetti, setShowConfetti] = useState(false)
+  
   const [staffFlash, setStaffFlash] = useState<'correct' | 'wrong' | null>(null)
   const [trail, setTrail] = useState<Array<{ note: import('./types').Note; id: number }>>([])
   const trailIdRef = useRef(0)
@@ -163,9 +162,7 @@ function AppContent() {
     if (state.phase === 'feedback' || state.phase === 'levelComplete') {
       if (state.lastAnswerCorrect) {
         if (!state.isMuted) playCorrect()
-        setShowConfetti(true)
         setStaffFlash('correct')
-        setTimeout(() => setShowConfetti(false), 1500)
         if (state.streak > 0 && state.streak % 5 === 0 && !state.isMuted) {
           playStreakMilestone()
         }
@@ -180,16 +177,15 @@ function AppContent() {
     }
   }, [state.phase])
 
-  // Auto-advance after feedback (with recovery window + timing jitter)
+  // Auto-advance after feedback (predictable delay)
   useEffect(() => {
     if (state.phase === 'feedback' && state.currentNote) {
       setHighlightKey(state.currentNote.midi)
-      const base = state.lastAnswerCorrect === false ? 2500 : 1500
-      const jitter = (Math.random() - 0.5) * 400
+      const delay = state.lastAnswerCorrect === false ? 2500 : 1500
       const timer = setTimeout(() => {
         setHighlightKey(null)
         nextNote()
-      }, base + jitter)
+      }, delay)
       return () => clearTimeout(timer)
     }
   }, [state.phase, state.recovering, state.lastAnswerCorrect])
@@ -266,7 +262,6 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
-      <Confetti active={showConfetti} />
       <div aria-live="polite" aria-atomic="true" className="sr-only" ref={liveRegionRef} />
       <a href="#game-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-card focus:text-foreground focus:rounded-lg focus:ring-2 focus:ring-ring">
         Saltar al juego
@@ -284,15 +279,13 @@ function AppContent() {
           answeredNotes={answeredNotes}
           responseTimes={state.responseTimes}
         />
-      )}
-
-        <div id="game-content" className="max-w-2xl mx-auto px-3 pt-2 pb-2 sm:pt-4 sm:pb-4 lg:pt-[68px] lg:pb-1 relative z-10">
+)}
+          <div id="game-content" className="max-w-2xl mx-auto px-3 pt-2 pb-2 sm:pt-4 sm:pb-4 lg:pt-[68px] lg:pb-1 relative z-10">
           <div className="flex items-center justify-between mb-2 lg:mb-0">
           <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
             Lectura Musical
           </h1>
-          <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 rounded-xl bg-accent/30 border border-border p-1">
+          <div className="flex items-center gap-1 rounded-xl bg-accent/30 border border-border p-1">
               <button
                 onClick={() => setMuted(!state.isMuted)}
                 className="p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
@@ -322,7 +315,8 @@ function AppContent() {
               </Select>
               <div className="w-px h-5 bg-border" />
               <ThemeToggle theme={state.theme} onToggle={setTheme} className="p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer" />
-              <div className="w-px h-5 bg-border" />
+            </div>
+            <div className="flex items-center gap-1">
               <button
                 onClick={() => restartGame()}
                 className="p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
@@ -428,7 +422,7 @@ function AppContent() {
             </button>
           </div>
         ) : (
-          <div className="max-sm:fixed max-sm:inset-x-0 max-sm:bottom-20 max-sm:z-30 max-sm:px-4">
+          <div className="max-sm:absolute max-sm:bottom-[calc(env(safe-area-inset-bottom)+1rem)] max-sm:z-30 max-sm:px-4">
             <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} errorType={state.lastErrorType} notation={state.notation} />
           </div>
         )}
@@ -443,7 +437,6 @@ function AppContent() {
             </button>
           </div>
         )}
-      </div>
 
       {isPaused && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
@@ -457,7 +450,7 @@ function AppContent() {
         </div>
       )}
       {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
-    </div>
+      </div>
   )
 }
 
