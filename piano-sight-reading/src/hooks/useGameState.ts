@@ -7,13 +7,21 @@ import { getLessonPool } from '../data/lessons'
 
 const SESSION_TARGET = 10
 
-function loadNotation(): Notation {
-  if (typeof window === 'undefined') return 'american'
-  return (localStorage.getItem('piano-notation') as Notation) ?? 'american'
+function loadConfig<T>(key: string, fallback: T): T {
+  if (typeof window === 'undefined') return fallback
+  try {
+    const raw = localStorage.getItem(`piano-${key}`)
+    if (raw === null) return fallback
+    return JSON.parse(raw) as T
+  } catch { return fallback }
+}
+
+function saveConfig(key: string, value: unknown) {
+  try { localStorage.setItem(`piano-${key}`, JSON.stringify(value)) } catch {}
 }
 
 const INITIAL_STATE: GameState = {
-  notation: loadNotation(),
+  notation: loadConfig<Notation>('notation', 'american'),
   phase: 'idle',
   currentNote: null,
   lastAnswerCorrect: null,
@@ -24,16 +32,18 @@ const INITIAL_STATE: GameState = {
   bestStreak: 0,
   totalAttempts: 0,
   correctAttempts: 0,
-  lessonId: 'lines',
-  showNoteName: false,
-  sessionTarget: SESSION_TARGET,
+  lessonId: loadConfig<string>('lessonId', 'lines'),
+  showNoteName: loadConfig<boolean>('showNoteName', false),
+  sessionTarget: loadConfig<number>('sessionTarget', SESSION_TARGET),
   startTime: null,
   isMuted: false,
-  theme: (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light',
+  theme: loadConfig<'light' | 'dark'>('theme',
+    (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'
+  ),
   noteShownAt: 0,
   responseTimes: [],
   lastCorrectNote: null,
-  isTimed: false,
+  isTimed: loadConfig<boolean>('isTimed', false),
 }
 
 function selectNote(lessonId: string, excludeMidi?: number): Note {
@@ -53,13 +63,15 @@ export function useGameState() {
 
   const startGame = useCallback((target?: number) => {
     setState(prev => {
+      const targetValue = target ?? SESSION_TARGET
+      saveConfig('sessionTarget', targetValue)
       const note = selectNote(prev.lessonId)
       return {
         ...prev, phase: 'waiting', currentNote: note,
         streak: 0, bestStreak: 0, totalAttempts: 0, correctAttempts: 0,
         lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null,
         startTime: Date.now(), recovering: false,
-        sessionTarget: target ?? SESSION_TARGET,
+        sessionTarget: targetValue,
         noteShownAt: Date.now(), responseTimes: [], lastCorrectNote: null,
       }
     })
@@ -119,10 +131,12 @@ export function useGameState() {
   }, [])
 
   const setLesson = useCallback((lessonId: string) => {
+    saveConfig('lessonId', lessonId)
     setState(prev => ({ ...prev, lessonId }))
   }, [])
 
   const setShowNoteName = useCallback((show: boolean) => {
+    saveConfig('showNoteName', show)
     setState(prev => ({ ...prev, showNoteName: show }))
   }, [])
 
@@ -131,15 +145,17 @@ export function useGameState() {
   }, [])
 
   const setTimed = useCallback((timed: boolean) => {
+    saveConfig('isTimed', timed)
     setState(prev => ({ ...prev, isTimed: timed }))
   }, [])
 
   const setTheme = useCallback((theme: 'light' | 'dark') => {
+    saveConfig('theme', theme)
     setState(prev => ({ ...prev, theme }))
   }, [])
 
   const setNotation = useCallback((notation: Notation) => {
-    localStorage.setItem('piano-notation', notation)
+    saveConfig('notation', notation)
     setState(prev => ({ ...prev, notation }))
   }, [])
 

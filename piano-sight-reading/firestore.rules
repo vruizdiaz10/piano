@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read: if request.auth != null
+                  && request.auth.uid == userId;
+
+      allow create: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.keys().hasAll([
+                         'level', 'notation', 'theme', 'timed',
+                         'showNoteName', 'sessionTarget',
+                         'dailyStreak', 'lastPlayDate', 'sessions'
+                       ])
+                    && request.resource.data.level is number
+                    && request.resource.data.notation in ['american', 'latino']
+                    && request.resource.data.theme in ['light', 'dark']
+                    && request.resource.data.timed is bool
+                    && request.resource.data.showNoteName is bool
+                    && request.resource.data.sessionTarget is number
+                    && request.resource.data.dailyStreak is number
+                    && request.resource.data.lastPlayDate is string
+                    && request.resource.data.sessions is list
+                    && request.resource.data.sessions.size() <= 20;
+
+      allow update: if request.auth != null
+                    && request.auth.uid == userId
+                    && request.resource.data.level is number
+                    && request.resource.data.notation in ['american', 'latino']
+                    && request.resource.data.theme in ['light', 'dark']
+                    && request.resource.data.timed is bool
+                    && request.resource.data.showNoteName is bool
+                    && request.resource.data.sessionTarget is number
+                    && request.resource.data.sessions is list
+                    && request.resource.data.sessions.size() <= 20;
+
+      allow delete: if request.auth != null
+                    && request.auth.uid == userId;
+    }
+  }
+}
