@@ -168,6 +168,7 @@ function AppContent() {
         }
       } else {
         if (!state.isMuted) playWrong()
+        navigator.vibrate?.(100)
         setStaffFlash('wrong')
       }
       setTimeout(() => setStaffFlash(null), 600)
@@ -288,7 +289,7 @@ function AppContent() {
           <div className="flex items-center gap-1 rounded-xl bg-accent/30 border border-border p-1">
               <button
                 onClick={() => setMuted(!state.isMuted)}
-                className="p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
+                className="flex flex-col items-center p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
                 aria-label={state.isMuted ? 'Activar sonido' : 'Silenciar sonido'}
               >
                 {!state.isMuted ? (
@@ -301,6 +302,7 @@ function AppContent() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
                   </svg>
                 )}
+                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground">{state.isMuted ? 'Off' : 'On'}</span>
               </button>
               <div className="w-px h-5 bg-border" />
               <Select value={state.notation} onValueChange={(v: 'american' | 'latino') => setNotation(v)}>
@@ -319,20 +321,22 @@ function AppContent() {
             <div className="flex items-center gap-1">
               <button
                 onClick={() => restartGame()}
-                className="p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
+                className="flex flex-col items-center p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
                 aria-label="Reiniciar"
                 title="Reiniciar (R)"
               >
                 <RotateCcw className="w-4 h-4" />
+                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground">Reiniciar</span>
               </button>
               <div className="w-px h-5 bg-border" />
               <button
                 onClick={() => setIsPaused(p => !p)}
-                className="p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
+                className="flex flex-col items-center p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
                 aria-label={isPaused ? 'Reanudar' : 'Pausar'}
                 title={isPaused ? 'Reanudar (P)' : 'Pausar (P)'}
               >
                 {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground">{isPaused ? 'Play' : 'Pausa'}</span>
               </button>
               <div className="w-px h-5 bg-border" />
               <UserMenu syncState={syncState} onDeleteAccount={handleDeleteAccount} />
