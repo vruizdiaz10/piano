@@ -10,20 +10,6 @@ const NOTE_RADIUS = 8
 const LEDGER_EXTEND = NOTE_RADIUS * 3
 const STEM_LENGTH = LINE_SPACING * 3.5
 
-function intervalLabel(a: Note, b: Note): string | null {
-  const diff = Math.abs(a.midi - b.midi)
-  if (diff === 0) return null
-  if (diff === 1) return '2ra'
-  if (diff === 2) return '3ra'
-  if (diff === 3) return '4ta'
-  if (diff === 4) return '5ta'
-  if (diff === 5) return '6ta'
-  if (diff === 6) return '7ma'
-  if (diff === 7) return '8va'
-  if (diff <= 14) return `${diff}va`
-  return null
-}
-
 interface StaffProps {
   note?: Note | null
   showNoteName: boolean
@@ -94,16 +80,6 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
             </g>
           )
         })}
-        {note && trail && trail.length > 0 && (() => {
-          const prev = trail[trail.length - 1].note
-          const label = intervalLabel(prev, note)
-          if (!label) return null
-          return (
-            <text x={STAFF_LEFT + 260} y={STAFF_TOP + LINE_SPACING * 2.5} textAnchor="middle" fontSize={14} fill="var(--gold)" opacity={0.7} className="animate-slide-up">
-              {label}
-            </text>
-          )
-        })()}
         {note && (() => {
           const pos = noteToPosition(note, clef)
           const y = STAFF_TOP - pos * LINE_SPACING / 2 + LINE_SPACING * 4
