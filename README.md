@@ -9,13 +9,13 @@
 ## Features
 
 ### Gameplay
-- **9 progressive lessons** — from simple line notes to the full chromatic range (C4–C6)
-- **Streak system** — consecutive correct answers build a streak; owl badge appears at 3+, intensifies at 5, 8, 10
+- **18 progressive lessons** — 9 treble clef + 9 bass clef, from simple line notes to the full chromatic range
+- **Streak system** — consecutive correct answers build a streak; milestone sound at every 5
 - **Daily streak** — consecutive practice days tracked via localStorage
-- **Recovery window** — 2.5s grace period after a wrong answer; hit the correct key for partial credit
+- **Recovery window** — after a wrong answer, hit the correct key for partial credit before auto-advance
 - **Timed mode** — countdown per note (toggle in toolbar)
-- **Ghost notes** — last correct note shown as translucent ghost after an error
-- **Level complete screen** — accuracy %, best streak, average response time, star rating (1–3), constellation SVG
+- **Ghost notes** — trail of recent notes shown as translucent ghosts; last correct note shown faded after an error
+- **Level complete screen** — accuracy %, best streak, average/best response time, star rating (1–3), constellation SVG, mastery check
 
 ### Input & Sound
 - **MIDI input** — connect any USB/MIDI keyboard via Web MIDI API; auto-detected
@@ -24,12 +24,12 @@
 - **Sound effects** — major arpeggio on correct, minor on wrong, fanfare on level complete
 
 ### Visuals
-- **Concert hall theme** — curtains, ornate frame, spotlight, floating stage-motes, amber/gold palette
-- **SVG staff** — treble and bass clefs via Noto Music font, ghost notes, interval labels
-- **Animated owl** — SVG mascot with mood states (sleepy, neutral, happy, excited)
-- **Progress chart** — mini SVG graph of last 20 sessions
+- **Clean card-based UI** — minimal design with blue accent palette, rounded cards, subtle borders
+- **SVG staff** — treble and bass clefs via Noto Music font, ghost notes, interval range dots
+- **Note expressions** — green/red indicator dot on notes after answer
+- **Progress chart** — mini SVG graph of session history
 - **Dark/light mode** — respects `prefers-color-scheme`, toggle in toolbar
-- **Mute mode** — dims UI, shows "Zzz" indicators, darkens staff
+- **Mute mode** — sleep emoji indicators on staff, sound off
 
 ### Notation
 - **American/Latin toggle** — C D E F G A B ↔ Do Re Mi Fa Sol La Si
@@ -131,7 +131,7 @@ src/
 ├── types/
 │   └── index.ts              # Note, GameState, GamePhase, Notation types
 ├── data/
-│   └── lessons.ts            # 9 lesson definitions with MIDI note pools
+│   └── lessons.ts            # 18 lesson definitions (9 treble + 9 bass) with MIDI note pools
 ├── utils/
 │   ├── midiToNote.ts         # MIDI number → Note object
 │   ├── noteToPosition.ts     # Note → Y position on SVG staff
@@ -147,13 +147,11 @@ src/
     ├── Feedback.tsx          # Correct/wrong banner + toast
     ├── LevelComplete.tsx     # Score modal + constellation + stats
     ├── Toolbar.tsx           # Lesson selector, note name toggle, timer toggle
-    ├── ProgressBar.tsx       # Swimming duck progress indicator
+    ├── ProgressBar.tsx       # Progress bar with current/total display
     ├── StreakBadge.tsx       # Fire streak counter
     ├── ScoreDisplay.tsx      # Accuracy + timer display
     ├── ProgressChart.tsx     # Mini SVG historical progress graph
     ├── ThemeToggle.tsx       # Dark/light mode switch
-    ├── Spotlight.tsx         # Radial stage spotlight overlay
-    ├── LoginModal.tsx        # Firebase Google sign-in modal
     ├── UserMenu.tsx          # User menu (signed-in state)
     ├── Toast.tsx             # Toast notification component
     └── ui/                   # Radix-based primitives (select, checkbox)
@@ -178,26 +176,42 @@ Shortcuts are disabled when focus is on an input or select element.
 1. Click **Start Game** (or choose a session length: 5, 10, or 20 notes).
 2. A note appears on the staff and plays audibly.
 3. Press the matching key on your MIDI keyboard or click the on-screen piano.
-4. **Correct**: staff flashes green, major arpeggio plays, confetti fires.
+4. **Correct**: staff flashes green, major arpeggio plays.
 5. **Incorrect**: staff flashes red, shows the correct answer + tip, 2.5s recovery window starts.
-6. After 10 correct answers, the **Level Complete** modal shows your stats.
-7. Choose **Retry** (same lesson) or **Next Lesson** to advance.
+6. After completing the session target (5, 10, or 20 notes), the **Level Complete** modal shows your stats.
+7. Choose **Retry** (same lesson) or **Next Lesson** to advance (next lesson requires meeting mastery criteria: accuracy, streak, and minimum notes).
 
 ---
 
 ## Lessons
 
+### Treble Clef (Sol)
+
 | # | Name | Notes | Description |
 |---|------|-------|-------------|
-| 1 | Lines | E4, G4, B4, D5, F5 | Notes on staff lines |
-| 2 | Spaces | F4, A4, C5, E5 | Notes in staff spaces |
-| 3 | Lines+Spaces | E4–A5 | Combined lines and spaces |
-| 4 | Staff Range | C4–E5 | Full staff range |
-| 5 | Below Staff | C4, D4 | Ledger lines below (middle C region) |
-| 6 | Above Staff | G5, A5, B5, C6 | Ledger lines above |
-| 7 | Full Naturals | C4–C6 (naturals only) | All natural notes in full range |
-| 8 | Accidentals | C4–C6 (all) | Introduces sharps |
-| 9 | All Notes | C4–C6 (all) | Full chromatic range, treble clef |
+| 1 | Líneas (Sol) | E4, G4, B4, D5, F5 | Notes on staff lines |
+| 2 | Espacios (Sol) | F4, A4, C5, E5 | Notes in staff spaces |
+| 3 | Líneas+Espacios (Sol) | E4–A5 | Combined lines and spaces |
+| 4 | Rango pentagrama (Sol) | C4–E5 | Full staff range |
+| 5 | Debajo pentagrama (Sol) | C4, D4 | Ledger lines below |
+| 6 | Encima pentagrama (Sol) | G5, A5, B5, C6 | Ledger lines above |
+| 7 | Naturales (Sol) | C4–C6 (naturals) | All natural notes in full range |
+| 8 | Sostenidos (Sol) | C4–C6 (all) | Introduces sharps |
+| 9 | Todas las notas (Sol) | C4–C6 (all) | Full chromatic range, treble clef |
+
+### Bass Clef (Fa)
+
+| # | Name | Notes | Description |
+|---|------|-------|-------------|
+| 10 | Líneas (Fa) | G2, B2, D3, F3, A3 | Notes on bass staff lines |
+| 11 | Espacios (Fa) | A2, C3, E3, G3 | Notes in bass staff spaces |
+| 12 | Líneas+Espacios (Fa) | G2–B3 | Combined lines and spaces |
+| 13 | Rango pentagrama (Fa) | G2–D4 | Full bass staff range |
+| 14 | Debajo pentagrama (Fa) | C2–F2 | Ledger lines below |
+| 15 | Encima pentagrama (Fa) | C4–E4 | Ledger lines above |
+| 16 | Naturales (Fa) | C2–D4 (naturals) | All natural notes in full range |
+| 17 | Sostenidos (Fa) | C2–E4 (all) | Introduces sharps |
+| 18 | Todas las notas (Fa) | C2–E4 (all) | Full chromatic range, bass clef |
 
 ---
 
