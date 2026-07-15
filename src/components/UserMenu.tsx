@@ -32,7 +32,7 @@ export default function UserMenu({ syncState, onDeleteAccount }: UserMenuProps) 
 
   if (loading) {
     return (
-      <div className="w-8 h-8 rounded-full bg-neon-blue/10 animate-pulse" aria-hidden="true" />
+      <div className="w-8 h-8 rounded-full bg-primary/10 animate-pulse" aria-hidden="true" />
     )
   }
 
@@ -40,7 +40,7 @@ export default function UserMenu({ syncState, onDeleteAccount }: UserMenuProps) 
     return (
       <button
         onClick={signInWithGoogle}
-        className="w-8 h-8 rounded-full bg-neon-blue/10 border border-neon-blue/20 flex items-center justify-center text-neon-blue/50 hover:text-neon-cyan hover:border-neon-blue/40 transition-all cursor-pointer"
+        className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary/50 hover:text-primary hover:border-primary/40 transition-all cursor-pointer"
         title="Guardar progreso"
         aria-label="Iniciar sesión para guardar progreso"
       >
@@ -53,7 +53,7 @@ export default function UserMenu({ syncState, onDeleteAccount }: UserMenuProps) 
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button
-          className={`w-8 h-8 rounded-full overflow-hidden border-2 border-neon-blue/30 hover:border-neon-cyan transition-all cursor-pointer ${glow ? 'animate-avatar-glow' : ''}`}
+          className={`w-8 h-8 rounded-full overflow-hidden border-2 border-primary/30 hover:border-primary transition-all cursor-pointer ${glow ? 'animate-avatar-glow' : ''}`}
           aria-label={`Menú de usuario: ${user.displayName ?? 'Usuario'}`}
         >
           {user.photoURL ? (
@@ -68,7 +68,7 @@ export default function UserMenu({ syncState, onDeleteAccount }: UserMenuProps) 
               }}
             />
           ) : (
-            <span className="w-full h-full flex items-center justify-center text-xs font-bold text-neon-cyan bg-neon-blue/20">
+            <span className="w-full h-full flex items-center justify-center text-xs font-bold text-primary bg-primary/20">
               {getInitials(user.displayName)}
             </span>
           )}
@@ -77,21 +77,20 @@ export default function UserMenu({ syncState, onDeleteAccount }: UserMenuProps) 
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="min-w-[180px] bg-[var(--stage-surface)] border border-neon-blue/20 rounded-xl p-1.5 animate-slide-up z-50"
+          className="min-w-[180px] bg-popover border border-border rounded-xl p-1.5 animate-slide-up z-50 shadow-lg"
           sideOffset={8}
           align="end"
-          style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.5)' }}
         >
           <div className="px-2.5 py-1.5 mb-1">
-            <div className="text-sm font-semibold text-neon-cyan truncate">{user.displayName ?? 'Usuario'}</div>
-            <div className="text-xs text-neon-blue/50 truncate">{user.email}</div>
+            <div className="text-sm font-semibold text-foreground truncate">{user.displayName ?? 'Usuario'}</div>
+            <div className="text-xs text-muted-foreground truncate">{user.email}</div>
           </div>
 
-          <DropdownMenu.Separator className="h-px bg-neon-blue/15 my-1" />
+          <DropdownMenu.Separator className="h-px bg-border my-1" />
 
-          <DropdownMenu.Item className="px-2.5 py-1.5 text-xs text-neon-blue/60 outline-none flex items-center gap-2" disabled>
+          <DropdownMenu.Item className="px-2.5 py-1.5 text-xs text-muted-foreground outline-none flex items-center gap-2" disabled>
             <span className={`w-2 h-2 rounded-full ${
-              syncState.syncError ? 'bg-amber-400' : syncState.lastSyncTime ? 'bg-emerald-400' : 'bg-neon-blue/30'
+              syncState.syncError ? 'bg-amber-400' : syncState.lastSyncTime ? 'bg-emerald-400' : 'bg-muted-foreground/30'
             }`} />
             {syncState.syncError
               ? 'Reintentando...'
@@ -100,11 +99,11 @@ export default function UserMenu({ syncState, onDeleteAccount }: UserMenuProps) 
                 : 'Sin sincronizar'}
           </DropdownMenu.Item>
 
-          <DropdownMenu.Separator className="h-px bg-neon-blue/15 my-1" />
+          <DropdownMenu.Separator className="h-px bg-border my-1" />
 
           {!confirmLogout ? (
             <DropdownMenu.Item
-              className="px-2.5 py-1.5 text-sm text-neon-blue/70 hover:text-neon-cyan hover:bg-neon-blue/10 rounded-lg cursor-pointer outline-none transition-colors"
+              className="px-2.5 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-accent/10 rounded-lg cursor-pointer outline-none transition-colors"
               onSelect={(e) => {
                 e.preventDefault()
                 setConfirmLogout(true)
@@ -114,11 +113,11 @@ export default function UserMenu({ syncState, onDeleteAccount }: UserMenuProps) 
             </DropdownMenu.Item>
           ) : (
             <div className="px-2.5 py-1.5">
-              <p className="text-xs text-neon-blue/60 mb-1.5">¿Cerrar sesión?</p>
+              <p className="text-xs text-muted-foreground mb-1.5">¿Cerrar sesión?</p>
               <div className="flex gap-1.5">
                 <button
                   onClick={() => setConfirmLogout(false)}
-                  className="flex-1 px-2 py-1 text-xs rounded-lg border border-neon-blue/20 text-neon-blue/60 hover:text-neon-cyan hover:border-neon-blue/40 transition-all cursor-pointer"
+                  className="flex-1 px-2 py-1 text-xs rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all cursor-pointer"
                 >
                   Cancelar
                 </button>
@@ -127,7 +126,7 @@ export default function UserMenu({ syncState, onDeleteAccount }: UserMenuProps) 
                     await signOut()
                     setConfirmLogout(false)
                   }}
-                  className="flex-1 px-2 py-1 text-xs rounded-lg bg-neon-blue/15 text-neon-cyan border border-neon-blue/30 hover:bg-neon-blue/25 transition-all cursor-pointer"
+                  className="flex-1 px-2 py-1 text-xs rounded-lg bg-primary/15 text-primary border border-primary/30 hover:bg-primary/25 transition-all cursor-pointer"
                 >
                   Cerrar
                 </button>
@@ -135,10 +134,10 @@ export default function UserMenu({ syncState, onDeleteAccount }: UserMenuProps) 
             </div>
           )}
 
-          <DropdownMenu.Separator className="h-px bg-neon-blue/15 my-1" />
+          <DropdownMenu.Separator className="h-px bg-border my-1" />
 
           <DropdownMenu.Item
-            className="px-2.5 py-1.5 text-xs text-pink-400/70 hover:text-pink-300 hover:bg-pink-500/10 rounded-lg cursor-pointer outline-none transition-colors"
+            className="px-2.5 py-1.5 text-xs text-destructive/70 hover:text-destructive hover:bg-destructive/10 rounded-lg cursor-pointer outline-none transition-colors"
             onSelect={() => onDeleteAccount()}
           >
             Eliminar mis datos

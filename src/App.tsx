@@ -302,7 +302,7 @@ function AppContent() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
                   </svg>
                 )}
-                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground">{state.isMuted ? 'Off' : 'On'}</span>
+                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground max-sm:hidden">{state.isMuted ? 'Off' : 'On'}</span>
               </button>
               <div className="w-px h-5 bg-border" />
               <Select value={state.notation} onValueChange={(v: 'american' | 'latino') => setNotation(v)}>
@@ -326,7 +326,7 @@ function AppContent() {
                 title="Reiniciar (R)"
               >
                 <RotateCcw className="w-4 h-4" />
-                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground">Reiniciar</span>
+                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground max-sm:hidden">Reiniciar</span>
               </button>
               <div className="w-px h-5 bg-border" />
               <button
@@ -336,7 +336,7 @@ function AppContent() {
                 title={isPaused ? 'Reanudar (P)' : 'Pausar (P)'}
               >
                 {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
-                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground">{isPaused ? 'Play' : 'Pausa'}</span>
+                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground max-sm:hidden">{isPaused ? 'Play' : 'Pausa'}</span>
               </button>
               <div className="w-px h-5 bg-border" />
               <UserMenu syncState={syncState} onDeleteAccount={handleDeleteAccount} />
