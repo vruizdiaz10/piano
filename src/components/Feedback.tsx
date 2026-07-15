@@ -37,7 +37,7 @@ export default function Feedback({ isCorrect, note, recovering, errorType, notat
         </div>
       )}
       {!isCorrect && !recovering && errorType && errorType !== 'random' && (
-        <div className="max-w-xs text-xs text-center text-muted-foreground bg-muted px-3 py-2 rounded-xl animate-slide-up border border-border">
+        <div className="max-w-[calc(100vw-2rem)] text-xs text-center text-muted-foreground bg-muted px-3 py-2 rounded-xl animate-slide-up border border-border">
           {getErrorTip(errorType, note, notation)}
         </div>
       )}

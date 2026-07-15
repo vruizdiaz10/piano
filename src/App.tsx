@@ -281,7 +281,7 @@ function AppContent() {
           responseTimes={state.responseTimes}
         />
 )}
-          <div id="game-content" className="max-w-2xl mx-auto px-3 pt-2 pb-2 sm:pt-4 sm:pb-4 lg:pt-[68px] lg:pb-1 relative z-10">
+          <div id="game-content" className="max-w-2xl mx-auto px-3 pt-2 pb-2 sm:pt-4 sm:pb-4 lg:pt-4 lg:pb-1 relative z-10">
           <div className="flex items-center justify-between mb-2 lg:mb-0">
           <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
             Note Dojo
@@ -289,7 +289,7 @@ function AppContent() {
           <div className="flex items-center gap-1 rounded-xl bg-accent/30 border border-border p-1">
               <button
                 onClick={() => setMuted(!state.isMuted)}
-                className="flex flex-col items-center p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
+                className="flex flex-col items-center p-2 rounded-lg hover:bg-accent transition-all cursor-pointer"
                 aria-label={state.isMuted ? 'Activar sonido' : 'Silenciar sonido'}
               >
                 {!state.isMuted ? (
@@ -306,7 +306,7 @@ function AppContent() {
               </button>
               <div className="w-px h-5 bg-border" />
               <Select value={state.notation} onValueChange={(v: 'american' | 'latino') => setNotation(v)}>
-                <SelectTrigger className="w-28 h-8 border-0 bg-transparent text-foreground hover:bg-accent text-xs rounded-lg" aria-label="Notación musical">
+                <SelectTrigger className="w-28 h-9 border-0 bg-transparent text-foreground hover:bg-accent text-xs rounded-lg" aria-label="Notación musical">
                   <Music className="w-3.5 h-3.5 mr-1" />
                   <SelectValue placeholder="A B C D E" />
                 </SelectTrigger>
@@ -316,12 +316,12 @@ function AppContent() {
                 </SelectContent>
               </Select>
               <div className="w-px h-5 bg-border" />
-              <ThemeToggle theme={state.theme} onToggle={setTheme} className="p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer" />
+              <ThemeToggle theme={state.theme} onToggle={setTheme} className="p-2 rounded-lg hover:bg-accent transition-all cursor-pointer" />
             </div>
             <div className="flex items-center gap-1">
               <button
                 onClick={() => restartGame()}
-                className="flex flex-col items-center p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
+                className="flex flex-col items-center p-2 rounded-lg hover:bg-accent transition-all cursor-pointer"
                 aria-label="Reiniciar"
                 title="Reiniciar (R)"
               >
@@ -331,7 +331,7 @@ function AppContent() {
               <div className="w-px h-5 bg-border" />
               <button
                 onClick={() => setIsPaused(p => !p)}
-                className="flex flex-col items-center p-1.5 rounded-lg hover:bg-accent transition-all cursor-pointer"
+                className="flex flex-col items-center p-2 rounded-lg hover:bg-accent transition-all cursor-pointer"
                 aria-label={isPaused ? 'Reanudar' : 'Pausar'}
                 title={isPaused ? 'Reanudar (P)' : 'Pausar (P)'}
               >
@@ -426,7 +426,7 @@ function AppContent() {
             </button>
           </div>
         ) : (
-          <div className="max-sm:absolute max-sm:bottom-[calc(env(safe-area-inset-bottom)+1rem)] max-sm:z-30 max-sm:px-4">
+          <div className="max-sm:px-4">
             <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} errorType={state.lastErrorType} notation={state.notation} />
           </div>
         )}
