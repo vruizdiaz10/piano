@@ -34,6 +34,7 @@
     --gold-light: #93C5FD;
     --ebony: #1E293B;
     --ivory: #FFFFFF;
+    --gold: #D4A843;
   }
 
   .dark {
@@ -63,6 +64,7 @@
     --gold-light: #60A5FA;
     --ebony: #0A0A0A;
     --ivory: #F5F5F5;
+    --gold: #E8C564;
   }
 }
 
@@ -199,9 +201,12 @@
 
 @media (orientation: landscape) and (max-height: 600px) {
   .game-layout { flex-direction: row; align-items: flex-start; touch-action: manipulation; }
-  .game-layout-staff { width: 50%; }
-  .game-layout-keyboard { width: 50%; position: sticky; top: 0; }
+  .game-layout-staff { width: 55%; }
+  .game-layout-keyboard { width: 45%; position: sticky; top: 0; }
   .game-layout-keyboard > div { margin-bottom: 0; }
+  #game-content > div:first-child { margin-bottom: 0 !important; }
+  #game-content > div:nth-child(2) { margin-bottom: 0 !important; padding-top: 0 !important; }
+  .game-layout-keyboard .h-36 { height: 7rem !important; }
 }
 
 @media (min-width: 1024px) {

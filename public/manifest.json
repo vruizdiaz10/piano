@@ -1,6 +1,6 @@
 {
-  "name": "Lectura Musical al Piano",
-  "short_name": "Piano",
+  "name": "Note Dojo",
+  "short_name": "Note Dojo",
   "description": "Aprende a leer partituras a primera vista",
   "start_url": "/",
   "display": "standalone",

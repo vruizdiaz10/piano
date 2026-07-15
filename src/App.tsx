@@ -284,7 +284,7 @@ function AppContent() {
           <div id="game-content" className="max-w-2xl mx-auto px-3 pt-2 pb-2 sm:pt-4 sm:pb-4 lg:pt-[68px] lg:pb-1 relative z-10">
           <div className="flex items-center justify-between mb-2 lg:mb-0">
           <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
-            Lectura Musical
+            Note Dojo
           </h1>
           <div className="flex items-center gap-1 rounded-xl bg-accent/30 border border-border p-1">
               <button

@@ -80,7 +80,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
     actualCount = PORTRAIT_KEY_COUNT
   } else if (isMobile) {
     actualStart = 48
-    actualCount = 24
+    actualCount = 18
   } else {
     actualStart = defaultStart
     actualCount = defaultCount
