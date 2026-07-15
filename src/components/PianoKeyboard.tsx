@@ -171,9 +171,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
               aria-label={`Nota ${name}${octave}`}
               onMouseDown={() => onPlayNote({ name: name as Note['name'], octave, midi })}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPlayNote({ name: name as Note['name'], octave, midi }) } }}
-            >
-              <span className="text-[10px] leading-none pointer-events-none">{name}</span>
-            </button>
+            />
           )
         })}
         {blackKeyData.map(k => {
