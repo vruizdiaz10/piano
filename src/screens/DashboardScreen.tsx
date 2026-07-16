@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import type { RankInfo, RoadmapStep } from '../utils/dashboardStats';
+import { weeklyAccuracyPath } from '../utils/dashboardStats';
 
 interface DashboardProps {
   onNavigate: (target: string) => void;
@@ -17,12 +19,19 @@ interface DashboardProps {
     goldBadges: number;
     totalTime: string;
     weeklyPrecision: number;
+    weeklyAccuracies: Array<number | null>;
+    practiceDays: boolean[];
+    challengingNotes: string[];
   };
+  roadmap: RoadmapStep[];
+  rank: RankInfo;
   senseiQuote: string;
   userName?: string;
   userLevel?: number;
   userAvatar?: string;
 }
+
+const WEEKDAY_LABELS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 
 export default function DashboardScreen({
   onNavigate,
@@ -35,9 +44,11 @@ export default function DashboardScreen({
   timedMode,
   onToggleTimed,
   stats,
+  roadmap,
+  rank,
   senseiQuote,
-  userName = 'Sensei Alex',
-  userLevel = 12,
+  userName = 'Pianista',
+  userLevel = 1,
   userAvatar,
 }: DashboardProps) {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -53,6 +64,12 @@ export default function DashboardScreen({
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
   }, [showDropdown])
+
+  const chartPath = weeklyAccuracyPath(stats.weeklyAccuracies)
+  const todayIdx = (() => {
+    const d = new Date().getDay()
+    return d === 0 ? 6 : d - 1 // Mon=0 … Sun=6
+  })()
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -106,7 +123,7 @@ export default function DashboardScreen({
       </nav>
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-[1200px] mx-auto px-container-padding py-stack-md md:py-stack-lg grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <main className="flex-1 w-full max-w-[1200px] mx-auto px-container-padding py-stack-md md:py-stack-lg grid grid-cols-1 lg:grid-cols-12 gap-10 pt-24">
         {/* Left Section */}
         <div className="lg:col-span-8 flex flex-col gap-10">
           {/* Session Config */}
@@ -117,7 +134,7 @@ export default function DashboardScreen({
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 clay-inner-panel px-4 py-2 mb-8 border border-outline-variant/20 rounded-full">
                 <span className="font-label-caps text-[10px] uppercase text-on-secondary-container tracking-wider font-bold">
-                  Ajuste Session Config
+                  Configuración de sesión
                 </span>
               </div>
               <h1 className="font-display-lg text-display-lg text-primary italic mb-12 max-w-md">
@@ -142,7 +159,7 @@ export default function DashboardScreen({
                     expand_more
                   </span>
                   {showDropdown && (
-                    <div className="absolute top-full left-0 w-full mt-4 clay-card z-50 overflow-hidden rounded-xl p-2">
+                    <div className="absolute top-full left-0 w-full mt-4 clay-card z-50 overflow-hidden rounded-xl p-2 max-h-64 overflow-y-auto">
                       {lessonTypes.map((lt) => (
                         <div
                           key={lt}
@@ -219,7 +236,9 @@ export default function DashboardScreen({
           <section className="clay-card p-10 md:p-12">
             <div className="flex justify-between items-end mb-16 pb-6">
               <div>
-                <h2 className="font-headline-lg text-headline-lg text-primary italic">HOJA DE RUTA: {selectedLesson.toUpperCase()}</h2>
+                <h2 className="font-headline-lg text-headline-lg text-primary italic">
+                  HOJA DE RUTA
+                </h2>
                 <p className="font-body-sm text-body-sm text-outline italic mt-2">
                   Progreso actual en el conjunto de lecciones
                 </p>
@@ -235,48 +254,67 @@ export default function DashboardScreen({
               <svg className="absolute left-12 md:left-24 top-0 w-[calc(100%-60px)] h-full pointer-events-none" preserveAspectRatio="none" viewBox="0 0 100 100">
                 <path d="M0,10 C40,10 60,90 100,90" fill="none" stroke="#d7c2ba" strokeDasharray="8,8" strokeWidth="3" strokeLinecap="round" />
               </svg>
-              {/* Step 1 */}
-              <div className="relative flex items-center mb-32 z-10">
-                <div className="absolute -left-16 md:-left-28 w-20 h-20 rounded-2xl clay-icon-dark text-brass-highlight flex items-center justify-center transform -rotate-3">
-                  <span className="material-symbols-outlined text-4xl">check_circle</span>
-                </div>
-                <div>
-                  <span className="font-label-caps text-[10px] uppercase text-outline-variant font-bold tracking-widest">Paso 01</span>
-                  <h3 className="font-headline-lg text-3xl text-primary uppercase tracking-wide mt-1">Las Líneas</h3>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant max-w-xs mt-2 leading-relaxed">
-                    E-G-B-D-F. Memorización completa de las líneas fundamentales.
-                  </p>
-                </div>
-              </div>
-              {/* Step 2 */}
-              <div className="relative flex flex-row-reverse items-center justify-between mb-32 z-10 w-full md:pr-12">
-                <div className="w-20 h-20 rounded-2xl clay-icon-dark text-brass-highlight flex items-center justify-center transform rotate-3">
-                  <span className="material-symbols-outlined text-4xl">check_circle</span>
-                </div>
-                <div className="text-right">
-                  <span className="font-label-caps text-[10px] uppercase text-outline-variant font-bold tracking-widest">Paso 02</span>
-                  <h3 className="font-headline-lg text-3xl text-primary uppercase tracking-wide mt-1">Los Espacios</h3>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant max-w-xs mt-2 ml-auto leading-relaxed">
-                    F-A-C-E. Identificación instantánea de los espacios.
-                  </p>
-                </div>
-              </div>
-              {/* Step 3 */}
-              <div className="relative flex items-center z-10">
-                <div className="absolute -left-16 md:-left-28 w-24 h-24 rounded-3xl clay-icon-raised text-on-secondary-container flex items-center justify-center transform -rotate-3 border-2 border-on-secondary-container/30">
-                  <span className="material-symbols-outlined text-5xl">piano</span>
-                </div>
-                <div className="w-full max-w-md">
-                  <span className="font-label-caps text-[10px] uppercase text-velvet-red font-bold tracking-widest">En Progreso 74%</span>
-                  <h3 className="font-headline-lg text-3xl text-primary uppercase tracking-wide mt-1">Fluidez Mixta</h3>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 mb-5 leading-relaxed">
-                    Integración de líneas y espacios en tiempo real.
-                  </p>
-                  <div className="clay-progress-bar w-full h-3" role="progressbar" aria-valuenow={74} aria-valuemin={0} aria-valuemax={100} aria-label="Progreso: 74%">
-                    <div className="clay-progress-fill w-[74%]" />
+              {roadmap.map((step, i) => {
+                const isReverse = i % 2 === 1
+                const isCurrent = step.status === 'current'
+                const isDone = step.status === 'done'
+                return (
+                  <div
+                    key={step.id}
+                    className={`relative flex items-center z-10 ${i < roadmap.length - 1 ? 'mb-32' : ''} ${
+                      isReverse ? 'flex-row-reverse justify-between w-full md:pr-12' : ''
+                    }`}
+                  >
+                    <div
+                      className={`${isReverse ? '' : 'absolute -left-16 md:-left-28'} w-20 h-20 ${
+                        isCurrent ? 'w-24 h-24 rounded-3xl clay-icon-raised text-on-secondary-container border-2 border-on-secondary-container/30' : 'rounded-2xl clay-icon-dark text-brass-highlight'
+                      } flex items-center justify-center transform ${isReverse ? 'rotate-3' : '-rotate-3'} ${
+                        step.status === 'locked' ? 'opacity-40' : ''
+                      }`}
+                    >
+                      <span className={`material-symbols-outlined ${isCurrent ? 'text-5xl' : 'text-4xl'}`}>
+                        {isDone ? 'check_circle' : isCurrent ? 'piano' : 'lock'}
+                      </span>
+                    </div>
+                    <div className={`${isReverse ? 'text-right' : ''} ${isCurrent ? 'w-full max-w-md' : ''}`}>
+                      <span
+                        className={`font-label-caps text-[10px] uppercase font-bold tracking-widest ${
+                          isCurrent ? 'text-velvet-red' : 'text-outline-variant'
+                        }`}
+                      >
+                        {isCurrent
+                          ? `En progreso ${step.progress}%`
+                          : isDone
+                            ? `Paso ${String(i + 1).padStart(2, '0')} · Completado`
+                            : `Paso ${String(i + 1).padStart(2, '0')} · Bloqueado`}
+                      </span>
+                      <h3 className="font-headline-lg text-3xl text-primary uppercase tracking-wide mt-1">{step.title}</h3>
+                      <p
+                        className={`font-body-sm text-body-sm text-on-surface-variant max-w-xs mt-2 leading-relaxed ${
+                          isReverse ? 'ml-auto' : ''
+                        } ${isCurrent ? 'mb-5' : ''}`}
+                      >
+                        {step.desc}
+                      </p>
+                      {isCurrent && (
+                        <div
+                          className="clay-progress-bar w-full h-3"
+                          role="progressbar"
+                          aria-valuenow={step.progress}
+                          aria-valuemin={0}
+                          aria-valuemax={100}
+                          aria-label={`Progreso: ${step.progress}%`}
+                        >
+                          <div className="clay-progress-fill" style={{ width: `${step.progress}%` }} />
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </div>
+                )
+              })}
+              {roadmap.length === 0 && (
+                <p className="font-body-sm text-outline italic">Completa una sesión para ver tu hoja de ruta.</p>
+              )}
             </div>
           </section>
         </div>
@@ -290,9 +328,16 @@ export default function DashboardScreen({
             </div>
             <div className="flex-1">
               <p className="font-label-caps text-[10px] uppercase text-outline tracking-widest mb-1">Rango</p>
-              <h3 className="font-title-md text-primary uppercase tracking-wide">Mastery Gold</h3>
-              <div className="clay-progress-bar h-2.5 mt-3" role="progressbar" aria-valuenow={80} aria-valuemin={0} aria-valuemax={100} aria-label="Rango: 80%">
-                <div className="clay-progress-fill w-[80%]" />
+              <h3 className="font-title-md text-primary uppercase tracking-wide">{rank.name}</h3>
+              <div
+                className="clay-progress-bar h-2.5 mt-3"
+                role="progressbar"
+                aria-valuenow={rank.progress}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={`Rango: ${rank.progress}%`}
+              >
+                <div className="clay-progress-fill" style={{ width: `${rank.progress}%` }} />
               </div>
             </div>
           </div>
@@ -328,24 +373,30 @@ export default function DashboardScreen({
                 <span className="material-symbols-outlined text-velvet-red text-[18px]">warning</span>
                 <span className="font-label-caps text-[11px] uppercase text-primary font-bold tracking-widest">Notas Desafiantes</span>
               </div>
-              <div className="flex justify-between px-3">
-                {['Fa', 'Si', 'Do♯'].map((note, i) => (
-                  <div key={i} className="flex flex-col items-center">
-                    <div className="w-12 h-12 rounded-xl bg-sheet-cream shadow-sm relative flex flex-col justify-center gap-1.5 mb-3 border border-outline-variant/30">
-                      <div className="w-8 mx-auto h-px bg-outline-variant" />
-                      <div className="w-8 mx-auto h-px bg-outline-variant" />
-                      <div className="w-8 mx-auto h-px bg-outline-variant" />
-                      <div className="w-3.5 h-3.5 bg-primary rounded-full absolute shadow-sm" style={{
-                        top: i === 0 ? '50%' : i === 1 ? 'auto' : '2px',
-                        bottom: i === 1 ? '6px' : 'auto',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                      }} />
+              {stats.challengingNotes.length > 0 ? (
+                <div className="flex justify-between px-3">
+                  {stats.challengingNotes.map((note, i) => (
+                    <div key={`${note}-${i}`} className="flex flex-col items-center">
+                      <div className="w-12 h-12 rounded-xl bg-sheet-cream shadow-sm relative flex flex-col justify-center gap-1.5 mb-3 border border-outline-variant/30">
+                        <div className="w-8 mx-auto h-px bg-outline-variant" />
+                        <div className="w-8 mx-auto h-px bg-outline-variant" />
+                        <div className="w-8 mx-auto h-px bg-outline-variant" />
+                        <div className="w-3.5 h-3.5 bg-primary rounded-full absolute shadow-sm" style={{
+                          top: i === 0 ? '50%' : i === 1 ? 'auto' : '2px',
+                          bottom: i === 1 ? '6px' : 'auto',
+                          left: '50%',
+                          transform: 'translateX(-50%)',
+                        }} />
+                      </div>
+                      <span className="font-label-caps text-[10px] text-outline font-bold">{note}</span>
                     </div>
-                    <span className="font-label-caps text-[10px] text-outline font-bold">{note}</span>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="font-body-sm text-outline italic text-center text-sm px-2">
+                  Sin notas débiles aún. ¡Practica para descubrirlas!
+                </p>
+              )}
             </div>
 
             {/* Precisión Semanal */}
@@ -355,7 +406,14 @@ export default function DashboardScreen({
                 <span className="font-label-caps text-[11px] text-on-secondary-container font-bold">{stats.weeklyPrecision}%</span>
               </div>
               <svg className="w-full h-16 overflow-visible" viewBox="0 0 100 30">
-                <path d="M0,25 Q10,15 20,20 T40,10 T60,15 T80,10 T100,0" fill="none" stroke="#785a1a" strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" />
+                <polyline
+                  points={chartPath}
+                  fill="none"
+                  stroke="#785a1a"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="3"
+                />
               </svg>
             </div>
           </div>
@@ -364,23 +422,29 @@ export default function DashboardScreen({
           <div className="clay-card p-8">
             <h3 className="font-label-caps text-[12px] uppercase text-primary font-bold tracking-widest mb-6 text-center">Rendimiento</h3>
             <div className="flex justify-between items-center mb-6">
-              {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, i) => (
-                <div
-                  key={i}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center font-label-caps text-[11px] ${
-                    i < 5
-                      ? 'clay-icon-dark text-brass-highlight'
-                      : i === 5
-                      ? 'clay-inner-panel text-outline'
-                      : 'bg-error-container text-error shadow-inner border border-error/10'
-                  }`}
-                >
-                  {d}
-                </div>
-              ))}
+              {WEEKDAY_LABELS.map((d, i) => {
+                const practiced = stats.practiceDays[i]
+                const isToday = i === todayIdx
+                const isMissed = !practiced && i < todayIdx
+                return (
+                  <div
+                    key={i}
+                    title={practiced ? 'Practicaste' : isMissed ? 'Sin práctica' : isToday ? 'Hoy' : 'Pendiente'}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center font-label-caps text-[11px] ${
+                      practiced
+                        ? 'clay-icon-dark text-brass-highlight'
+                        : isMissed
+                          ? 'bg-error-container text-error shadow-inner border border-error/10'
+                          : 'clay-inner-panel text-outline'
+                    }`}
+                  >
+                    {d}
+                  </div>
+                )
+              })}
             </div>
             <p className="text-center font-body-sm text-[13px] text-outline italic">
-              "La repetición es la madre de la maestría."
+              &ldquo;{senseiQuote}&rdquo;
             </p>
           </div>
 
@@ -400,7 +464,7 @@ export default function DashboardScreen({
             </h3>
             <div className="border-l-2 border-brass-highlight/50 pl-5 py-2">
               <p className="font-body-sm text-surface-bright italic opacity-90 leading-relaxed text-[15px]">
-                "{senseiQuote}"
+                &ldquo;{senseiQuote}&rdquo;
               </p>
             </div>
           </div>

@@ -5,6 +5,8 @@ export interface SessionRecord {
   notes: number
   lessonId: string
   date: string
+  /** Optional; older sessions may omit this. */
+  elapsedMs?: number
 }
 
 export function saveSession(r: SessionRecord) {

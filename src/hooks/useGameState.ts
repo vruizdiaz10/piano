@@ -67,7 +67,8 @@ export function useGameState() {
     setState(prev => {
       if (prev.phase === 'waiting' && prev.currentNote) {
         const isCorrect = midi === prev.currentNote.midi
-        if (!isCorrect) addWeakNote(midi)
+        // Track the target note that was missed (not the wrong key pressed)
+        if (!isCorrect) addWeakNote(prev.currentNote.midi)
         const newStreak = isCorrect ? prev.streak + 1 : 0
         const newTotal = prev.totalAttempts + 1
         const newCorrect = prev.correctAttempts + (isCorrect ? 1 : 0)
@@ -120,6 +121,10 @@ export function useGameState() {
     setState(prev => ({ ...prev, lessonId }))
   }, [])
 
+  const setSessionTarget = useCallback((target: number) => {
+    setState(prev => ({ ...prev, sessionTarget: target }))
+  }, [])
+
   const setShowNoteName = useCallback((show: boolean) => {
     setState(prev => ({ ...prev, showNoteName: show }))
   }, [])
@@ -156,6 +161,6 @@ export function useGameState() {
 
   return {
     state, startGame, submitAnswer, nextNote,
-    setLesson, setShowNoteName, setMuted, setTimed, setTheme, setNotation, restartGame,
+    setLesson, setSessionTarget, setShowNoteName, setMuted, setTimed, setTheme, setNotation, restartGame,
   }
 }

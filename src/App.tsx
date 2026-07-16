@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useGameState } from './hooks/useGameState'
 import { useDailyStreak } from './hooks/useDailyStreak'
 import { saveSession } from './utils/sessionHistory'
+import { computeDashboardStats } from './utils/dashboardStats'
 import { useMidi } from './hooks/useMidi'
 import { useSound } from './hooks/useSound'
 import { getLessonPool, LESSONS } from './data/lessons'
@@ -31,7 +32,7 @@ const SENSEI_QUOTES = [
 ]
 
 function AppContent() {
-  const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTimed, setTheme, setNotation, restartGame } = useGameState()
+  const { state, startGame, submitAnswer, nextNote, setLesson, setSessionTarget, setShowNoteName, setMuted, setTimed, setTheme, setNotation, restartGame } = useGameState()
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
   const [correctKey, setCorrectKey] = useState<number | null>(null)
   const [wrongKey, setWrongKey] = useState<number | null>(null)
@@ -331,6 +332,7 @@ function AppContent() {
   }
 
   if (screen === 'dashboard') {
+    const dash = computeDashboardStats(state.lessonId, state.notation)
     return (
       <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
         <DashboardScreen
@@ -343,20 +345,26 @@ function AppContent() {
             if (lesson) setLesson(lesson.id)
           }}
           noteCount={state.sessionTarget}
-          onSelectNoteCount={(n) => startGame(n)}
+          onSelectNoteCount={(n) => setSessionTarget(n)}
           timedMode={state.isTimed}
           onToggleTimed={() => setTimed(!state.isTimed)}
           stats={{
             streak: dailyStreak,
-            score: String(Math.round(state.correctAttempts * 10)),
-            totalNotes: String(state.totalAttempts),
-            goldBadges: Math.floor(state.bestStreak / 5),
-            totalTime: state.startTime ? `${Math.round((Date.now() - state.startTime) / 1000)}s` : '0s',
-            weeklyPrecision: Math.round(accuracy),
+            score: dash.score,
+            totalNotes: dash.totalNotes,
+            goldBadges: dash.goldBadges,
+            totalTime: dash.totalTime,
+            weeklyPrecision: dash.weeklyPrecision,
+            weeklyAccuracies: dash.weeklyAccuracies,
+            practiceDays: dash.practiceDays,
+            challengingNotes: dash.challengingNotes,
           }}
-          senseiQuote={SENSEI_QUOTES[state.bestStreak % SENSEI_QUOTES.length]}
-          userName={user?.displayName || user?.email?.split('@')[0] || 'Sensei Alex'}
-          userLevel={Math.floor(state.bestStreak / 10) + 1}
+          roadmap={dash.roadmap}
+          rank={dash.rank}
+          senseiQuote={SENSEI_QUOTES[dash.userLevel % SENSEI_QUOTES.length]}
+          userName={user?.displayName || user?.email?.split('@')[0] || 'Pianista'}
+          userLevel={dash.userLevel}
+          userAvatar={user?.photoURL || undefined}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
       </div>
