@@ -22,10 +22,10 @@ export default function Feedback({ isCorrect, note, recovering, errorType, notat
         role="status"
         aria-live="polite"
         aria-atomic="true"
-        className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl text-base font-bold shadow-lg ${
+        className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl text-base font-bold animate-slide-up ${
           isCorrect
-            ? 'bg-success/10 text-success border-2 border-success/30 animate-slide-up'
-            : 'bg-destructive/10 text-destructive border-2 border-destructive/30 animate-slide-up'
+            ? 'clay-surface !text-success'
+            : 'clay-surface !text-destructive'
         }`}
       >
         <span className="text-xl">{isCorrect ? '\u2713' : '\u2717'}</span>
@@ -37,7 +37,7 @@ export default function Feedback({ isCorrect, note, recovering, errorType, notat
         </div>
       )}
       {!isCorrect && !recovering && errorType && errorType !== 'random' && (
-        <div className="max-w-[calc(100vw-2rem)] text-xs text-center text-muted-foreground bg-muted px-3 py-2 rounded-xl animate-slide-up border border-border">
+        <div className="max-w-[calc(100vw-2rem)] text-xs text-center text-muted-foreground bg-muted/50 px-3 py-2 rounded-xl animate-slide-up clay-surface">
           {getErrorTip(errorType, note, notation)}
         </div>
       )}

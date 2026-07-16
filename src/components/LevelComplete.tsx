@@ -98,7 +98,7 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
   return (
     <div id="level-complete-dialog" className="fixed inset-0 z-40 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Lección completada">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onRetry} />
-      <div className="relative bg-card rounded-2xl p-6 sm:p-8 max-w-sm w-full animate-slide-up border border-border">
+      <div className="relative rounded-2xl p-6 sm:p-8 max-w-sm w-full animate-slide-up clay-surface">
         <h2 className="text-xl font-bold text-center text-foreground mb-4">
           {'\u00A1'}Lección Completada!
         </h2>
@@ -116,10 +116,10 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
         </div>
 
         {mastery && (
-          <div className={`text-center mb-3 px-3 py-2 rounded-xl text-sm font-semibold ${
+          <div className={`text-center mb-3 px-3 py-2 rounded-xl text-sm font-semibold clay-surface ${
             masteryAchieved
-              ? 'bg-success/10 text-success border border-success/30'
-              : 'bg-muted text-muted-foreground border border-border'
+              ? '!text-success'
+              : 'text-muted-foreground'
           }`}>
             {masteryAchieved
               ? '\u2714 Maestría alcanzada'
@@ -157,30 +157,30 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
         )}
 
         <div className="grid grid-cols-3 gap-2 mb-6 text-center">
-          <div className={`rounded-xl p-2 ${accuracy >= 75 ? 'bg-success/10 animate-gold-pulse' : accuracy >= 50 ? 'bg-primary/5 animate-gold-pulse' : 'bg-primary/5'}`}>
+          <div className={`rounded-xl p-2 clay-surface ${accuracy >= 75 ? 'animate-gold-pulse' : accuracy >= 50 ? 'animate-gold-pulse' : ''}`}>
             <div className="text-xs text-muted-foreground font-medium">Precisión</div>
             <div className="text-lg font-bold text-foreground">
               {accuracy >= 90 ? '\u2713 ' : accuracy >= 70 ? '\u26A0 ' : '\u2717 '}
               {Math.round(accuracy)}%
             </div>
           </div>
-          <div className="rounded-xl bg-accent/5 p-2">
+          <div className="rounded-xl p-2 clay-surface">
             <div className="text-xs text-muted-foreground font-medium">Mejor Racha</div>
             <div className="text-lg font-bold text-foreground">{'\uD83D\uDD25'} {bestStreak}</div>
           </div>
-          <div className="rounded-xl bg-secondary/5 p-2">
+          <div className="rounded-xl p-2 clay-surface">
             <div className="text-xs text-muted-foreground font-medium">Notas</div>
             <div className="text-lg font-bold text-foreground">{totalNotes}</div>
           </div>
-          <div className="rounded-xl bg-success/5 p-2">
+          <div className="rounded-xl p-2 clay-surface">
             <div className="text-xs text-muted-foreground font-medium">Tiempo Total</div>
             <div className="text-lg font-bold text-foreground">{formatTime(elapsedMs)}</div>
           </div>
-          <div className="rounded-xl bg-primary/5 p-2">
+          <div className="rounded-xl p-2 clay-surface">
             <div className="text-xs text-muted-foreground font-medium">Respuesta Prom.</div>
             <div className="text-lg font-bold text-foreground">{avgTime > 0 ? `${avgTime}ms` : '--'}</div>
           </div>
-          <div className="rounded-xl bg-accent/5 p-2">
+          <div className="rounded-xl p-2 clay-surface">
             <div className="text-xs text-muted-foreground font-medium">Mejor Tiempo</div>
             <div className="text-lg font-bold text-foreground">{bestTime > 0 ? `${bestTime}ms` : '--'}</div>
           </div>
@@ -189,7 +189,7 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
         <div className="flex gap-3">
           <button
             onClick={onRetry}
-            className="flex-1 px-4 py-2.5 rounded-xl border-2 border-border bg-card text-muted-foreground hover:text-foreground hover:bg-muted font-semibold transition-all cursor-pointer"
+            className="flex-1 px-4 py-2.5 rounded-xl font-semibold transition-all cursor-pointer clay-button-secondary"
           >
             Reintentar
           </button>
@@ -199,7 +199,7 @@ export default function LevelComplete({ accuracy, bestStreak, totalNotes, elapse
             className={`flex-1 px-4 py-2.5 rounded-xl font-semibold transition-all cursor-pointer ${
               mastery && mastery.unlockNext && !masteryAchieved
                 ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                : 'bg-primary text-primary-foreground hover:opacity-90'
+                : 'clay-button-primary !text-cream'
             }`}
             title={mastery && mastery.unlockNext && !masteryAchieved ? 'Alcanza la maestría para desbloquear' : ''}
           >

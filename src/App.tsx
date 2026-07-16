@@ -5,36 +5,41 @@ import { saveSession } from './utils/sessionHistory'
 import { useMidi } from './hooks/useMidi'
 import { useSound } from './hooks/useSound'
 import { getLessonPool, LESSONS } from './data/lessons'
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from './components/ui/select'
 import Staff from './components/Staff'
 import PianoKeyboard from './components/PianoKeyboard'
 import Feedback from './components/Feedback'
-import Toolbar from './components/Toolbar'
-import ProgressBar from './components/ProgressBar'
-import StreakBadge from './components/StreakBadge'
-import ScoreDisplay from './components/ScoreDisplay'
-import LevelComplete from './components/LevelComplete'
 import ThemeToggle from './components/ThemeToggle'
-import ProgressChart from './components/ProgressChart'
 import AuthProvider from './hooks/useAuthProvider'
 import { useAuth } from './hooks/useAuth'
 import { useSessionSync } from './hooks/useSessionSync'
 import { useConfigSync } from './hooks/useConfigSync'
 import UserMenu from './components/UserMenu'
 import Toast from './components/Toast'
-import { Music, RotateCcw, Pause, Play } from 'lucide-react'
+import InicioScreen from './screens/InicioScreen'
+import DashboardScreen from './screens/DashboardScreen'
+import BibliotecaScreen from './screens/BibliotecaScreen'
+import PerfilScreen from './screens/PerfilScreen'
+import ResultadosScreen from './screens/ResultadosScreen'
+
+type Screen = 'inicio' | 'dashboard' | 'biblioteca' | 'perfil' | 'practica' | 'resultados'
+
+const SENSEI_QUOTES = [
+  'La repetición es la madre del aprendizaje — y el maestro del arte.',
+  'Cada nota incorrecta es una lección disfrazada de error.',
+  'La paciencia es la virtud del pianista que alcanza la maestría.',
+  'No toques las notas, deja que ellas te toquen a ti.',
+]
 
 function AppContent() {
   const { state, startGame, submitAnswer, nextNote, setLesson, setShowNoteName, setMuted, setTimed, setTheme, setNotation, restartGame } = useGameState()
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
   const [correctKey, setCorrectKey] = useState<number | null>(null)
   const [wrongKey, setWrongKey] = useState<number | null>(null)
-  
+
   const [staffFlash, setStaffFlash] = useState<'correct' | 'wrong' | null>(null)
   const [trail, setTrail] = useState<Array<{ note: import('./types').Note; id: number }>>([])
   const trailIdRef = useRef(0)
   const [noteExpression, setNoteExpression] = useState<'happy' | 'sad' | null>(null)
-  const [answeredNotes, setAnsweredNotes] = useState<number[]>([])
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
   const { dailyStreak, markToday } = useDailyStreak()
   const liveRegionRef = useRef<HTMLDivElement>(null)
@@ -43,6 +48,19 @@ function AppContent() {
   const { config, updateConfig } = useConfigSync(user)
   const [isPaused, setIsPaused] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'warning' | 'error' } | null>(null)
+
+  // Screen routing
+  const [screen, setScreen] = useState<Screen>('inicio')
+  const [isStarting, setIsStarting] = useState(false)
+
+  const handleNavigate = (target: string) => setScreen(target as Screen)
+
+  const handleStartGame = useCallback((target?: string) => {
+    if (target) setLesson(target)
+    markToday()
+    startGame()
+    setScreen('practica')
+  }, [markToday, startGame, setLesson])
 
   const handleDeleteAccount = async () => {
     if (!user) return
@@ -144,7 +162,6 @@ function AppContent() {
         return next.slice(-3)
       })
       setNoteExpression(state.lastAnswerCorrect ? 'happy' : 'sad')
-      setAnsweredNotes(prev => [...prev, state.currentNote!.midi])
     }
     return () => setNoteExpression(null)
   }, [state.phase, state.lastAnswerCorrect, state.currentNote])
@@ -153,11 +170,10 @@ function AppContent() {
   useEffect(() => {
     if (state.totalAttempts === 0 && state.phase === 'waiting') {
       setTrail([])
-      setAnsweredNotes([])
     }
   }, [state.totalAttempts, state.phase])
 
-  // Sound effects + confetti + flash on answer
+  // Sound effects + flash on answer
   useEffect(() => {
     if (state.phase === 'feedback' || state.phase === 'levelComplete') {
       if (state.lastAnswerCorrect) {
@@ -178,7 +194,7 @@ function AppContent() {
     }
   }, [state.phase])
 
-  // Auto-advance after feedback (predictable delay)
+  // Auto-advance after feedback
   useEffect(() => {
     if (state.phase === 'feedback' && state.currentNote) {
       setHighlightKey(state.currentNote.midi)
@@ -221,7 +237,7 @@ function AppContent() {
     }
   }, [state.phase, state.currentNote, nextNote])
 
-  // Save session history on level complete (localStorage + cloud if logged in)
+  // Save session history on level complete
   useEffect(() => {
     if (state.phase === 'levelComplete') {
       const session = { accuracy, notes: state.totalAttempts, lessonId: state.lessonId, date: new Date().toISOString(), elapsedMs: state.startTime ? Date.now() - state.startTime : undefined }
@@ -261,200 +277,254 @@ function AppContent() {
       ? 'animate-flash-red animate-shake'
       : ''
 
+  const handleGuestEnter = () => {
+    setIsStarting(true)
+    setTimeout(() => { setScreen('dashboard'); setIsStarting(false) }, 600)
+  }
+
+  const handleGoogleSignIn = async () => {
+    setIsStarting(true)
+    try {
+      await (await import('./firebase/auth')).signInWithGoogle()
+      setScreen('dashboard')
+    } catch { /* noop */ }
+    setIsStarting(false)
+  }
+
+  const sessionStats = {
+    score: Math.round(state.correctAttempts * 10 * (1 + state.bestStreak / 20)),
+    notesPlayed: state.totalAttempts,
+    accuracy: Math.round(accuracy),
+    maxStreak: state.bestStreak,
+    totalTime: state.startTime ? `${Math.round((Date.now() - state.startTime) / 1000)}s` : '0s',
+    challengingNotes: [] as Array<{ note: string; octave: number }>,
+    newBadges: Math.floor(state.bestStreak / 5),
+  }
+
+  const selectedLesson = currentLesson?.name ?? 'Líneas'
+
+  // ── Render ──
+  if (screen === 'inicio') {
+    return (
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+        <InicioScreen
+          onSignInGoogle={handleGoogleSignIn}
+          onEnterGuest={handleGuestEnter}
+          isLoading={isStarting}
+        />
+        {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
+      </div>
+    )
+  }
+
+  if (screen === 'dashboard') {
+    return (
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+        <DashboardScreen
+          onNavigate={handleNavigate}
+          onStartGame={() => handleStartGame()}
+          lessonTypes={LESSONS.map(l => l.name)}
+          selectedLesson={selectedLesson}
+          onSelectLesson={(name) => {
+            const lesson = LESSONS.find(l => l.name === name)
+            if (lesson) setLesson(lesson.id)
+          }}
+          noteCount={state.sessionTarget}
+          onSelectNoteCount={(n) => startGame(n)}
+          timedMode={state.isTimed}
+          onToggleTimed={() => setTimed(!state.isTimed)}
+          stats={{
+            streak: dailyStreak,
+            score: String(Math.round(state.correctAttempts * 10)),
+            totalNotes: String(state.totalAttempts),
+            goldBadges: Math.floor(state.bestStreak / 5),
+            totalTime: state.startTime ? `${Math.round((Date.now() - state.startTime) / 1000)}s` : '0s',
+            weeklyPrecision: Math.round(accuracy),
+          }}
+          senseiQuote={SENSEI_QUOTES[state.bestStreak % SENSEI_QUOTES.length]}
+          userName={user?.displayName || user?.email?.split('@')[0] || 'Sensei Alex'}
+          userLevel={Math.floor(state.bestStreak / 10) + 1}
+        />
+        {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
+      </div>
+    )
+  }
+
+  if (screen === 'biblioteca') {
+    return (
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+        <BibliotecaScreen
+          onNavigate={handleNavigate}
+          onSelectLesson={(id) => setLesson(id)}
+          onStartGame={() => handleStartGame()}
+          userName={user?.displayName || 'Pianista'}
+          userLevel={Math.floor(state.bestStreak / 10) + 1}
+        />
+        {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
+      </div>
+    )
+  }
+
+  if (screen === 'perfil') {
+    return (
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+        <PerfilScreen
+          onNavigate={handleNavigate}
+          userName={user?.displayName || 'Pianista'}
+          userLevel={Math.floor(state.bestStreak / 10) + 1}
+          userAvatar={user?.photoURL || undefined}
+          stats={{ stars: state.correctAttempts, notesMastered: state.totalAttempts, streak: dailyStreak }}
+          settings={{
+            language: 'es',
+            showAlphabetical: state.showNoteName,
+            correctKeyFlash: true,
+            incorrectKeyFlash: true,
+            darkMode: state.theme === 'dark',
+            difficulty: state.sessionTarget <= 5 ? 'facil' : state.sessionTarget <= 10 ? 'normal' : 'dificil',
+          }}
+          onSettingsChange={(s) => {
+            setShowNoteName(s.showAlphabetical)
+            setTheme(s.darkMode ? 'dark' : 'light')
+          }}
+          onDeleteAccount={handleDeleteAccount}
+        />
+        {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
+      </div>
+    )
+  }
+
+  if (screen === 'resultados') {
+    return (
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+        <ResultadosScreen
+          stats={sessionStats}
+          onDashboard={() => setScreen('dashboard')}
+          onRetry={() => { restartGame(); setScreen('practica') }}
+          onNext={() => { startGame(); setScreen('practica') }}
+        />
+        {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
+      </div>
+    )
+  }
+
+  // ── PRACTICE SCREEN ──
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <div aria-live="polite" aria-atomic="true" className="sr-only" ref={liveRegionRef} />
-      <a href="#game-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-card focus:text-foreground focus:rounded-lg focus:ring-2 focus:ring-ring">
-        Saltar al juego
-      </a>
 
-      {state.phase === 'levelComplete' && (
-        <LevelComplete
-          accuracy={accuracy}
-          bestStreak={state.bestStreak}
-          totalNotes={state.totalAttempts}
-          elapsedMs={state.startTime ? Date.now() - state.startTime : 0}
-          lessonId={state.lessonId}
-          onRetry={restartGame}
-          onNext={() => { restartGame() }}
-          answeredNotes={answeredNotes}
-          responseTimes={state.responseTimes}
-        />
-)}
-          <div id="game-content" className="max-w-2xl mx-auto px-3 pt-2 pb-2 sm:pt-4 sm:pb-4 lg:pt-4 lg:pb-1 relative z-10">
-          <div className="flex items-center justify-between mb-2 lg:mb-0">
-          <h1 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
-            Note Dojo
-          </h1>
-          <div className="flex items-center gap-1 rounded-xl bg-accent/30 border border-border p-1">
-              <button
-                onClick={() => setMuted(!state.isMuted)}
-                className="flex flex-col items-center p-2 rounded-lg hover:bg-accent transition-all cursor-pointer"
-                aria-label={state.isMuted ? 'Activar sonido' : 'Silenciar sonido'}
-              >
-                {!state.isMuted ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                  </svg>
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
-                  </svg>
-                )}
-                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground max-sm:hidden">{state.isMuted ? 'Off' : 'On'}</span>
-              </button>
-              <div className="w-px h-5 bg-border" />
-              <Select value={state.notation} onValueChange={(v: 'american' | 'latino') => setNotation(v)}>
-                <SelectTrigger className="w-28 h-9 border-0 bg-transparent text-foreground hover:bg-accent text-xs rounded-lg" aria-label="Notación musical">
-                  <Music className="w-3.5 h-3.5 mr-1" />
-                  <SelectValue placeholder="A B C D E" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="american">A B C D E</SelectItem>
-                  <SelectItem value="latino">Do Re Mi Fa</SelectItem>
-                </SelectContent>
-              </Select>
-              <div className="w-px h-5 bg-border" />
-              <ThemeToggle theme={state.theme} onToggle={setTheme} className="p-2 rounded-lg hover:bg-accent transition-all cursor-pointer" />
+      {/* TopNavBar */}
+      <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding h-20 bg-sheet-cream/90 backdrop-blur-md shadow-[0_8px_30px_-5px_rgba(61,31,16,0.05)] border-b border-outline-variant/30">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setScreen('dashboard')}
+            className="clay-inner-panel w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
+          >
+            <span className="material-symbols-outlined">arrow_back</span>
+          </button>
+          <span className="font-headline-lg text-headline-lg font-bold text-primary italic">Clavis</span>
+        </div>
+        {/* Stats Bar */}
+        <div className="hidden md:flex items-center gap-5">
+          {[
+            { icon: 'timer', value: state.isTimed ? timerDisplay : '∞', label: 'Tiempo', show: state.isTimed },
+            { icon: 'local_fire_department', value: String(state.streak), label: 'Racha' },
+            { icon: 'stars', value: `${Math.round(accuracy)}%`, label: 'Precisión' },
+            { icon: 'music_note', value: `${state.totalAttempts}/${state.sessionTarget}`, label: 'Notas' },
+          ].filter(s => s.show !== false).map((s) => (
+            <div key={s.label} className="flex items-center gap-2 text-on-surface-variant">
+              <span className="material-symbols-outlined text-sm">{s.icon}</span>
+              <span className="font-label-caps text-[10px] uppercase tracking-widest text-outline">{s.label}</span>
+              <span className="font-title-md text-primary">{s.value}</span>
             </div>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => restartGame()}
-                className="flex flex-col items-center p-2 rounded-lg hover:bg-accent transition-all cursor-pointer"
-                aria-label="Reiniciar"
-                title="Reiniciar (R)"
-              >
-                <RotateCcw className="w-4 h-4" />
-                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground max-sm:hidden">Reiniciar</span>
-              </button>
-              <div className="w-px h-5 bg-border" />
-              <button
-                onClick={() => setIsPaused(p => !p)}
-                className="flex flex-col items-center p-2 rounded-lg hover:bg-accent transition-all cursor-pointer"
-                aria-label={isPaused ? 'Reanudar' : 'Pausar'}
-                title={isPaused ? 'Reanudar (P)' : 'Pausar (P)'}
-              >
-                {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
-                <span className="text-[9px] leading-none mt-0.5 text-muted-foreground max-sm:hidden">{isPaused ? 'Play' : 'Pausa'}</span>
-              </button>
-              <div className="w-px h-5 bg-border" />
-              <UserMenu syncState={syncState} onDeleteAccount={handleDeleteAccount} />
+          ))}
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setMuted(!state.isMuted)}
+            className="text-on-surface-variant hover:text-primary transition-colors"
+          >
+            <span className="material-symbols-outlined">{state.isMuted ? 'volume_off' : 'volume_up'}</span>
+          </button>
+          <button
+            onClick={() => restartGame()}
+            className="text-on-surface-variant hover:text-primary transition-colors"
+          >
+            <span className="material-symbols-outlined">history</span>
+          </button>
+          <ThemeToggle theme={state.theme} onToggle={setTheme} className="text-on-surface-variant hover:text-primary transition-colors" />
+          <div className="w-px h-5 bg-outline-variant/50 mx-1" />
+          <UserMenu syncState={syncState} onDeleteAccount={handleDeleteAccount} />
+          <span
+            className={`inline-block w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500' : 'bg-red-400'}`}
+            title={midiConnected ? 'MIDI: Conectado' : 'MIDI: Sin conexión'}
+          />
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="flex-1 w-full max-w-[1200px] mx-auto px-6 pt-24 pb-32 flex flex-col items-center">
+
+        {/* Conductor's Stand */}
+        <div className="perspective-stage w-full max-w-3xl mb-8">
+          <div className="tilted-stand wood-texture rounded-t-3xl rounded-b-xl p-6 md:p-10 border-t-8 border-r-4 border-l-4 border-b-8 border-mahogany-dark/80 relative">
+            <div className={`absolute inset-0 rounded-3xl transition-opacity duration-300 pointer-events-none mix-blend-overlay ${staffFlash === 'correct' ? 'opacity-100' : staffFlash === 'wrong' ? 'opacity-100' : 'opacity-0'}`} style={{ background: staffFlash === 'correct' ? 'radial-gradient(circle, rgba(34,197,94,0.2) 0%, transparent 70%)' : 'radial-gradient(circle, rgba(168,32,36,0.2) 0%, transparent 70%)' }} />
+            <div className={`clay-surface rounded-xl p-4 sm:p-6 relative mx-auto w-full max-w-xl flex flex-col items-center justify-center min-h-[180px] transition-colors duration-300 ${staffClass}`}>
+              <div className="mt-2 w-full">
+                <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} lastCorrectNote={state.lastCorrectNote} notation={state.notation} />
+              </div>
             </div>
-            <span
-              className={`inline-block w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500' : 'bg-red-400'}`}
-              title={midiConnected ? 'MIDI: Conectado' : 'MIDI: Sin conexión'}
-              role="img"
-              aria-label={midiConnected ? 'MIDI conectado' : 'MIDI sin conexión'}
-            />
+            <div className="absolute bottom-0 left-0 w-full h-6 bg-mahogany-dark/90 rounded-b-xl border-t border-brass-highlight/20 shadow-[0_-5px_15px_rgba(0,0,0,0.5)]" />
           </div>
         </div>
 
-        {state.phase !== 'idle' && (
-          <div className="bg-card rounded-xl border border-border shadow-sm mb-2 lg:mb-3 overflow-hidden">
-            <div className="px-3 py-1 lg:py-0.5 border-b border-border/50">
-              <ProgressBar current={state.totalAttempts} total={state.sessionTarget} label="Progreso" />
-            </div>
-            <div className="flex items-center divide-x divide-border/50 text-xs sm:text-sm">
-              <div className="flex items-center gap-2 px-3 py-2 lg:py-1.5 flex-1 justify-center">
-                <StreakBadge streak={state.streak} />
-              </div>
-              <div className="px-3 py-2 lg:py-1.5 flex-1 text-center font-semibold">
-                <ScoreDisplay accuracy={accuracy} totalAttempts={state.totalAttempts} timerDisplay={state.isTimed ? timerDisplay : undefined} isTimed={state.isTimed} />
-              </div>
-              <div className="px-3 py-2 lg:py-1.5 flex-1 text-center">
-                <span className="text-muted-foreground">Intentos </span>
-                <span className="text-destructive font-bold">{state.totalAttempts}</span>
-              </div>
-              {dailyStreak > 1 && (
-                <div className="px-3 py-2 lg:py-1.5 flex-1 text-center">
-                  <span className="text-xs">{'\uD83D\uDD25'} {dailyStreak}d</span>
-                </div>
-              )}
-            </div>
+        {/* Feedback */}
+        <div className="w-full max-w-3xl px-4">
+          <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} errorType={state.lastErrorType} notation={state.notation} />
+        </div>
+
+        {/* Progress bar */}
+        <div className="w-full max-w-3xl mt-6">
+          <div className="flex justify-between items-center mb-2 px-2">
+            <span className="font-label-caps text-[10px] uppercase tracking-widest text-outline font-bold">Progreso</span>
+            <span className="font-label-caps text-[10px] text-outline">{state.totalAttempts}/{state.sessionTarget}</span>
           </div>
-        )}
-
-        {state.phase !== 'idle' && (
-        <div className="game-layout flex flex-col">
-          <div className="game-layout-staff">
-            <div className={`bg-card rounded-2xl border border-border p-3 sm:p-4 mb-3 lg:p-1.5 lg:mb-3 transition-colors duration-300 ${staffClass}`}>
-                <Toolbar
-                  lessonId={state.lessonId}
-                  showNoteName={state.showNoteName}
-                  isTimed={state.isTimed}
-                  onLessonChange={setLesson}
-                  onShowNoteNameChange={setShowNoteName}
-                  onTimedChange={setTimed}
-                />
-                <div className="mt-2 lg:mt-0.5">
-                  <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} lastCorrectNote={state.lastCorrectNote} notation={state.notation} />
-                </div>
-              </div>
-            </div>
-
-          <div className="game-layout-keyboard">
-            <div className="bg-card rounded-2xl border border-border p-3 mb-3 lg:p-1.5 lg:mb-2 transition-colors duration-300">
-              <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} startMidi={keyboardStart} />
-            </div>
+          <div className="h-3 rounded-full clay-progress-track overflow-hidden">
+            <div className="h-full rounded-full transition-all duration-500 ease-out clay-progress-fill" style={{ width: `${Math.min((state.totalAttempts / state.sessionTarget) * 100, 100)}%` }} />
           </div>
         </div>
-        )}
 
-        {state.phase === 'idle' ? (
-          <div className="text-center animate-slide-up">
-            <ProgressChart />
-            <div className="flex justify-center gap-3 mb-4 lg:mb-1">
-              {[5, 10, 20].map(n => (
-                <button key={n}
-                  className={`px-4 py-2 rounded-xl font-semibold transition-all cursor-pointer border-2 btn-3d text-sm ${
-                    state.sessionTarget === n
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'bg-card text-muted-foreground border-border hover:text-foreground hover:border-primary/50'
-                  }`}
-                  onClick={() => { markToday(); startGame(n) }}
-                >
-                  {n} notas
-                </button>
-              ))}
-            </div>
-            <button
-              className="px-12 py-4 text-lg font-bold rounded-2xl bg-primary text-primary-foreground hover:opacity-90 active:opacity-80 transition-all duration-150 cursor-pointer border-none btn-3d"
-              onClick={() => { markToday(); startGame() }}
-            >
-              Iniciar Juego
-            </button>
-          </div>
-        ) : (
-          <div className="max-sm:px-4">
-            <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} errorType={state.lastErrorType} notation={state.notation} />
-          </div>
-        )}
+        {/* Virtual Keyboard */}
+        <div className="w-full max-w-3xl bg-surface-variant/50 p-4 rounded-3xl shadow-inner border border-outline-variant/40 mt-8">
+          <div className="font-label-caps text-[10px] text-center text-outline uppercase tracking-widest font-bold mb-4">Select the matching key</div>
+          <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} startMidi={keyboardStart} />
+        </div>
+      </main>
 
-        {state.phase === 'feedback' && (
-          <div className="text-center mt-3 lg:mt-0">
-            <button
-              className="px-8 py-3 text-base font-semibold rounded-xl border-2 bg-primary/10 border-primary text-primary hover:bg-primary/20 transition-all duration-150 cursor-pointer btn-3d"
-              onClick={() => { setHighlightKey(null); if (state.lastAnswerCorrect === false && state.currentNote) playNote(state.currentNote.midi); nextNote() }}
-            >
-              Siguiente Nota &rarr;
-            </button>
-          </div>
-        )}
-
+      {/* Pause Overlay */}
       {isPaused && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
           <button
             onClick={() => setIsPaused(false)}
-            className="p-6 rounded-full bg-primary text-primary-foreground shadow-lg hover:opacity-90 transition-all cursor-pointer"
+            className="clay-btn-primary p-6 rounded-full shadow-lg cursor-pointer"
             aria-label="Reanudar"
           >
-            <Play className="w-10 h-10" />
+            <span className="material-symbols-outlined text-brass-highlight" style={{ fontSize: '40px' }}>play_arrow</span>
           </button>
         </div>
       )}
+
+      {/* Level Complete → Results screen */}
+      {state.phase === 'levelComplete' && (
+        <ResultadosScreen
+          stats={sessionStats}
+          onDashboard={() => setScreen('dashboard')}
+          onRetry={() => { restartGame(); setScreen('practica') }}
+          onNext={() => { startGame(); setScreen('practica') }}
+        />
+      )}
+
       {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
-      </div>
+    </div>
   )
 }
 

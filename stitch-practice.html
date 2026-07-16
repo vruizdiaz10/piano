@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clavis - Practice Session</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#e9c176",
+                        "primary-container": "#5d2e17",
+                        "secondary": "#775a19",
+                        "on-primary-container": "#d99577",
+                        "on-surface-variant": "#52443e",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#fff8f6",
+                        "background": "#fff8f6",
+                        "on-primary-fixed-variant": "#6b3922",
+                        "surface-tint": "#885037",
+                        "surface-container": "#f8ebe7",
+                        "on-background": "#201a18",
+                        "on-secondary-fixed": "#261900",
+                        "primary-fixed": "#ffdbcc",
+                        "on-tertiary-container": "#7aaeb6",
+                        "velvet-red": "#A82024",
+                        "tertiary": "#002a2f",
+                        "on-surface": "#201a18",
+                        "surface": "#fff8f6",
+                        "on-secondary-container": "#785a1a",
+                        "surface-container-highest": "#ece0dc",
+                        "secondary-fixed": "#ffdea5",
+                        "on-error": "#ffffff",
+                        "brass-highlight": "#E8D09B",
+                        "tertiary-container": "#004249",
+                        "surface-container-low": "#fef1ed",
+                        "outline-variant": "#d7c2ba",
+                        "on-secondary-fixed-variant": "#5d4201",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#ece0dc",
+                        "on-tertiary-fixed": "#001f23",
+                        "on-secondary": "#ffffff",
+                        "primary": "#421904",
+                        "inverse-surface": "#362f2c",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "outline": "#85736d",
+                        "secondary-container": "#fed488",
+                        "mahogany-dark": "#3D1F10",
+                        "on-primary-fixed": "#351000",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#f2e6e1",
+                        "sheet-cream": "#FDFBF7",
+                        "surface-dim": "#e4d8d3",
+                        "inverse-primary": "#feb696",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#9bcfd8",
+                        "tertiary-fixed": "#b6ecf4",
+                        "inverse-on-surface": "#fbeeea",
+                        "primary-fixed-dim": "#feb696",
+                        "on-tertiary-fixed-variant": "#144e55"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "3xl": "1.5rem",
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "stack-lg": "48px",
+                        "gutter": "16px",
+                        "stack-sm": "12px",
+                        "container-padding": "24px",
+                        "stack-md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Hanken Grotesk"],
+                        "body-sm": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["EB Garamond"],
+                        "display-lg": ["EB Garamond"],
+                        "title-md": ["Hanken Grotesk"],
+                        "label-caps": ["Hanken Grotesk"],
+                        "headline-lg": ["EB Garamond"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Claymorphism Utilities */
+        .clay-surface {
+            box-shadow: 
+                0 10px 30px -5px rgba(61, 31, 16, 0.1), /* Outer warm shadow */
+                inset 2px 2px 4px rgba(255, 255, 255, 0.6), /* Top left highlight */
+                inset -2px -2px 6px rgba(0, 0, 0, 0.05); /* Bottom right inner shadow */
+        }
+        
+        .clay-button-primary {
+            box-shadow: 
+                0 8px 20px -4px rgba(61, 31, 16, 0.3),
+                inset 2px 2px 4px rgba(232, 208, 155, 0.4), /* Brass highlight */
+                inset -2px -2px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+        }
+        .clay-button-primary:active {
+            box-shadow: 
+                0 2px 5px rgba(61, 31, 16, 0.3),
+                inset 4px 4px 8px rgba(0, 0, 0, 0.2),
+                inset -2px -2px 4px rgba(232, 208, 155, 0.1);
+            transform: translateY(2px) scale(0.98);
+        }
+
+        .clay-button-secondary {
+            box-shadow: 
+                0 4px 10px -2px rgba(0, 0, 0, 0.05),
+                inset 2px 2px 4px rgba(255, 255, 255, 0.8),
+                inset -2px -2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+        .clay-button-secondary:active, .clay-button-secondary.active {
+            box-shadow: 
+                inset 3px 3px 6px rgba(0, 0, 0, 0.1),
+                inset -2px -2px 4px rgba(255, 255, 255, 0.5);
+            transform: translateY(1px);
+        }
+
+        .piano-key-white {
+            background: linear-gradient(180deg, #FDFBF7 0%, #f4eee1 100%);
+            box-shadow: 
+                0 4px 6px rgba(0,0,0,0.1),
+                inset 1px 1px 2px rgba(255,255,255,0.9),
+                inset -1px -3px 4px rgba(0,0,0,0.05);
+            border: 1px solid #e4d8d3;
+            border-top: none;
+            transition: all 0.1s ease;
+        }
+        .piano-key-white:active {
+            transform: rotateX(2deg) translateY(2px);
+            box-shadow: 
+                0 1px 2px rgba(0,0,0,0.1),
+                inset 1px 1px 2px rgba(0,0,0,0.05),
+                inset -1px -1px 2px rgba(255,255,255,0.2);
+            background: linear-gradient(180deg, #f4eee1 0%, #e9e3d6 100%);
+        }
+
+        .piano-key-black {
+            background: linear-gradient(180deg, #3D1F10 0%, #1a0d07 100%);
+            box-shadow: 
+                0 6px 8px rgba(0,0,0,0.3),
+                inset 1px 1px 2px rgba(255,255,255,0.1),
+                inset -1px -3px 4px rgba(0,0,0,0.4);
+            border-radius: 0 0 6px 6px;
+            transition: all 0.1s ease;
+        }
+        .piano-key-black:active {
+            transform: rotateX(2deg) translateY(2px);
+            box-shadow: 
+                0 2px 3px rgba(0,0,0,0.3),
+                inset 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .wood-texture {
+            background-color: #5d2e17;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%233D1F10' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            box-shadow: 
+                inset 0 20px 40px rgba(0,0,0,0.3),
+                0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .staff-line {
+            height: 2px;
+            background-color: #201a18;
+            width: 100%;
+            margin: 12px 0;
+            opacity: 0.8;
+            border-radius: 1px;
+        }
+
+        .perspective-stage {
+            perspective: 1000px;
+        }
+        
+        .tilted-stand {
+            transform: rotateX(15deg);
+            transform-origin: bottom center;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen font-body-lg overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-on-background border-b border-outline-variant shadow-sm flex justify-between items-center w-full px-container-padding h-16 z-50 sticky top-0">
+<div class="font-headline-lg-mobile md:font-headline-lg font-bold text-mahogany-dark dark:text-primary-fixed italic">
+            Clavis
+        </div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-primary-container transition-colors duration-300 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-primary-container transition-colors duration-300 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="workspace_premium">workspace_premium</span>
+</button>
+<button class="text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-low dark:hover:bg-primary-container transition-colors duration-300 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="max-w-[1200px] mx-auto px-container-padding py-stack-md flex flex-col items-center pb-32">
+<!-- Practice Configuration & Stats Bento Grid -->
+<div class="w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-stack-lg max-w-4xl mx-auto">
+<!-- Session Selection -->
+<div class="clay-surface bg-sheet-cream rounded-2xl p-6 flex flex-col justify-center items-center col-span-1 md:col-span-2 border border-outline-variant/30">
+<h3 class="font-title-md text-mahogany-dark mb-4">Session Length</h3>
+<div class="flex gap-4">
+<button class="clay-button-secondary bg-surface rounded-xl px-6 py-3 font-title-md text-on-surface-variant">5 notas</button>
+<button class="clay-button-secondary active bg-secondary-container text-on-secondary-container rounded-xl px-6 py-3 font-title-md">10 notas</button>
+<button class="clay-button-secondary bg-surface rounded-xl px-6 py-3 font-title-md text-on-surface-variant">20 notas</button>
+</div>
+<div class="mt-6 w-full max-w-xs flex items-center bg-surface-container rounded-full p-1 border border-outline-variant/20">
+<button class="flex-1 flex justify-center items-center py-2 rounded-full bg-sheet-cream shadow-sm text-primary">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="music_note" data-weight="fill">music_note</span> A B C D E
+                    </button>
+<button class="flex-1 flex justify-center items-center py-2 rounded-full text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-sm mr-1" data-icon="dark_mode">dark_mode</span> C D E F G
+                    </button>
+</div>
+</div>
+<!-- Stats Mini-Card -->
+<div class="clay-surface bg-surface-container-low rounded-2xl p-6 flex flex-col justify-between border border-outline-variant/30">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-caps text-on-surface-variant">Daily Streak</span>
+<span class="material-symbols-outlined text-velvet-red" data-icon="local_fire_department" data-weight="fill">local_fire_department</span>
+</div>
+<div class="font-display-lg text-mahogany-dark">12 <span class="font-title-md text-on-surface-variant">days</span></div>
+<div class="mt-4 pt-4 border-t border-outline-variant/30 flex justify-between items-end">
+<div>
+<div class="font-label-caps text-on-surface-variant">Accuracy</div>
+<div class="font-title-md text-secondary">94%</div>
+</div>
+<div>
+<div class="font-label-caps text-on-surface-variant text-right">Score</div>
+<div class="font-title-md text-primary-container text-right">8,420</div>
+</div>
+</div>
+</div>
+</div>
+<!-- The Conductor's Stand (Interactive Stage) -->
+<div class="perspective-stage w-full max-w-3xl mb-stack-lg">
+<div class="tilted-stand wood-texture rounded-t-3xl rounded-b-xl p-8 md:p-12 border-t-8 border-r-4 border-l-4 border-b-8 border-mahogany-dark/80 relative">
+<!-- Feedback Glow (Hidden by default, can be toggled via JS) -->
+<div class="absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-300 pointer-events-none mix-blend-overlay" id="feedback-glow" style="background: radial-gradient(circle, rgba(168,32,36,0.2) 0%, rgba(253,251,247,0) 70%);"></div>
+<!-- Sheet Music Card (Claymorphism) -->
+<div class="clay-surface bg-sheet-cream rounded-xl p-8 relative mx-auto w-full max-w-xl flex flex-col items-center justify-center min-h-[250px] border border-brass-highlight/30">
+<!-- Clef and Staff -->
+<div class="w-full flex items-center justify-center relative my-8 px-4">
+<!-- G Clef Icon (simplified representation) -->
+<div class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 text-mahogany-dark opacity-90 z-10">
+<span class="material-symbols-outlined text-6xl" data-icon="music_note" style="font-size: 80px;">music_note</span>
+</div>
+<!-- The Staff Lines -->
+<div class="w-full flex flex-col justify-center items-center ml-12">
+<div class="staff-line"></div>
+<div class="staff-line"></div>
+<!-- Note on middle line -->
+<div class="relative w-full h-0 flex justify-center items-center">
+<div class="w-10 h-8 bg-mahogany-dark rounded-[50%] absolute transform -rotate-12 shadow-sm border border-black/20" style="top: -4px;"></div>
+<div class="w-1 h-20 bg-mahogany-dark absolute top-[0px] right-[calc(50%-18px)] rounded-t-sm shadow-sm"></div>
+</div>
+<div class="staff-line"></div>
+<div class="staff-line"></div>
+<div class="staff-line"></div>
+</div>
+</div>
+<!-- Hint / Note Name (Hidden normally, shown on error) -->
+<div class="mt-4 font-title-md text-velvet-red opacity-0 transition-opacity" id="hint-text">
+                        Try Again - That's a 'B'
+                    </div>
+</div>
+<!-- Ledge of the stand -->
+<div class="absolute bottom-0 left-0 w-full h-6 bg-mahogany-dark/90 rounded-b-xl border-t border-brass-highlight/20 shadow-[0_-5px_15px_rgba(0,0,0,0.5)]"></div>
+</div>
+</div>
+<!-- Start Button -->
+<div class="mb-stack-lg">
+<button class="clay-button-primary bg-primary text-on-primary font-title-md rounded-2xl px-12 py-4 flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="play_arrow" data-weight="fill">play_arrow</span>
+                Iniciar Juego
+            </button>
+</div>
+<!-- Virtual Keyboard Stage -->
+<div class="w-full max-w-3xl bg-surface-container-highest p-4 rounded-3xl shadow-inner border border-outline-variant/40 mt-8">
+<div class="font-label-caps text-center text-on-surface-variant mb-4">Select the matching key</div>
+<!-- Keyboard Layout -->
+<div class="relative flex justify-center h-48 md:h-64 px-2">
+<!-- White Keys -->
+<div class="flex h-full w-full max-w-2xl">
+<button class="piano-key-white flex-1 rounded-bl-xl h-full relative z-0"></button>
+<button class="piano-key-white flex-1 h-full relative z-0"></button>
+<button class="piano-key-white flex-1 h-full relative z-0"></button>
+<button class="piano-key-white flex-1 h-full relative z-0"></button>
+<button class="piano-key-white flex-1 h-full relative z-0"></button>
+<button class="piano-key-white flex-1 h-full relative z-0"></button>
+<button class="piano-key-white flex-1 rounded-br-xl h-full relative z-0"></button>
+</div>
+<!-- Black Keys (Overlaid) -->
+<div class="absolute top-0 left-0 w-full h-[60%] flex justify-center pointer-events-none px-2 max-w-2xl mx-auto" style="left: 50%; transform: translateX(-50%);">
+<div class="flex w-full relative">
+<!-- Spacer for C -->
+<div class="flex-1"></div>
+<!-- C# -->
+<button class="piano-key-black w-[8%] h-full absolute z-10 pointer-events-auto" style="left: 10.3%;"></button>
+<!-- D# -->
+<button class="piano-key-black w-[8%] h-full absolute z-10 pointer-events-auto" style="left: 24.6%;"></button>
+<!-- Spacer for E/F gap -->
+<!-- F# -->
+<button class="piano-key-black w-[8%] h-full absolute z-10 pointer-events-auto" style="left: 53.1%;"></button>
+<!-- G# -->
+<button class="piano-key-black w-[8%] h-full absolute z-10 pointer-events-auto" style="left: 67.4%;"></button>
+<!-- A# -->
+<button class="piano-key-black w-[8%] h-full absolute z-10 pointer-events-auto" style="left: 81.7%;"></button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Visible only on mobile/md:hidden) -->
+<nav class="md:hidden fixed bottom-0 w-full rounded-t-xl z-50 bg-sheet-cream dark:bg-mahogany-dark shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.1)] flex justify-around items-center px-4 pb-4 pt-2 h-20 border-none">
+<button class="flex flex-col items-center justify-center bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-xl px-4 py-1 shadow-[inset_2px_2px_4px_rgba(255,255,255,0.4),inset_-2px_-2px_4px_rgba(0,0,0,0.1)] transition-transform duration-100 ease-in-out scale-90">
+<span class="material-symbols-outlined" data-icon="piano">piano</span>
+<span class="font-label-caps mt-1">Practice</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="school">school</span>
+<span class="font-label-caps mt-1">Lessons</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="local_fire_department">local_fire_department</span>
+<span class="font-label-caps mt-1">Streaks</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline p-2 hover:scale-105 transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-caps mt-1">Settings</span>
+</button>
+</nav>
+</body></html>

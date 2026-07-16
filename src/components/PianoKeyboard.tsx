@@ -161,7 +161,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
               key={midi}
               type="button"
               className={cn(
-                'h-36 lg:h-[100px] border border-[var(--gold-dim)] rounded-b-[4px] bg-gradient-to-b from-white to-[var(--ivory)] cursor-pointer flex flex-col justify-end items-center pb-1 text-xs text-muted-foreground transition-colors duration-100 hover:bg-gradient-to-b hover:from-white hover:to-[var(--gold-light)]/10 active:bg-primary/10 key-press',
+                'h-36 lg:h-[100px] piano-key-white cursor-pointer flex flex-col justify-end items-center pb-1 text-xs text-muted-foreground transition-colors duration-100',
                 isHighlighted && '!bg-gradient-to-b !from-primary !to-primary/80 !text-white',
                 isCorrect && '!bg-success animate-key-correct',
                 isWrong && 'animate-pulse-glow',
@@ -190,7 +190,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
               <button
                 type="button"
                 className={cn(
-                  'border border-[var(--ebony)] rounded-b-[4px] bg-gradient-to-b from-[var(--ebony)] to-black cursor-pointer transition-colors duration-100 hover:bg-foreground/60 key-press-black',
+                  'piano-key-black cursor-pointer transition-colors duration-100',
                   isHighlighted && '!bg-accent',
                   isCorrect && '!bg-success animate-key-correct',
                   isWrong && 'animate-pulse-glow',

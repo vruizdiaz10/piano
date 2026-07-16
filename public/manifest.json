@@ -1,6 +1,6 @@
 {
-  "name": "Note Dojo",
-  "short_name": "Note Dojo",
+  "name": "Clavis",
+  "short_name": "Clavis",
   "description": "Aprende a leer partituras a primera vista",
   "start_url": "/",
   "display": "standalone",

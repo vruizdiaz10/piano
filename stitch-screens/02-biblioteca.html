@@ -1,0 +1,359 @@
+<!DOCTYPE html><html lang="es" class="light" style=""><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca de Lecciones - Clavis</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;600;700;800&amp;family=Hanken+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#ffdbcc",
+                        "inverse-primary": "#feb696",
+                        "background": "#fff8f6",
+                        "outline": "#85736d",
+                        "on-secondary-fixed-variant": "#5d4201",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#885037",
+                        "surface-bright": "#fff8f6",
+                        "inverse-surface": "#362f2c",
+                        "primary-container": "#5d2e17",
+                        "surface-container-high": "#f2e6e1",
+                        "secondary": "#775a19",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#261900",
+                        "inverse-on-surface": "#fbeeea",
+                        "on-background": "#201a18",
+                        "sheet-cream": "#FDFBF7",
+                        "on-tertiary-container": "#7aaeb6",
+                        "surface": "#fff8f6",
+                        "on-surface-variant": "#52443e",
+                        "tertiary-container": "#004249",
+                        "tertiary-fixed": "#b6ecf4",
+                        "tertiary-fixed-dim": "#9bcfd8",
+                        "secondary-fixed": "#ffdea5",
+                        "surface-container": "#f8ebe7",
+                        "tertiary": "#002a2f",
+                        "primary-fixed-dim": "#feb696",
+                        "secondary-fixed-dim": "#e9c176",
+                        "secondary-container": "#fed488",
+                        "outline-variant": "#d7c2ba",
+                        "brass-highlight": "#E8D09B",
+                        "mahogany-dark": "#3D1F10",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#785a1a",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#6b3922",
+                        "on-tertiary-fixed": "#001f23",
+                        "surface-variant": "#ece0dc",
+                        "on-surface": "#201a18",
+                        "surface-dim": "#e4d8d3",
+                        "surface-container-low": "#fef1ed",
+                        "on-primary-container": "#d99577",
+                        "primary": "#421904",
+                        "on-tertiary-fixed-variant": "#144e55",
+                        "on-primary-fixed": "#351000",
+                        "velvet-red": "#A82024",
+                        "surface-container-highest": "#ece0dc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "stack-md": "24px",
+                        "stack-lg": "48px",
+                        "unit": "8px",
+                        "stack-sm": "12px",
+                        "container-padding": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["EB Garamond", "serif"],
+                        "title-md": ["Hanken Grotesk", "sans-serif"],
+                        "label-caps": ["Hanken Grotesk", "sans-serif"],
+                        "body-sm": ["Hanken Grotesk", "sans-serif"],
+                        "body-lg": ["Hanken Grotesk", "sans-serif"],
+                        "headline-lg-mobile": ["EB Garamond", "serif"],
+                        "headline-lg": ["EB Garamond", "serif"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "34px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .clay-card {
+            background-color: #FDFBF7;
+            box-shadow: 
+                -10px -10px 20px rgba(255, 255, 255, 0.8),
+                10px 10px 20px rgba(0, 0, 0, 0.05),
+                inset 2px 2px 4px rgba(255, 255, 255, 0.5),
+                inset -2px -2px 4px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(232, 208, 155, 0.3);
+            border-radius: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .clay-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                -12px -12px 24px rgba(255, 255, 255, 0.9),
+                12px 12px 24px rgba(0, 0, 0, 0.06),
+                inset 2px 2px 4px rgba(255, 255, 255, 0.5),
+                inset -2px -2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .clay-btn-primary {
+            background-color: #3D1F10;
+            color: #ffffff;
+            box-shadow: 
+                -5px -5px 10px rgba(255, 255, 255, 0.5),
+                5px 5px 10px rgba(0, 0, 0, 0.2),
+                inset 1px 1px 2px rgba(232, 208, 155, 0.5),
+                inset -1px -1px 2px rgba(0, 0, 0, 0.5);
+            border-radius: 9999px;
+            transition: all 0.15s ease;
+        }
+
+        .clay-btn-primary:active {
+            transform: scale(0.98);
+            box-shadow: 
+                inset 3px 3px 6px rgba(0, 0, 0, 0.3),
+                inset -2px -2px 4px rgba(232, 208, 155, 0.2);
+        }
+
+        .clay-progress-track {
+            background-color: #f2e6e1;
+            box-shadow: inset 2px 2px 4px rgba(0,0,0,0.1), inset -2px -2px 4px rgba(255,255,255,0.7);
+            border-radius: 9999px;
+        }
+
+        .clay-progress-fill {
+            background-color: #A82024;
+            box-shadow: inset 1px 1px 3px rgba(255,255,255,0.4), inset -1px -1px 3px rgba(0,0,0,0.3);
+            border-radius: 9999px;
+        }
+
+        .clay-icon-bubble {
+            background-color: #FDFBF7;
+            box-shadow: 
+                -5px -5px 10px rgba(255, 255, 255, 0.8),
+                5px 5px 10px rgba(0, 0, 0, 0.08),
+                inset 2px 2px 4px rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+        }
+
+        .clay-icon-bubble.locked {
+            background-color: #ece0dc;
+            box-shadow: 
+                -3px -3px 6px rgba(255, 255, 255, 0.5),
+                3px 3px 6px rgba(0, 0, 0, 0.05),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.3);
+            color: #85736d;
+        }
+
+        .path-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 100%;
+            background-color: #E8D09B;
+            opacity: 0.5;
+            z-index: 0;
+            border-radius: 4px;
+        }
+        
+        .path-node-container {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-lg min-h-screen flex flex-col relative overflow-x-hidden min-h-screen">
+
+    <!-- Background Illustration -->
+    <div class="fixed inset-0 z-[-1] pointer-events-none opacity-20 bg-cover bg-center" style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCHQzC4YiDrRMIlV3txJI4165Dw_LOif-asjppBY49T06Uu7e004mz89pIoJ52ispDA2xR_C0KsG9JokcPSS9kyip1Rweps7ZTSdJUo4v9MM1eldapm1CnEvcqBf9it2F6A2UdyAw9VS0ueKUBYH84TwnEhQ2eiTiEHGr58u7MLihF31Yxl29JukW3J9ynZrBTMmKvPczRT5uNsgquP6sA0rrMxRZVng8mCWkR8GCyiBJGSIP8eNyZLYHsOFbXU_2BRGkzC0EUGODDQ&quot;);"></div>
+    <div class="fixed inset-0 z-[-1] bg-background/80 backdrop-blur-sm pointer-events-none"></div>
+
+    <!-- TopNavBar -->
+    <header class="bg-background dark:bg-background text-primary dark:text-primary-fixed font-display-lg text-display-lg font-headline-lg text-headline-lg sticky top-0 z-50 bg-sheet-cream dark:bg-surface-container shadow-[0_20px_20px_-5px_rgba(0,0,0,0.05)] shadow-[inset_4px_4px_8px_rgba(255,255,255,0.8),inset_-4px_-4px_8px_rgba(0,0,0,0.05)]">
+        <div class="flex justify-between items-center px-container-padding py-4 w-full max-w-7xl mx-auto">
+            <div class="font-display-lg text-display-lg font-semibold text-primary dark:text-primary-fixed">
+                Clavis
+            </div>
+            
+            <nav class="hidden md:flex gap-8"><a class="text-on-surface-variant dark:text-outline font-medium hover:text-primary dark:hover:text-primary-fixed transition-transform duration-200 hover:scale-105 active:scale-95 transition-all duration-150" href="{{DATA:SCREEN:SCREEN_35}}">Inicio</a><a href="{{DATA:SCREEN:SCREEN_8}}" class="text-on-surface-variant dark:text-outline font-medium hover:text-primary dark:hover:text-primary-fixed transition-transform duration-200 hover:scale-105 active:scale-95 transition-all duration-150">Perfil</a><a class="text-primary dark:text-primary-fixed border-b-2 border-brass-highlight pb-1 font-bold hover:text-primary dark:hover:text-primary-fixed transition-transform duration-200 hover:scale-105 active:scale-95 transition-all duration-150" href="#">Biblioteca</a></nav>
+
+            <div class="flex items-center gap-4">
+                <button class="text-primary hover:text-brass-highlight transition-colors p-2 rounded-full hover:bg-surface-variant">
+                    <span class="material-symbols-outlined" style="font-size: 28px;">account_circle</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Canvas -->
+    <main class="flex-grow w-full max-w-7xl mx-auto px-container-padding py-stack-lg flex flex-col items-center">
+        
+        <div class="text-center mb-stack-lg max-w-2xl">
+            <h1 class="font-display-lg text-display-lg text-primary mb-stack-sm drop-shadow-sm">Biblioteca de Lecciones</h1>
+            <p class="font-body-lg text-on-surface-variant">Tu camino hacia el dominio musical. Completa las lecciones paso a paso para desbloquear nuevos conceptos y refinar tu técnica.</p>
+        </div>
+
+        <!-- Learning Path -->
+        <div class="relative w-full max-w-3xl flex flex-col items-center gap-16 py-8">
+            <!-- Connecting Line -->
+            <div class="path-line"></div>
+
+            <!-- Category: Fundamentos -->
+            <div class="w-full text-center z-10 mb-4 bg-background/90 py-2 rounded-xl border border-brass-highlight/30 clay-card max-w-sm mx-auto">
+                <h2 class="font-label-caps text-label-caps text-secondary uppercase tracking-widest">Fundamentos</h2>
+            </div>
+
+            <!-- Node 1: Completed -->
+            <div class="path-node-container w-full flex justify-center group">
+                <div class="clay-card p-6 w-full md:w-3/4 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left relative">
+                    <!-- Status Indicator Line to central path (visual only, for layout) -->
+                    <div class="hidden sm:block absolute top-1/2 left-0 w-8 h-1 bg-brass-highlight/50 transform -translate-x-full -translate-y-1/2 rounded-full"></div>
+
+                    <div class="clay-icon-bubble text-velvet-red shrink-0">
+                        <span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1; font-size: 32px;">check_circle</span>
+                    </div>
+                    
+                    <div class="flex-grow">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                            <h3 class="font-headline-lg-mobile md:font-headline-lg text-primary leading-tight">Las Líneas</h3>
+                            <span class="inline-block px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full font-label-caps text-label-caps self-center sm:self-start">Completado</span>
+                        </div>
+                        <p class="text-body-sm text-on-surface-variant mb-4">Introducción a las cinco líneas del pentagrama y su significado.</p>
+                        <button class="font-title-md text-title-md text-primary font-medium hover:text-velvet-red transition-colors flex items-center justify-center sm:justify-start gap-1" onclick="window.location.href='{{DATA:SCREEN:SCREEN_11}}'">
+                            <span class="material-symbols-outlined text-sm">replay</span> Repasar Lección
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node 2: Completed -->
+            <div class="path-node-container w-full flex justify-center">
+                <div class="clay-card p-6 w-full md:w-3/4 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left relative ml-0 sm:ml-12">
+                     <div class="hidden sm:block absolute top-1/2 -left-12 w-12 h-1 bg-brass-highlight/50 transform -translate-y-1/2 rounded-full"></div>
+                    <div class="clay-icon-bubble text-velvet-red shrink-0">
+                        <span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1; font-size: 32px;">check_circle</span>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                            <h3 class="font-headline-lg-mobile md:font-headline-lg text-primary leading-tight">Los Espacios</h3>
+                            <span class="inline-block px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full font-label-caps text-label-caps self-center sm:self-start">Completado</span>
+                        </div>
+                        <p class="text-body-sm text-on-surface-variant mb-4">Descubre cómo los espacios entre líneas albergan nuevas notas.</p>
+                        <button class="font-title-md text-title-md text-primary font-medium hover:text-velvet-red transition-colors flex items-center justify-center sm:justify-start gap-1" onclick="window.location.href='{{DATA:SCREEN:SCREEN_11}}'">
+                            <span class="material-symbols-outlined text-sm">replay</span> Repasar Lección
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Node 3: In Progress (Active) -->
+            <div class="path-node-container w-full flex justify-center transform scale-105 z-20 my-4">
+                <div class="clay-card p-8 w-full md:w-5/6 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left border-2 border-brass-highlight/50 shadow-[0_0_30px_rgba(232,208,155,0.3)]">
+                    <div class="clay-icon-bubble text-primary shrink-0 scale-110 shadow-[inset_2px_2px_4px_rgba(255,255,255,0.8),inset_-2px_-2px_4px_rgba(0,0,0,0.1)]">
+                        <span class="material-symbols-outlined" style="font-size: 36px;">music_note</span>
+                    </div>
+                    <div class="flex-grow w-full">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                            <h3 class="font-headline-lg-mobile md:font-headline-lg text-primary leading-tight">Fluidez Mixta</h3>
+                            <span class="inline-block px-3 py-1 bg-primary-container text-on-primary-container rounded-full font-label-caps text-label-caps self-center sm:self-start">En Progreso</span>
+                        </div>
+                        <p class="text-body-lg text-on-surface-variant mb-6">Combina la lectura de líneas y espacios para leer tu primera partitura completa.</p>
+                        
+                        <!-- Progress Bar -->
+                        <div class="w-full mb-6">
+                            <div class="flex justify-between text-body-sm text-on-surface-variant mb-2">
+                                <span class="">Progreso</span>
+                                <span class="font-bold">60%</span>
+                            </div>
+                            <div class="h-4 clay-progress-track w-full">
+                                <div class="h-full clay-progress-fill w-[60%]"></div>
+                            </div>
+                        </div>
+
+                        <button class="clay-btn-primary w-full sm:w-auto px-8 py-3 font-title-md text-title-md flex items-center justify-center gap-2 mx-auto sm:mx-0" onclick="window.location.href='{{DATA:SCREEN:SCREEN_11}}'">
+                            <span class="">Continuar Lección</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category: Técnica Intermedia -->
+            <div class="w-full text-center z-10 my-4 bg-background/90 py-2 rounded-xl border border-outline-variant/30 clay-card max-w-sm mx-auto opacity-70">
+                <h2 class="font-label-caps text-label-caps text-outline uppercase tracking-widest">Técnica Intermedia</h2>
+            </div>
+
+            <!-- Node 4: Locked -->
+            <div class="path-node-container w-full flex justify-center opacity-75">
+                <div class="clay-card p-6 w-full md:w-3/4 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left relative mr-0 sm:mr-12">
+                     <div class="hidden sm:block absolute top-1/2 -right-12 w-12 h-1 bg-outline-variant/50 transform -translate-y-1/2 rounded-full"></div>
+                    <div class="clay-icon-bubble locked shrink-0">
+                        <span class="material-symbols-outlined" style="font-size: 32px;">lock</span>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                            <h3 class="font-headline-lg-mobile md:font-headline-lg text-on-surface-variant leading-tight">Escalas Mayores</h3>
+                            <span class="inline-block px-3 py-1 bg-surface-variant text-on-surface-variant rounded-full font-label-caps text-label-caps self-center sm:self-start">Bloqueado</span>
+                        </div>
+                        <p class="text-body-sm text-outline mb-0">Comprende la estructura de tonos y semitonos en las escalas mayores.</p>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Node 5: Locked -->
+            <div class="path-node-container w-full flex justify-center opacity-75">
+                <div class="clay-card p-6 w-full md:w-3/4 flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left relative ml-0 sm:ml-8">
+                    <div class="hidden sm:block absolute top-1/2 -left-8 w-8 h-1 bg-outline-variant/50 transform -translate-y-1/2 rounded-full"></div>
+                    <div class="clay-icon-bubble locked shrink-0">
+                        <span class="material-symbols-outlined" style="font-size: 32px;">lock</span>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-2">
+                            <h3 class="font-headline-lg-mobile md:font-headline-lg text-on-surface-variant leading-tight">Acordes Básicos</h3>
+                            <span class="inline-block px-3 py-1 bg-surface-variant text-on-surface-variant rounded-full font-label-caps text-label-caps self-center sm:self-start">Bloqueado</span>
+                        </div>
+                        <p class="text-body-sm text-outline mb-0">Construye tríadas mayores y menores fundamentales.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary dark:bg-mahogany-dark text-on-primary dark:text-primary-fixed font-body-sm text-body-sm full-width bottom-0 shadow-[0_-10px_20px_rgba(0,0,0,0.2)] shadow-[inset_0_2px_4px_rgba(255,255,255,0.1)] mt-auto z-10 relative"><div class="w-full py-stack-md px-container-padding flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto"><div class="font-display-lg text-display-lg text-on-primary">Clavis</div><div class="text-center md:text-left opacity-90">© 1724 Clavis Conservatory of Music. All rights reserved.</div><nav class="flex flex-wrap justify-center gap-6"><a href="#" class="text-on-primary/80 dark:text-primary-fixed/80 hover:text-brass-highlight transition-colors duration-200 opacity-90 hover:opacity-100">Honor Code</a><a href="#" class="text-on-primary/80 dark:text-primary-fixed/80 hover:text-brass-highlight transition-colors duration-200 opacity-90 hover:opacity-100">Terms of Service</a><a href="#" class="text-on-primary/80 dark:text-primary-fixed/80 hover:text-brass-highlight transition-colors duration-200 opacity-90 hover:opacity-100">Support</a></nav></div></footer>
+
+
+
+</body></html>
