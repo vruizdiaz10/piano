@@ -337,6 +337,7 @@ function AppContent() {
       <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
         <DashboardScreen
           onNavigate={handleNavigate}
+          onLogout={handleLogout}
           onStartGame={() => handleStartGame()}
           lessonTypes={LESSONS.map(l => l.name)}
           selectedLesson={selectedLesson}
@@ -376,10 +377,12 @@ function AppContent() {
       <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
         <BibliotecaScreen
           onNavigate={handleNavigate}
+          onLogout={handleLogout}
           onSelectLesson={(id) => setLesson(id)}
           onStartGame={() => handleStartGame()}
-          userName={user?.displayName || 'Pianista'}
+          userName={user?.displayName || user?.email?.split('@')[0] || 'Pianista'}
           userLevel={Math.floor(state.bestStreak / 10) + 1}
+          userAvatar={user?.photoURL || undefined}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
       </div>

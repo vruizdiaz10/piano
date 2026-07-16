@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import type { RankInfo, RoadmapStep } from '../utils/dashboardStats';
 import { weeklyAccuracyPath } from '../utils/dashboardStats';
+import NavUserMenu from '../components/NavUserMenu';
 
 interface DashboardProps {
   onNavigate: (target: string) => void;
+  onLogout: () => void;
   onStartGame: () => void;
   lessonTypes: string[];
   selectedLesson: string;
@@ -35,6 +37,7 @@ const WEEKDAY_LABELS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 
 export default function DashboardScreen({
   onNavigate,
+  onLogout,
   onStartGame,
   lessonTypes,
   selectedLesson,
@@ -101,24 +104,13 @@ export default function DashboardScreen({
           >
             <span className="material-symbols-outlined">settings</span>
           </button>
-          <button
-            onClick={() => onNavigate('perfil')}
-            className="flex items-center gap-2 pl-4 border-l border-outline-variant/50 group"
-          >
-            <div className="text-right hidden sm:block">
-              <p className="font-label-caps text-label-caps text-outline uppercase tracking-widest text-[10px]">Nivel {userLevel}</p>
-              <p className="font-title-md text-title-md text-primary group-hover:text-velvet-red transition-colors">{userName}</p>
-            </div>
-            <div className="h-10 w-10 rounded-full bg-surface-variant overflow-hidden border-2 border-brass-highlight shadow-sm">
-              {userAvatar ? (
-                <img src={userAvatar} alt={`Avatar de ${userName}`} className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center font-title-md text-primary" aria-hidden="true">
-                  {userName.charAt(0)}
-                </div>
-              )}
-            </div>
-          </button>
+          <NavUserMenu
+            userName={userName}
+            userLevel={userLevel}
+            userAvatar={userAvatar}
+            onProfile={() => onNavigate('perfil')}
+            onLogout={onLogout}
+          />
         </div>
       </nav>
 

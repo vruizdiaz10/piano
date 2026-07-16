@@ -1,11 +1,14 @@
 
+import NavUserMenu from '../components/NavUserMenu';
 
 interface BibliotecaScreenProps {
   onNavigate: (target: string) => void;
+  onLogout: () => void;
   onSelectLesson: (lessonId: string) => void;
   onStartGame: () => void;
   userName?: string;
   userLevel?: number;
+  userAvatar?: string;
 }
 
 interface LessonNode {
@@ -31,8 +34,12 @@ const INTERMEDIA: LessonNode[] = [
 
 export default function BibliotecaScreen({
   onNavigate,
+  onLogout,
   onSelectLesson,
   onStartGame,
+  userName = 'Pianista',
+  userLevel = 1,
+  userAvatar,
 }: BibliotecaScreenProps) {
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -61,12 +68,13 @@ export default function BibliotecaScreen({
               </button>
             ))}
           </nav>
-          <button
-            onClick={() => onNavigate('perfil')}
-            className="text-primary hover:text-brass-highlight transition-colors p-2 rounded-full hover:bg-surface-variant"
-          >
-            <span className="material-symbols-outlined" style={{ fontSize: 28 }}>account_circle</span>
-          </button>
+          <NavUserMenu
+            userName={userName}
+            userLevel={userLevel}
+            userAvatar={userAvatar}
+            onProfile={() => onNavigate('perfil')}
+            onLogout={onLogout}
+          />
         </div>
       </header>
 
