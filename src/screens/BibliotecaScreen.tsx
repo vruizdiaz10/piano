@@ -143,7 +143,7 @@ export default function BibliotecaScreen({
           </div>
           <nav className="flex flex-wrap justify-center gap-6">
             {['Honor Code', 'Terms of Service', 'Support'].map((link) => (
-              <a key={link} href="#" className="text-on-primary/80 hover:text-brass-highlight transition-colors duration-200 opacity-90 hover:opacity-100">
+              <a key={link} href="#" className="text-on-primary/80 hover:text-brass-highlight transition-colors duration-200 opacity-90 hover:opacity-100" aria-disabled="true" tabIndex={-1}>
                 {link}
               </a>
             ))}
@@ -199,7 +199,7 @@ function LessonNodeCard({
               ? 'text-primary scale-110 shadow-[inset_2px_2px_4px_rgba(255,255,255,0.8),inset_-2px_-2px_4px_rgba(0,0,0,0.1)]'
               : isCompleted
               ? 'text-velvet-red'
-              : 'locked'
+              : 'opacity-50'
           }`}
         >
           <span
@@ -240,7 +240,7 @@ function LessonNodeCard({
                 <span>Progreso</span>
                 <span className="font-bold">{node.progress}%</span>
               </div>
-              <div className="h-4 clay-progress-track w-full">
+              <div className="h-4 clay-progress-bar w-full">
                 <div className="h-full clay-progress-fill" style={{ width: `${node.progress}%` }} />
               </div>
             </div>

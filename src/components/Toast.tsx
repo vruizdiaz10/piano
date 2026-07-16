@@ -36,6 +36,7 @@ export default function Toast({ message, type = 'warning', onDismiss }: ToastPro
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
       }`}
       role="alert"
+      aria-live="assertive"
     >
       <span className="mr-2">{typeIcons[type]}</span>
       {message}

@@ -63,7 +63,7 @@ export default function PerfilScreen({
         <div className="clay-card p-6 flex flex-col sm:flex-row items-center gap-4">
           <div className="clay-icon-raised w-20 h-20 flex items-center justify-center text-display-lg font-display-lg text-primary">
             {userAvatar ? (
-              <img src={userAvatar} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+              <img src={userAvatar} alt={`Avatar de ${userName}`} className="w-full h-full rounded-full object-cover" />
             ) : (
               userName.charAt(0)
             )}
@@ -117,42 +117,64 @@ export default function PerfilScreen({
           {/* Alphabetical display */}
           <SettingRow label="Visualización: Notas Alfabéticas">
             <button
+              role="switch"
+              aria-checked={settings.showAlphabetical}
+              aria-label="Notas Alfabéticas"
               onClick={() => updateSetting('showAlphabetical', !settings.showAlphabetical)}
               className={`clay-switch ${settings.showAlphabetical ? 'on' : ''}`}
-            />
+            >
+              <span className="clay-switch-knob" />
+            </button>
           </SettingRow>
 
           {/* Correct key flash */}
           <SettingRow label="Tecla Correcta: Flash de Éxito">
             <button
+              role="switch"
+              aria-checked={settings.correctKeyFlash}
+              aria-label="Flash de Éxito en tecla correcta"
               onClick={() => updateSetting('correctKeyFlash', !settings.correctKeyFlash)}
               className={`clay-switch ${settings.correctKeyFlash ? 'on' : ''}`}
-            />
+            >
+              <span className="clay-switch-knob" />
+            </button>
           </SettingRow>
 
           {/* Incorrect key flash */}
           <SettingRow label="Tecla Incorrecta: Flash de Error">
             <button
+              role="switch"
+              aria-checked={settings.incorrectKeyFlash}
+              aria-label="Flash de Error en tecla incorrecta"
               onClick={() => updateSetting('incorrectKeyFlash', !settings.incorrectKeyFlash)}
               className={`clay-switch ${settings.incorrectKeyFlash ? 'on' : ''}`}
-            />
+            >
+              <span className="clay-switch-knob" />
+            </button>
           </SettingRow>
 
           {/* Dark Mode */}
           <SettingRow label="Tema: Modo Oscuro">
             <button
+              role="switch"
+              aria-checked={settings.darkMode}
+              aria-label="Modo Oscuro"
               onClick={() => updateSetting('darkMode', !settings.darkMode)}
               className={`clay-switch ${settings.darkMode ? 'on' : ''}`}
-            />
+            >
+              <span className="clay-switch-knob" />
+            </button>
           </SettingRow>
 
           {/* Difficulty */}
           <div>
             <span className="font-title-md text-title-md text-primary block mb-3">Nivel de Dificultad</span>
-            <div className="flex gap-3">
+            <div className="flex gap-3" role="radiogroup" aria-label="Nivel de Dificultad">
               {(['facil', 'normal', 'dificil'] as const).map((d) => (
                 <button
                   key={d}
+                  role="radio"
+                  aria-checked={settings.difficulty === d}
                   onClick={() => updateSetting('difficulty', d)}
                   className={`clay-button-secondary flex-1 py-3 rounded-xl font-title-md text-title-md ${
                     settings.difficulty === d ? 'bg-secondary-container text-on-secondary-container' : ''

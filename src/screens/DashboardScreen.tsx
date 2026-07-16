@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface DashboardProps {
   onNavigate: (target: string) => void;
@@ -41,6 +41,18 @@ export default function DashboardScreen({
   userAvatar,
 }: DashboardProps) {
   const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showDropdown) return
+    const handleClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowDropdown(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [showDropdown])
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -82,9 +94,9 @@ export default function DashboardScreen({
             </div>
             <div className="h-10 w-10 rounded-full bg-surface-variant overflow-hidden border-2 border-brass-highlight shadow-sm">
               {userAvatar ? (
-                <img src={userAvatar} alt="" className="w-full h-full object-cover" />
+                <img src={userAvatar} alt={`Avatar de ${userName}`} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center font-title-md text-primary">
+                <div className="w-full h-full flex items-center justify-center font-title-md text-primary" aria-hidden="true">
                   {userName.charAt(0)}
                 </div>
               )}
@@ -99,7 +111,7 @@ export default function DashboardScreen({
         <div className="lg:col-span-8 flex flex-col gap-10">
           {/* Session Config */}
           <section className="clay-card p-10 md:p-12 relative overflow-hidden">
-            <div className="absolute -right-20 -bottom-20 text-surface-dim/30 select-none pointer-events-none">
+            <div className="absolute -right-20 -bottom-20 text-surface-dim/30 select-none pointer-events-none" aria-hidden="true">
               <span className="material-symbols-outlined" style={{ fontSize: 240 }}>music_note</span>
             </div>
             <div className="relative z-10">
@@ -118,6 +130,7 @@ export default function DashboardScreen({
                   Tipo de Lección
                 </label>
                 <div
+                  ref={dropdownRef}
                   className="clay-input-key flex items-center justify-between p-5 cursor-pointer group relative"
                   onClick={() => setShowDropdown(!showDropdown)}
                 >
@@ -150,8 +163,9 @@ export default function DashboardScreen({
                   <button
                     key={count}
                     onClick={() => onSelectNoteCount(count)}
+                    aria-pressed={noteCount === count}
                     className={`clay-input-key flex flex-col items-center justify-center py-8 ${
-                      noteCount === count ? 'active' : 'text-primary'
+                      noteCount === count ? 'bg-primary-container text-on-primary-container' : 'text-primary'
                     }`}
                   >
                     <span className="font-headline-lg text-headline-lg font-bold mb-2">
@@ -173,15 +187,18 @@ export default function DashboardScreen({
                     <span className="material-symbols-outlined">timer</span>
                   </div>
                   <div>
-                    <h3 className="font-title-md text-base text-primary uppercase tracking-wide">Modo Cronometrado</h3>
+                    <h3 className="font-title-md text-primary uppercase tracking-wide">Modo Cronometrado</h3>
                     <p className="font-body-sm text-body-sm text-outline italic">Corre contra el reloj</p>
                   </div>
                 </div>
                 <button
+                  role="switch"
+                  aria-checked={timedMode}
+                  aria-label="Modo Cronometrado"
                   onClick={onToggleTimed}
                   className={`clay-switch ${timedMode ? 'on' : ''}`}
                 >
-                  <div className="clay-switch-knob" />
+                  <span className="clay-switch-knob" />
                 </button>
               </div>
 
@@ -207,7 +224,10 @@ export default function DashboardScreen({
                   Progreso actual en el conjunto de lecciones
                 </p>
               </div>
-              <button className="clay-input-key px-5 py-3 font-label-caps text-[10px] uppercase text-primary font-bold hover:text-secondary transition-colors flex items-center gap-2">
+              <button
+                onClick={() => onNavigate('biblioteca')}
+                className="clay-input-key px-5 py-3 font-label-caps text-[10px] uppercase text-primary font-bold hover:text-secondary transition-colors flex items-center gap-2"
+              >
                 <span className="material-symbols-outlined text-[16px]">info</span> Detalles
               </button>
             </div>
@@ -252,7 +272,7 @@ export default function DashboardScreen({
                   <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 mb-5 leading-relaxed">
                     Integración de líneas y espacios en tiempo real.
                   </p>
-                  <div className="clay-progress-bar w-full h-3">
+                  <div className="clay-progress-bar w-full h-3" role="progressbar" aria-valuenow={74} aria-valuemin={0} aria-valuemax={100} aria-label="Progreso: 74%">
                     <div className="clay-progress-fill w-[74%]" />
                   </div>
                 </div>
@@ -271,7 +291,7 @@ export default function DashboardScreen({
             <div className="flex-1">
               <p className="font-label-caps text-[10px] uppercase text-outline tracking-widest mb-1">Rango</p>
               <h3 className="font-title-md text-primary uppercase tracking-wide">Mastery Gold</h3>
-              <div className="clay-progress-bar h-2.5 mt-3">
+              <div className="clay-progress-bar h-2.5 mt-3" role="progressbar" aria-valuenow={80} aria-valuemin={0} aria-valuemax={100} aria-label="Rango: 80%">
                 <div className="clay-progress-fill w-[80%]" />
               </div>
             </div>
@@ -368,9 +388,9 @@ export default function DashboardScreen({
           <div className="clay-card-dark p-8 relative overflow-hidden">
             <div className="w-16 h-16 rounded-full border-2 border-brass-highlight overflow-hidden mb-6 shadow-lg">
               {userAvatar ? (
-                <img src={userAvatar} alt="" className="w-full h-full object-cover" />
+                <img src={userAvatar} alt={`Avatar de ${userName}`} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full bg-mahogany-dark flex items-center justify-center text-brass-highlight font-title-md">
+                <div className="w-full h-full bg-mahogany-dark flex items-center justify-center text-brass-highlight font-title-md" aria-hidden="true">
                   {userName.charAt(0)}
                 </div>
               )}

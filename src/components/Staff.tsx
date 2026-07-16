@@ -75,7 +75,7 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
           const x = STAFF_LEFT + 160
           const opacity = 0.15 + (idx / (trail.length || 1)) * 0.35
           return (
-            <g key={entry.id} opacity={opacity} className="animate-ghost-drift text-primary">
+            <g key={entry.id} opacity={opacity} className="animate-ghost-drift text-primary" aria-hidden="true">
               <ellipse cx={x} cy={y} rx={NOTE_RADIUS * 0.6} ry={NOTE_RADIUS * 0.6 * 0.65} fill="currentColor" opacity={0.5} />
             </g>
           )

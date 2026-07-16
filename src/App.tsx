@@ -105,7 +105,7 @@ function AppContent() {
     if (config.showNoteName !== state.showNoteName) setShowNoteName(config.showNoteName)
     if (config.timed !== state.isTimed) setTimed(config.timed)
     if (config.sessionTarget !== state.sessionTarget) startGame(config.sessionTarget)
-  }, [!!user, !!config])
+  }, [config?.notation, config?.theme, config?.showNoteName, config?.timed, config?.sessionTarget, user?.uid])
 
   // Push local config changes to Firestore when logged in
   useEffect(() => {
@@ -132,10 +132,11 @@ function AppContent() {
 
   const { midiConnected } = useMidi(
     useCallback((midi: number) => {
+      if (isPaused) return
       if (state.phase === 'waiting' || (state.phase === 'feedback' && state.recovering)) {
         submitAnswer(midi)
       }
-    }, [state.phase, state.recovering, submitAnswer])
+    }, [state.phase, state.recovering, submitAnswer, isPaused])
   )
 
   useEffect(() => {
@@ -195,10 +196,11 @@ function AppContent() {
         navigator.vibrate?.(100)
         setStaffFlash('wrong')
       }
-      setTimeout(() => setStaffFlash(null), 600)
-    }
-    if (state.phase === 'levelComplete' && !state.isMuted) {
-      playLevelComplete()
+      if (state.phase === 'levelComplete' && !state.isMuted) {
+        playLevelComplete()
+      }
+      const t = setTimeout(() => setStaffFlash(null), 600)
+      return () => clearTimeout(t)
     }
   }, [state.phase])
 
@@ -226,8 +228,9 @@ function AppContent() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement) return
+      if (e.key === 'p' || e.key === 'P') { setIsPaused(p => !p); return }
+      if (isPaused) return
       if (e.key === 'r' || e.key === 'R') restartGame()
-      if (e.key === 'p' || e.key === 'P') setIsPaused(p => !p)
       if (e.key === ' ' && state.phase === 'feedback') {
         e.preventDefault()
         if (state.lastAnswerCorrect === false && state.currentNote) playNote(state.currentNote.midi)
@@ -236,7 +239,7 @@ function AppContent() {
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [state.phase, state.lastAnswerCorrect, state.currentNote, nextNote, restartGame, playNote])
+  }, [state.phase, state.lastAnswerCorrect, state.currentNote, nextNote, restartGame, playNote, isPaused])
 
   // Safety: if phase is waiting/feedback but no note, recover
   useEffect(() => {
@@ -263,6 +266,7 @@ function AppContent() {
     setTimerDisplay(duration)
     if (!state.isTimed || state.phase !== 'waiting') return
     const interval = setInterval(() => {
+      if (isPaused) return
       tickRef.current += 1
       setTimerDisplay(duration - tickRef.current)
       if (tickRef.current >= duration) {
@@ -271,13 +275,14 @@ function AppContent() {
       }
     }, 1000)
     return () => { clearInterval(interval) }
-  }, [state.isTimed, state.phase, state.noteShownAt])
+  }, [state.isTimed, state.phase, state.noteShownAt, isPaused])
 
   const handleKeyboardPlay = useCallback((note: { name: string; octave: number; midi: number }) => {
+    if (isPaused) return
     if (state.phase === 'waiting' || (state.phase === 'feedback' && state.recovering)) {
       submitAnswer(note.midi)
     }
-  }, [state.phase, state.recovering, submitAnswer])
+  }, [state.phase, state.recovering, submitAnswer, isPaused])
 
   const staffClass = staffFlash === 'correct'
     ? 'animate-flash-green'
@@ -427,8 +432,9 @@ function AppContent() {
           <button
             onClick={() => setScreen('dashboard')}
             className="clay-inner-panel w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
+            aria-label="Volver al panel"
           >
-            <span className="material-symbols-outlined">arrow_back</span>
+            <span className="material-symbols-outlined" aria-hidden="true">arrow_back</span>
           </button>
           <span className="font-headline-lg text-headline-lg font-bold text-primary italic">Clavis</span>
         </div>
@@ -451,27 +457,31 @@ function AppContent() {
           <button
             onClick={() => setMuted(!state.isMuted)}
             className="text-on-surface-variant hover:text-primary transition-colors"
+            aria-label={state.isMuted ? 'Activar sonido' : 'Silenciar'}
           >
-            <span className="material-symbols-outlined">{state.isMuted ? 'volume_off' : 'volume_up'}</span>
+            <span className="material-symbols-outlined" aria-hidden="true">{state.isMuted ? 'volume_off' : 'volume_up'}</span>
           </button>
           <button
             onClick={() => restartGame()}
             className="text-on-surface-variant hover:text-primary transition-colors"
+            aria-label="Reiniciar"
           >
-            <span className="material-symbols-outlined">history</span>
+            <span className="material-symbols-outlined" aria-hidden="true">history</span>
           </button>
           <ThemeToggle theme={state.theme} onToggle={setTheme} className="text-on-surface-variant hover:text-primary transition-colors" />
           <div className="w-px h-5 bg-outline-variant/50 mx-1" />
           <UserMenu syncState={syncState} onDeleteAccount={handleDeleteAccount} />
           <span
+            role="status"
+            aria-label={midiConnected ? 'MIDI: Conectado' : 'MIDI: Sin conexión'}
             className={`inline-block w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500' : 'bg-red-400'}`}
-            title={midiConnected ? 'MIDI: Conectado' : 'MIDI: Sin conexión'}
           />
         </div>
       </nav>
 
       {/* Main Content */}
       <main className="flex-1 w-full max-w-[1200px] mx-auto px-6 pt-24 pb-32 flex flex-col items-center">
+        <h1 className="sr-only">Practicar: {selectedLesson}</h1>
 
         {/* Conductor's Stand */}
         <div className="perspective-stage w-full max-w-3xl mb-8">
@@ -497,7 +507,14 @@ function AppContent() {
             <span className="font-label-caps text-[10px] uppercase tracking-widest text-outline font-bold">Progreso</span>
             <span className="font-label-caps text-[10px] text-outline">{state.totalAttempts}/{state.sessionTarget}</span>
           </div>
-          <div className="h-3 rounded-full clay-progress-track overflow-hidden">
+          <div
+            className="h-3 rounded-full clay-progress-bar overflow-hidden"
+            role="progressbar"
+            aria-valuenow={Math.round((state.totalAttempts / state.sessionTarget) * 100)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={`Progreso: ${state.totalAttempts} de ${state.sessionTarget} notas`}
+          >
             <div className="h-full rounded-full transition-all duration-500 ease-out clay-progress-fill" style={{ width: `${Math.min((state.totalAttempts / state.sessionTarget) * 100, 100)}%` }} />
           </div>
         </div>
@@ -511,14 +528,22 @@ function AppContent() {
 
       {/* Pause Overlay */}
       {isPaused && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+        <div
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background/80 backdrop-blur-sm gap-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Pausa"
+          onKeyDown={(e) => { if (e.key === 'Escape') setIsPaused(false) }}
+        >
           <button
             onClick={() => setIsPaused(false)}
             className="clay-btn-primary p-6 rounded-full shadow-lg cursor-pointer"
             aria-label="Reanudar"
+            autoFocus
           >
             <span className="material-symbols-outlined text-brass-highlight" style={{ fontSize: '40px' }}>play_arrow</span>
           </button>
+          <span className="font-title-md text-title-md text-on-surface-variant">Pausado</span>
         </div>
       )}
 
