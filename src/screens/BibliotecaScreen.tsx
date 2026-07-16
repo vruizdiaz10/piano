@@ -61,7 +61,10 @@ export default function BibliotecaScreen({
               </button>
             ))}
           </nav>
-          <button className="text-primary hover:text-brass-highlight transition-colors p-2 rounded-full hover:bg-surface-variant">
+          <button
+            onClick={() => onNavigate('perfil')}
+            className="text-primary hover:text-brass-highlight transition-colors p-2 rounded-full hover:bg-surface-variant"
+          >
             <span className="material-symbols-outlined" style={{ fontSize: 28 }}>account_circle</span>
           </button>
         </div>
@@ -106,6 +109,30 @@ export default function BibliotecaScreen({
           ))}
         </div>
       </main>
+
+      {/* Mobile Bottom Nav */}
+      <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 bg-sheet-cream/95 backdrop-blur-md border-t border-outline-variant/30 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+        <div className="flex justify-around items-center py-2">
+          {[
+            { key: 'dashboard', icon: 'home', label: 'Inicio' },
+            { key: 'biblioteca', icon: 'menu_book', label: 'Librería' },
+            { key: 'perfil', icon: 'person', label: 'Perfil' },
+          ].map((item) => (
+            <button
+              key={item.key}
+              onClick={() => onNavigate(item.key)}
+              className={`flex flex-col items-center gap-1 px-4 py-1 rounded-xl transition-colors ${
+                item.key === 'biblioteca'
+                  ? 'text-primary'
+                  : 'text-on-surface-variant'
+              }`}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 24 }}>{item.icon}</span>
+              <span className="font-label-caps text-[9px] uppercase tracking-wider">{item.label}</span>
+            </button>
+          ))}
+        </div>
+      </nav>
 
       {/* Footer */}
       <footer className="bg-primary text-on-primary font-body-sm text-body-sm w-full bottom-0 shadow-[0_-10px_20px_rgba(0,0,0,0.2),inset_0_2px_4px_rgba(255,255,255,0.1)] mt-auto z-10 relative">

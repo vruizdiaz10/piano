@@ -273,16 +273,6 @@
 }
 
 /* ─── Roadmap Path ─── */
-.path-line {
-  stroke: #d7c2ba;
-  stroke-width: 3;
-  stroke-dasharray: 8 6;
-  fill: none;
-}
-.path-line.completed {
-  stroke: #5d2e17;
-  stroke-dasharray: none;
-}
 .path-node-container {
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -350,6 +340,60 @@
 .key-dim {
   opacity: 0.4;
   filter: grayscale(0.5);
+}
+
+/* ─── Clay Button Primary (alias) ─── */
+.clay-btn-primary {
+  background: #5d2e17;
+  color: #ffffff;
+  box-shadow:
+    -6px -6px 14px 0px rgba(255, 255, 255, 0.4),
+    6px 6px 14px 0px rgba(0, 0, 0, 0.3),
+    inset 2px 2px 4px 0px rgba(255, 255, 255, 0.2),
+    inset -2px -2px 4px 0px rgba(0, 0, 0, 0.3);
+  border-radius: 1rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.clay-btn-primary:hover {
+  transform: scale(1.02);
+  box-shadow:
+    -8px -8px 18px 0px rgba(255, 255, 255, 0.45),
+    8px 8px 18px 0px rgba(0, 0, 0, 0.35),
+    inset 2px 2px 4px 0px rgba(255, 255, 255, 0.25),
+    inset -2px -2px 4px 0px rgba(0, 0, 0, 0.35);
+}
+.clay-btn-primary:active {
+  transform: scale(0.98);
+  box-shadow:
+    inset -4px -4px 8px 0px rgba(255, 255, 255, 0.15),
+    inset 4px 4px 8px 0px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Clay Surface ─── */
+.clay-surface {
+  background: rgba(253, 251, 247, 0.95);
+  box-shadow:
+    inset -4px -4px 8px 0px rgba(255, 255, 255, 0.8),
+    inset 4px 4px 8px 0px rgba(0, 0, 0, 0.06);
+}
+
+/* ─── Path Line (for div-based layout) ─── */
+.path-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #d7c2ba 0px,
+    #d7c2ba 8px,
+    transparent 8px,
+    transparent 14px
+  );
+  transform: translateX(-50%);
+  z-index: 0;
 }
 
 /* ─── Utility Animations ─── */

@@ -69,10 +69,18 @@ function AppContent() {
       const { deleteUserDoc } = await import('./firebase/firestore')
       await deleteUserDoc(user.uid)
       await signOut()
+      setScreen('inicio')
       setToast({ message: 'Datos eliminados correctamente', type: 'success' })
     } catch {
       setToast({ message: 'Error al eliminar datos', type: 'error' })
     }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await signOut()
+      setScreen('inicio')
+    } catch { /* noop */ }
   }
 
   // First-login migration: localStorage → Firestore
@@ -387,6 +395,7 @@ function AppContent() {
             setTheme(s.darkMode ? 'dark' : 'light')
           }}
           onDeleteAccount={handleDeleteAccount}
+          onLogout={handleLogout}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
       </div>

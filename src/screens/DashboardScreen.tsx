@@ -65,16 +65,20 @@ export default function DashboardScreen({
           ))}
         </div>
         <div className="flex items-center gap-4">
-          <button className="text-on-surface-variant hover:text-primary transition-colors">
-            <span className="material-symbols-outlined">volume_up</span>
-          </button>
-          <button className="text-on-surface-variant hover:text-primary transition-colors">
+          <button
+            onClick={() => onNavigate('perfil')}
+            className="text-on-surface-variant hover:text-primary transition-colors"
+            title="Configuración"
+          >
             <span className="material-symbols-outlined">settings</span>
           </button>
-          <div className="flex items-center gap-2 pl-4 border-l border-outline-variant/50">
+          <button
+            onClick={() => onNavigate('perfil')}
+            className="flex items-center gap-2 pl-4 border-l border-outline-variant/50 group"
+          >
             <div className="text-right hidden sm:block">
               <p className="font-label-caps text-label-caps text-outline uppercase tracking-widest text-[10px]">Nivel {userLevel}</p>
-              <p className="font-title-md text-title-md text-primary">{userName}</p>
+              <p className="font-title-md text-title-md text-primary group-hover:text-velvet-red transition-colors">{userName}</p>
             </div>
             <div className="h-10 w-10 rounded-full bg-surface-variant overflow-hidden border-2 border-brass-highlight shadow-sm">
               {userAvatar ? (
@@ -85,7 +89,7 @@ export default function DashboardScreen({
                 </div>
               )}
             </div>
-          </div>
+          </button>
         </div>
       </nav>
 
@@ -398,6 +402,30 @@ export default function DashboardScreen({
           </div>
         </div>
       </main>
+
+      {/* Mobile Bottom Nav */}
+      <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 bg-sheet-cream/95 backdrop-blur-md border-t border-outline-variant/30 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+        <div className="flex justify-around items-center py-2">
+          {[
+            { key: 'dashboard', icon: 'home', label: 'Inicio' },
+            { key: 'biblioteca', icon: 'menu_book', label: 'Librería' },
+            { key: 'perfil', icon: 'person', label: 'Perfil' },
+          ].map((item) => (
+            <button
+              key={item.key}
+              onClick={() => onNavigate(item.key)}
+              className={`flex flex-col items-center gap-1 px-4 py-1 rounded-xl transition-colors ${
+                item.key === 'dashboard'
+                  ? 'text-primary'
+                  : 'text-on-surface-variant'
+              }`}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 24 }}>{item.icon}</span>
+              <span className="font-label-caps text-[9px] uppercase tracking-wider">{item.label}</span>
+            </button>
+          ))}
+        </div>
+      </nav>
 
       {/* Footer */}
       <footer className="w-full py-stack-lg px-container-padding flex flex-col md:flex-row justify-between items-center gap-4 bg-mahogany-dark shadow-[inset_0_10px_20px_rgba(0,0,0,0.2)]">

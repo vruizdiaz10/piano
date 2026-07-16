@@ -16,6 +16,7 @@ interface PerfilScreenProps {
   };
   onSettingsChange: (settings: PerfilScreenProps['settings']) => void;
   onDeleteAccount: () => void;
+  onLogout?: () => void;
 }
 
 export default function PerfilScreen({
@@ -27,6 +28,7 @@ export default function PerfilScreen({
   settings,
   onSettingsChange,
   onDeleteAccount,
+  onLogout,
 }: PerfilScreenProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -80,8 +82,12 @@ export default function PerfilScreen({
               </span>
             </div>
           </div>
-          <button className="clay-button-secondary py-2 px-4 rounded-xl font-title-md text-title-md">
-            Editar Perfil
+          <button
+            onClick={onLogout}
+            className="clay-button-secondary py-2 px-4 rounded-xl font-title-md text-title-md flex items-center gap-2"
+          >
+            <span className="material-symbols-outlined text-sm">logout</span>
+            Cerrar Sesión
           </button>
         </div>
 
@@ -200,6 +206,30 @@ export default function PerfilScreen({
           )}
         </div>
       </div>
+
+      {/* Mobile Bottom Nav */}
+      <nav className="md:hidden fixed bottom-0 left-0 w-full z-50 bg-sheet-cream/95 backdrop-blur-md border-t border-outline-variant/30 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+        <div className="flex justify-around items-center py-2">
+          {[
+            { key: 'dashboard', icon: 'home', label: 'Inicio' },
+            { key: 'biblioteca', icon: 'menu_book', label: 'Librería' },
+            { key: 'perfil', icon: 'person', label: 'Perfil' },
+          ].map((item) => (
+            <button
+              key={item.key}
+              onClick={() => onNavigate(item.key)}
+              className={`flex flex-col items-center gap-1 px-4 py-1 rounded-xl transition-colors ${
+                item.key === 'perfil'
+                  ? 'text-primary'
+                  : 'text-on-surface-variant'
+              }`}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: 24 }}>{item.icon}</span>
+              <span className="font-label-caps text-[9px] uppercase tracking-wider">{item.label}</span>
+            </button>
+          ))}
+        </div>
+      </nav>
     </div>
   );
 }
