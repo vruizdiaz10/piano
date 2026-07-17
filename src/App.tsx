@@ -321,7 +321,7 @@ function AppContent() {
       quote = SENSEI_QUOTES[Math.floor(Math.random() * SENSEI_QUOTES.length)]
     } while (recentQuotes.current.has(quote.text))
     recentQuotes.current.add(quote.text)
-    return quote.text
+    return quote
   }
 
   // ── Render ──

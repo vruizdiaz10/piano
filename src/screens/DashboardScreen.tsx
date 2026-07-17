@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import type { RankInfo, RoadmapStep } from '../utils/dashboardStats';
+import type { Quote } from '../data/senseiQuotes';
 import { weeklyAccuracyPath } from '../utils/dashboardStats';
 import TopNavBar from '../components/TopNavBar';
 
@@ -27,7 +28,7 @@ interface DashboardProps {
   };
   roadmap: RoadmapStep[];
   rank: RankInfo;
-  senseiQuote: string;
+  senseiQuote: Quote;
   userName?: string;
   userLevel?: number;
   userAvatar?: string;
@@ -407,7 +408,10 @@ export default function DashboardScreen({
               })}
             </div>
             <p className="text-center font-body-sm text-[13px] text-outline italic">
-              &ldquo;{senseiQuote}&rdquo;
+              &ldquo;{senseiQuote.text}&rdquo;
+            </p>
+            <p className="text-center font-label-caps text-[10px] text-outline mt-2">
+              — {senseiQuote.author}
             </p>
           </div>
 
@@ -427,7 +431,10 @@ export default function DashboardScreen({
             </h3>
             <div className="border-l-2 border-brass-highlight/50 pl-5 py-2">
               <p className="font-body-sm text-surface-bright italic opacity-90 leading-relaxed text-[15px]">
-                &ldquo;{senseiQuote}&rdquo;
+                &ldquo;{senseiQuote.text}&rdquo;
+              </p>
+              <p className="font-label-caps text-[11px] text-brass-highlight mt-3 tracking-wide">
+                — {senseiQuote.author}
               </p>
             </div>
           </div>
