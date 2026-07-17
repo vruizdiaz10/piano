@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TopNavBar from '../components/TopNavBar';
 
 interface PerfilScreenProps {
   onNavigate: (target: string) => void;
@@ -6,11 +7,14 @@ interface PerfilScreenProps {
   userLevel?: number;
   userAvatar?: string;
   stats: { stars: number; notesMastered: number; streak: number };
+  notation: 'american' | 'latino';
+  onNotationChange: (notation: 'american' | 'latino') => void;
+  profileStats: {
+    totalNotes: string;
+    totalTime: string;
+    firstSession: string;
+  };
   settings: {
-    language: string;
-    showAlphabetical: boolean;
-    correctKeyFlash: boolean;
-    incorrectKeyFlash: boolean;
     darkMode: boolean;
     difficulty: 'facil' | 'normal' | 'dificil';
   };
@@ -25,6 +29,9 @@ export default function PerfilScreen({
   userLevel = 5,
   userAvatar,
   stats,
+  notation,
+  onNotationChange,
+  profileStats,
   settings,
   onSettingsChange,
   onDeleteAccount,
@@ -38,27 +45,16 @@ export default function PerfilScreen({
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Top Nav */}
-      <nav className="clay-card rounded-none px-4 md:px-8 py-4 flex items-center justify-between sticky top-0 z-50">
-        <div className="flex items-center gap-2">
-          <span className="font-headline-lg text-headline-lg text-primary italic">Clavis</span>
-        </div>
-        <div className="hidden md:flex items-center gap-6">
-          {['dashboard', 'perfil', 'biblioteca'].map((s) => (
-            <button
-              key={s}
-              onClick={() => onNavigate(s)}
-              className={`font-body-lg text-body-lg transition-colors ${
-                s === 'perfil' ? 'text-primary font-semibold' : 'text-on-surface-variant hover:text-primary'
-              }`}
-            >
-              {s === 'dashboard' ? 'Inicio' : s.charAt(0).toUpperCase() + s.slice(1)}
-            </button>
-          ))}
-        </div>
-      </nav>
+      <TopNavBar
+        activeScreen="perfil"
+        onNavigate={onNavigate}
+        onLogout={onLogout!}
+        userName={userName}
+        userLevel={userLevel}
+        userAvatar={userAvatar}
+      />
 
-      <div className="max-w-[800px] mx-auto p-4 md:p-8 space-y-6">
+      <div className="max-w-[800px] mx-auto px-4 md:px-8 pt-28 pb-stack-md md:pb-stack-lg space-y-6">
         {/* Profile Header */}
         <div className="clay-card p-6 flex flex-col sm:flex-row items-center gap-4">
           <div className="clay-icon-raised w-20 h-20 flex items-center justify-center text-display-lg font-display-lg text-primary">
@@ -102,56 +98,25 @@ export default function PerfilScreen({
         <div className="clay-card p-6 space-y-6">
           <h2 className="font-headline-lg-mobile text-headline-lg-mobile text-primary">Configuración</h2>
 
-          {/* Language */}
-          <SettingRow label="Idioma">
-            <select
-              value={settings.language}
-              onChange={(e) => updateSetting('language', e.target.value)}
-              className="clay-input-key px-4 py-2 font-body-lg text-body-lg text-on-surface rounded-xl border-none outline-none"
-            >
-              <option value="es">Español</option>
-              <option value="en">English</option>
-            </select>
-          </SettingRow>
-
-          {/* Alphabetical display */}
-          <SettingRow label="Visualización: Notas Alfabéticas">
-            <button
-              role="switch"
-              aria-checked={settings.showAlphabetical}
-              aria-label="Notas Alfabéticas"
-              onClick={() => updateSetting('showAlphabetical', !settings.showAlphabetical)}
-              className={`clay-switch ${settings.showAlphabetical ? 'on' : ''}`}
-            >
-              <span className="clay-switch-knob" />
-            </button>
-          </SettingRow>
-
-          {/* Correct key flash */}
-          <SettingRow label="Tecla Correcta: Flash de Éxito">
-            <button
-              role="switch"
-              aria-checked={settings.correctKeyFlash}
-              aria-label="Flash de Éxito en tecla correcta"
-              onClick={() => updateSetting('correctKeyFlash', !settings.correctKeyFlash)}
-              className={`clay-switch ${settings.correctKeyFlash ? 'on' : ''}`}
-            >
-              <span className="clay-switch-knob" />
-            </button>
-          </SettingRow>
-
-          {/* Incorrect key flash */}
-          <SettingRow label="Tecla Incorrecta: Flash de Error">
-            <button
-              role="switch"
-              aria-checked={settings.incorrectKeyFlash}
-              aria-label="Flash de Error en tecla incorrecta"
-              onClick={() => updateSetting('incorrectKeyFlash', !settings.incorrectKeyFlash)}
-              className={`clay-switch ${settings.incorrectKeyFlash ? 'on' : ''}`}
-            >
-              <span className="clay-switch-knob" />
-            </button>
-          </SettingRow>
+          {/* Notation system */}
+          <div>
+            <span className="font-title-md text-title-md text-primary block mb-3">Sistema de Notación</span>
+            <div className="flex gap-3" role="radiogroup" aria-label="Sistema de Notación">
+              {(['latino', 'american'] as const).map((n) => (
+                <button
+                  key={n}
+                  role="radio"
+                  aria-checked={notation === n}
+                  onClick={() => onNotationChange(n)}
+                  className={`clay-button-secondary flex-1 py-3 rounded-xl font-title-md text-title-md ${
+                    notation === n ? 'bg-secondary-container text-on-secondary-container' : ''
+                  }`}
+                >
+                  {n === 'latino' ? 'Latino (Do, Re, Mi)' : 'Americano (C, D, E)'}
+                </button>
+              ))}
+            </div>
+          </div>
 
           {/* Dark Mode */}
           <SettingRow label="Tema: Modo Oscuro">
@@ -190,9 +155,9 @@ export default function PerfilScreen({
         {/* Mi Perfil */}
         <div className="clay-card p-6 space-y-4">
           <h2 className="font-headline-lg-mobile text-headline-lg-mobile text-primary">Mi Perfil</h2>
-          <ProfileRow label="Notas Tocadas" value="1,245" />
-          <ProfileRow label="Tiempo Tocando" value="12h 30m" />
-          <ProfileRow label="Primera Sesión" value="15 Ene 2025" />
+          <ProfileRow label="Notas Tocadas" value={profileStats.totalNotes} />
+          <ProfileRow label="Tiempo Tocando" value={profileStats.totalTime} />
+          <ProfileRow label="Primera Sesión" value={profileStats.firstSession} />
         </div>
 
         {/* Danger Zone */}

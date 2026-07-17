@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useGameState } from './hooks/useGameState'
 import { useDailyStreak } from './hooks/useDailyStreak'
-import { saveSession } from './utils/sessionHistory'
+import { saveSession, getSessions } from './utils/sessionHistory'
 import { computeDashboardStats } from './utils/dashboardStats'
 import { useMidi } from './hooks/useMidi'
 import { useSound } from './hooks/useSound'
@@ -397,6 +397,28 @@ function AppContent() {
   }
 
   if (screen === 'perfil') {
+    // Compute profile stats from session history
+    const sessions = getSessions()
+    const totalNotes = sessions.reduce((sum, s) => sum + (s.notes || 0), 0)
+    const totalMs = sessions.reduce((sum, s) => sum + (s.elapsedMs || 0), 0)
+    const firstSessionDate = sessions.length > 0
+      ? new Date(sessions[sessions.length - 1].date)
+      : null
+    const formatNumber = (n: number) => n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n)
+    const formatTime = (ms: number) => {
+      if (ms <= 0) return '0s'
+      const sec = Math.floor(ms / 1000)
+      const h = Math.floor(sec / 3600)
+      const m = Math.floor((sec % 3600) / 60)
+      if (h > 0) return `${h}h ${m}m`
+      if (m > 0) return `${m}m`
+      return `${sec}s`
+    }
+    const formatDate = (d: Date) => {
+      const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']
+      return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`
+    }
+
     return (
       <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
         <PerfilScreen
@@ -405,16 +427,18 @@ function AppContent() {
           userLevel={Math.floor(state.bestStreak / 10) + 1}
           userAvatar={user?.photoURL || undefined}
           stats={{ stars: state.correctAttempts, notesMastered: state.totalAttempts, streak: dailyStreak }}
+          notation={state.notation}
+          onNotationChange={setNotation}
+          profileStats={{
+            totalNotes: formatNumber(totalNotes),
+            totalTime: formatTime(totalMs),
+            firstSession: firstSessionDate ? formatDate(firstSessionDate) : 'Sin datos',
+          }}
           settings={{
-            language: 'es',
-            showAlphabetical: state.showNoteName,
-            correctKeyFlash: true,
-            incorrectKeyFlash: true,
             darkMode: state.theme === 'dark',
             difficulty: state.sessionTarget <= 5 ? 'facil' : state.sessionTarget <= 10 ? 'normal' : 'dificil',
           }}
           onSettingsChange={(s) => {
-            setShowNoteName(s.showAlphabetical)
             setTheme(s.darkMode ? 'dark' : 'light')
           }}
           onDeleteAccount={handleDeleteAccount}
