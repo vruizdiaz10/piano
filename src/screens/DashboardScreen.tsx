@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import type { QuickLessonConfig } from '../types'
 import type { RankInfo, RoadmapStep } from '../utils/dashboardStats';
 import type { Quote } from '../data/senseiQuotes';
 import { weeklyAccuracyPath } from '../utils/dashboardStats';
@@ -32,6 +33,7 @@ interface DashboardProps {
   userName?: string;
   userLevel?: number;
   userAvatar?: string;
+  onQuickLesson?: (config: QuickLessonConfig) => void; // Added from task brief
 }
 
 const WEEKDAY_LABELS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
@@ -54,9 +56,26 @@ export default function DashboardScreen({
   userName = 'Pianista',
   userLevel = 1,
   userAvatar,
+  onQuickLesson, // Added from task brief
 }: DashboardProps) {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // State for the new generator UI and onboarding banner
+  const [config, setConfig] = useState<QuickLessonConfig>({
+    clef: 'treble',
+    lines: true,
+    spaces: true,
+    ledgerAbove: 0,
+    ledgerBelow: 0,
+    sharps: false,
+    timed: true,
+    noteCount: 20,
+  });
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    return !localStorage.getItem('piano-onboarding-seen');
+  });
 
   useEffect(() => {
     if (!showDropdown) return
@@ -87,113 +106,203 @@ export default function DashboardScreen({
       />
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-[1200px] mx-auto px-container-padding pb-stack-md md:pb-stack-lg grid grid-cols-1 lg:grid-cols-12 gap-10 pt-28">
+      <main className="flex-grow w-full max-w-7xl mx-auto px-container-padding pt-28 pb-20 md:pb-stack-lg grid grid-cols-1 lg:grid-cols-12 gap-10"> {/* pb-20 added from task brief */}
         {/* Left Section */}
         <div className="lg:col-span-8 flex flex-col gap-10">
           {/* Session Config */}
-          <section className="clay-card p-10 md:p-12 relative overflow-hidden">
-            <div className="absolute -right-20 -bottom-20 text-surface-dim/30 select-none pointer-events-none" aria-hidden="true">
-              <span className="material-symbols-outlined" style={{ fontSize: 240 }}>music_note</span>
+          {/* Replaced "Elige tu Desafío" section with new Generator UI and Onboarding Banner */}
+          {/* Onboarding Banner */}
+          {showOnboarding && (
+            <div className="clay-card p-4 flex items-center justify-between gap-4 border border-brass-highlight/30">
+              <p className="text-body-sm text-on-surface-variant">
+                <strong>Rápido</strong> = práctica personalizada. <strong>Camino</strong> = lecciones ordenadas en la biblioteca.
+              </p>
+              <button
+                onClick={() => { localStorage.setItem('piano-onboarding-seen', '1'); setShowOnboarding(false); }}
+                className="shrink-0 clay-input-key px-3 py-1 text-label-caps font-label-caps uppercase text-primary"
+                aria-label="Cerrar aviso"
+              >
+                Entendido
+              </button>
             </div>
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 clay-inner-panel px-4 py-2 mb-8 border border-outline-variant/20 rounded-full">
-                <span className="font-label-caps text-[10px] uppercase text-on-secondary-container tracking-wider font-bold">
-                  Configuración de sesión
-                </span>
-              </div>
-              <h1 className="font-display-lg text-display-lg text-primary italic mb-12 max-w-md">
-                ELIGE TU DESAFÍO
-              </h1>
+          )}
 
-              {/* Lesson Type Dropdown */}
-              <div className="mb-8">
-                <label className="font-label-caps text-[10px] uppercase text-outline tracking-widest mb-3 block">
-                  Tipo de Lección
-                </label>
-                <div
-                  ref={dropdownRef}
-                  className="clay-input-key flex items-center justify-between p-5 cursor-pointer group relative"
-                  onClick={() => setShowDropdown(!showDropdown)}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-secondary">music_note</span>
-                    <span className="font-title-md text-primary uppercase tracking-wide">{selectedLesson}</span>
-                  </div>
-                  <span className="material-symbols-outlined text-outline group-hover:text-primary transition-colors">
-                    expand_more
-                  </span>
-                  {showDropdown && (
-                    <div className="absolute top-full left-0 w-full mt-4 clay-card z-50 overflow-hidden rounded-xl p-2 max-h-64 overflow-y-auto">
-                      {lessonTypes.map((lt) => (
-                        <div
-                          key={lt}
-                          onClick={(e) => { e.stopPropagation(); onSelectLesson(lt); setShowDropdown(false); }}
-                          className="p-3 hover:bg-surface-variant text-primary font-medium text-sm rounded-lg transition-colors cursor-pointer"
-                        >
-                          {lt}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+          {/* Generador Rápido */}
+          <section className="clay-card p-6 sm:p-8">
+            <h3 className="font-headline-lg-mobile md:font-headline-lg text-foreground mb-4 flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary">bolt</span>
+              Generador Rápido
+            </h3>
+
+            {/* Default controls */}
+            <div className="space-y-4">
+              {/* Clef selector */}
+              <div>
+                <label className="text-body-sm font-medium text-on-surface-variant mb-2 block">Clave</label>
+                <div className="flex gap-2">
+                  {(['treble', 'bass', 'both'] as const).map(c => (
+                    <button
+                      key={c}
+                      onClick={() => setConfig(prev => ({ ...prev, clef: c }))}
+                      aria-pressed={config.clef === c}
+                      aria-label={`Clave ${c === 'treble' ? 'Sol' : c === 'bass' ? 'Fa' : 'Ambas'}`}
+                      className={`flex-1 py-2 rounded-xl text-title-md font-medium transition-all clay-input-key ${
+                        config.clef === c ? 'bg-primary-container text-on-primary-container' : ''
+                      }`}
+                    >
+                      {c === 'treble' ? 'Sol' : c === 'bass' ? 'Fa' : 'Ambas'}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Note Count Buttons */}
-              <div className="grid grid-cols-3 gap-6 mb-10">
-                {[5, 10, 20].map((count) => (
-                  <button
-                    key={count}
-                    onClick={() => onSelectNoteCount(count)}
-                    aria-pressed={noteCount === count}
-                    className={`clay-input-key flex flex-col items-center justify-center py-8 ${
-                      noteCount === count ? 'bg-primary-container text-on-primary-container' : 'text-primary'
-                    }`}
-                  >
-                    <span className="font-headline-lg text-headline-lg font-bold mb-2">
-                      {String(count).padStart(2, '0')}
-                    </span>
-                    <span className={`font-label-caps text-[10px] uppercase tracking-widest ${
-                      noteCount === count ? 'text-current opacity-80' : 'text-outline'
-                    }`}>
-                      Notas
-                    </span>
-                  </button>
-                ))}
+              {/* Note count */}
+              <div>
+                <label className="text-body-sm font-medium text-on-surface-variant mb-2 block">Notas</label>
+                <div className="flex gap-2">
+                  {([5, 10, 20] as const).map(n => (
+                    <button
+                      key={n}
+                      onClick={() => setConfig(prev => ({ ...prev, noteCount: n }))}
+                      aria-pressed={config.noteCount === n}
+                      aria-label={`${n} notas`}
+                      className={`flex-1 py-2 rounded-xl text-title-md font-medium transition-all clay-input-key ${
+                        config.noteCount === n ? 'bg-primary-container text-on-primary-container' : ''
+                      }`}
+                    >
+                      {n}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              {/* Timed Mode */}
-              <div className="clay-inner-panel flex items-center justify-between p-6 mb-12">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full clay-icon-raised flex items-center justify-center text-secondary">
-                    <span className="material-symbols-outlined">timer</span>
-                  </div>
-                  <div>
-                    <h3 className="font-title-md text-primary uppercase tracking-wide">Modo Cronometrado</h3>
-                    <p className="font-body-sm text-body-sm text-outline italic">Corre contra el reloj</p>
-                  </div>
-                </div>
+              {/* Timer toggle — using existing clay-switch */}
+              <div className="flex items-center justify-between">
+                <span className="text-body-md font-medium text-on-surface-variant">Cronómetro</span>
                 <button
                   role="switch"
-                  aria-checked={timedMode}
+                  aria-checked={config.timed}
                   aria-label="Modo Cronometrado"
-                  onClick={onToggleTimed}
-                  className={`clay-switch ${timedMode ? 'on' : ''}`}
+                  onClick={() => setConfig(prev => ({ ...prev, timed: !prev.timed }))}
+                  className={`clay-switch ${config.timed ? 'on' : ''}`}
                 >
                   <span className="clay-switch-knob" />
                 </button>
               </div>
-
-              {/* Start Button */}
-              <button
-                onClick={onStartGame}
-                className="clay-btn-primary w-full py-6 flex items-center justify-center gap-3 font-title-md text-title-md uppercase tracking-widest text-brass-highlight"
-              >
-                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
-                  play_arrow
-                </span>
-                Iniciar Sesión
-              </button>
             </div>
+
+            {/* Advanced toggle — using clay-input-key */}
+            <button
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              aria-expanded={showAdvanced}
+              className="w-full mt-4 py-2 clay-input-key flex items-center justify-center gap-1 text-primary"
+            >
+              <span className="font-label-caps text-label-caps uppercase">{showAdvanced ? 'Ocultar opciones' : 'Personalizar'}</span>
+              <span className={`material-symbols-outlined text-sm transition-transform ${showAdvanced ? 'rotate-180' : ''}`}>
+                expand_more
+              </span>
+            </button>
+
+            {/* Advanced controls */}
+            {showAdvanced && (
+              <div className="mt-4 space-y-4 border-t border-outline-variant/30 pt-4">
+                {/* Lines/Spaces — using clay-switch */}
+                <div className="flex gap-4">
+                  <div className="flex-1 flex items-center justify-between">
+                    <span className="text-body-md font-medium text-on-surface-variant">Líneas</span>
+                    <button
+                      role="switch"
+                      aria-checked={config.lines}
+                      aria-label="Líneas"
+                      onClick={() => setConfig(prev => ({ ...prev, lines: !prev.lines }))}
+                      className={`clay-switch ${config.lines ? 'on' : ''}`}
+                    >
+                      <span className="clay-switch-knob" />
+                    </button>
+                  </div>
+                  <div className="flex-1 flex items-center justify-between">
+                    <span className="text-body-md font-medium text-on-surface-variant">Espacios</span>
+                    <button
+                      role="switch"
+                      aria-checked={config.spaces}
+                      aria-label="Espacios"
+                      onClick={() => setConfig(prev => ({ ...prev, spaces: !prev.spaces }))}
+                      className={`clay-switch ${config.spaces ? 'on' : ''}`}
+                    >
+                      <span className="clay-switch-knob" />
+                    </button>
+                  </div>
+                </div>
+
+                {(!config.lines && !config.spaces) && (
+                  <p className="text-body-sm text-velvet-red text-center">Selecciona al menos líneas o espacios</p>
+                )}
+
+                {/* Ledger lines — w-12 h-12 steppers */}
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <label className="text-body-sm font-medium text-on-surface-variant mb-2 block">Adic. arriba</label>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setConfig(prev => ({ ...prev, ledgerAbove: Math.max(0, prev.ledgerAbove - 1) }))}
+                        aria-label="Reducir adicionales arriba"
+                        className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
+                      >-</button>
+                      <span className="flex-1 text-center text-title-md font-bold" aria-live="polite">{config.ledgerAbove}</span>
+                      <button
+                        onClick={() => setConfig(prev => ({ ...prev, ledgerAbove: Math.min(3, prev.ledgerAbove + 1) }))}
+                        aria-label="Aumentar adicionales arriba"
+                        className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
+                      >+</button>
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <label className="text-body-sm font-medium text-on-surface-variant mb-2 block">Adic. abajo</label>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setConfig(prev => ({ ...prev, ledgerBelow: Math.max(0, prev.ledgerBelow - 1) }))}
+                        aria-label="Reducir adicionales abajo"
+                        className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
+                      >-</button>
+                      <span className="flex-1 text-center text-title-md font-bold" aria-live="polite">{config.ledgerBelow}</span>
+                      <button
+                        onClick={() => setConfig(prev => ({ ...prev, ledgerBelow: Math.min(3, prev.ledgerBelow + 1) }))}
+                        aria-label="Aumentar adicionales abajo"
+                        className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
+                      >+</button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sharps — using clay-switch */}
+                <div className="flex items-center justify-between">
+                  <span className="text-body-md font-medium text-on-surface-variant">Sostenidos</span>
+                  <button
+                    role="switch"
+                    aria-checked={config.sharps}
+                    aria-label="Sostenidos"
+                    onClick={() => setConfig(prev => ({ ...prev, sharps: !prev.sharps }))}
+                    className={`clay-switch ${config.sharps ? 'on' : ''}`}
+                  >
+                    <span className="clay-switch-knob" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Start button — using existing clay-btn-primary CTA */}
+            <button
+              onClick={() => onQuickLesson?.(config)} // Use new callback prop
+              disabled={!config.lines && !config.spaces}
+              className={`w-full mt-6 py-6 flex items-center justify-center gap-3 font-title-md text-title-md uppercase tracking-widest transition-all ${
+                (!config.lines && !config.spaces)
+                  ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                  : 'clay-btn-primary text-brass-highlight'
+              }`}
+            >
+              <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>play_arrow</span>
+              Practicar {/* Changed button label from "Iniciar Sesión" */}
+            </button>
           </section>
 
           {/* Roadmap */}
@@ -468,7 +577,7 @@ export default function DashboardScreen({
             <button
               key={item.key}
               onClick={() => onNavigate(item.key)}
-              className={`flex flex-col items-center gap-1 px-4 py-1 rounded-xl transition-colors ${
+              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-colors ${ {/* py-2 applied from task brief */}
                 item.key === 'dashboard'
                   ? 'text-primary'
                   : 'text-on-surface-variant'
