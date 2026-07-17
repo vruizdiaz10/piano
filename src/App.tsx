@@ -9,12 +9,12 @@ import { getLessonPool, LESSONS } from './data/lessons'
 import Staff from './components/Staff'
 import PianoKeyboard from './components/PianoKeyboard'
 import Feedback from './components/Feedback'
-import ThemeToggle from './components/ThemeToggle'
+import PracticeNavBar from './components/PracticeNavBar'
 import AuthProvider from './hooks/useAuthProvider'
 import { useAuth } from './hooks/useAuth'
 import { useSessionSync } from './hooks/useSessionSync'
 import { useConfigSync } from './hooks/useConfigSync'
-import UserMenu from './components/UserMenu'
+
 import Toast from './components/Toast'
 import InicioScreen from './screens/InicioScreen'
 import DashboardScreen from './screens/DashboardScreen'
@@ -44,7 +44,7 @@ function AppContent() {
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
   const { dailyStreak, markToday } = useDailyStreak()
   const liveRegionRef = useRef<HTMLDivElement>(null)
-  const { user, signOut } = useAuth()
+  const { user, loading, signOut } = useAuth()
   const { syncState, saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
   const { config, updateConfig } = useConfigSync(user)
   const [isPaused, setIsPaused] = useState(false)
@@ -53,6 +53,13 @@ function AppContent() {
   // Screen routing
   const [screen, setScreen] = useState<Screen>('inicio')
   const [isStarting, setIsStarting] = useState(false)
+
+  // Skip welcome screen if user is already logged in
+  useEffect(() => {
+    if (!loading && user && screen === 'inicio') {
+      setScreen('dashboard')
+    }
+  }, [loading, user, screen])
 
   const handleNavigate = (target: string) => setScreen(target as Screen)
 
@@ -437,58 +444,23 @@ function AppContent() {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <div aria-live="polite" aria-atomic="true" className="sr-only" ref={liveRegionRef} />
 
-      {/* TopNavBar */}
-      <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding h-20 bg-sheet-cream/90 backdrop-blur-md shadow-[0_8px_30px_-5px_rgba(61,31,16,0.05)] border-b border-outline-variant/30">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setScreen('dashboard')}
-            className="clay-inner-panel w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
-            aria-label="Volver al panel"
-          >
-            <span className="material-symbols-outlined" aria-hidden="true">arrow_back</span>
-          </button>
-          <span className="font-headline-lg text-headline-lg font-bold text-primary italic">Clavis</span>
-        </div>
-        {/* Stats Bar */}
-        <div className="hidden md:flex items-center gap-5">
-          {[
-            { icon: 'timer', value: state.isTimed ? timerDisplay : '∞', label: 'Tiempo', show: state.isTimed },
-            { icon: 'local_fire_department', value: String(state.streak), label: 'Racha' },
-            { icon: 'stars', value: `${Math.round(accuracy)}%`, label: 'Precisión' },
-            { icon: 'music_note', value: `${state.totalAttempts}/${state.sessionTarget}`, label: 'Notas' },
-          ].filter(s => s.show !== false).map((s) => (
-            <div key={s.label} className="flex items-center gap-2 text-on-surface-variant">
-              <span className="material-symbols-outlined text-sm">{s.icon}</span>
-              <span className="font-label-caps text-[10px] uppercase tracking-widest text-outline">{s.label}</span>
-              <span className="font-title-md text-primary">{s.value}</span>
-            </div>
-          ))}
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setMuted(!state.isMuted)}
-            className="text-on-surface-variant hover:text-primary transition-colors"
-            aria-label={state.isMuted ? 'Activar sonido' : 'Silenciar'}
-          >
-            <span className="material-symbols-outlined" aria-hidden="true">{state.isMuted ? 'volume_off' : 'volume_up'}</span>
-          </button>
-          <button
-            onClick={() => restartGame()}
-            className="text-on-surface-variant hover:text-primary transition-colors"
-            aria-label="Reiniciar"
-          >
-            <span className="material-symbols-outlined" aria-hidden="true">history</span>
-          </button>
-          <ThemeToggle theme={state.theme} onToggle={setTheme} className="text-on-surface-variant hover:text-primary transition-colors" />
-          <div className="w-px h-5 bg-outline-variant/50 mx-1" />
-          <UserMenu syncState={syncState} onDeleteAccount={handleDeleteAccount} />
-          <span
-            role="status"
-            aria-label={midiConnected ? 'MIDI: Conectado' : 'MIDI: Sin conexión'}
-            className={`inline-block w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500' : 'bg-red-400'}`}
-          />
-        </div>
-      </nav>
+      <PracticeNavBar
+        onBack={() => setScreen('dashboard')}
+        isMuted={state.isMuted}
+        onToggleMute={() => setMuted(!state.isMuted)}
+        onRestart={() => restartGame()}
+        theme={state.theme}
+        onToggleTheme={setTheme}
+        timerDisplay={timerDisplay}
+        isTimed={state.isTimed}
+        streak={state.streak}
+        accuracy={accuracy}
+        totalAttempts={state.totalAttempts}
+        sessionTarget={state.sessionTarget}
+        syncState={syncState}
+        onDeleteAccount={handleDeleteAccount}
+        midiConnected={midiConnected}
+      />
 
       {/* Main Content */}
       <main className="flex-1 w-full max-w-[1200px] mx-auto px-6 pt-24 pb-32 flex flex-col items-center">
