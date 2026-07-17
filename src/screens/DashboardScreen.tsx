@@ -118,7 +118,7 @@ export default function DashboardScreen({
       </nav>
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-[1200px] mx-auto px-container-padding py-stack-md md:py-stack-lg grid grid-cols-1 lg:grid-cols-12 gap-10 pt-24">
+      <main className="flex-1 w-full max-w-[1200px] mx-auto px-container-padding py-stack-md md:py-stack-lg grid grid-cols-1 lg:grid-cols-12 gap-10 pt-28">
         {/* Left Section */}
         <div className="lg:col-span-8 flex flex-col gap-10">
           {/* Session Config */}
