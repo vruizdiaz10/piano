@@ -40,3 +40,14 @@ export async function saveUserDoc(uid: string, data: UserDoc): Promise<void> {
 export async function deleteUserDoc(uid: string): Promise<void> {
   await deleteDoc(doc(db, 'users', uid))
 }
+
+export async function loadQuoteHistory(uid: string, date: string): Promise<number[]> {
+  const snap = await getDoc(doc(db, 'users', uid, 'quoteHistory', date))
+  if (!snap.exists()) return []
+  const data = snap.data()
+  return Array.isArray(data.indices) ? data.indices : []
+}
+
+export async function saveQuoteHistory(uid: string, date: string, indices: number[]): Promise<void> {
+  await setDoc(doc(db, 'users', uid, 'quoteHistory', date), { indices })
+}
