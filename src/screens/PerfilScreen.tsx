@@ -15,7 +15,6 @@ interface PerfilScreenProps {
     firstSession: string;
   };
   settings: {
-    darkMode: boolean;
     difficulty: 'facil' | 'normal' | 'dificil';
   };
   onSettingsChange: (settings: PerfilScreenProps['settings']) => void;
@@ -118,19 +117,6 @@ export default function PerfilScreen({
             </div>
           </div>
 
-          {/* Dark Mode */}
-          <SettingRow label="Tema: Modo Oscuro">
-            <button
-              role="switch"
-              aria-checked={settings.darkMode}
-              aria-label="Modo Oscuro"
-              onClick={() => updateSetting('darkMode', !settings.darkMode)}
-              className={`clay-switch ${settings.darkMode ? 'on' : ''}`}
-            >
-              <span className="clay-switch-knob" />
-            </button>
-          </SettingRow>
-
           {/* Difficulty */}
           <div>
             <span className="font-title-md text-title-md text-primary block mb-3">Notas por Sesión</span>
@@ -217,15 +203,6 @@ export default function PerfilScreen({
           ))}
         </div>
       </nav>
-    </div>
-  );
-}
-
-function SettingRow({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="flex items-center justify-between">
-      <span className="font-body-lg text-body-lg text-on-surface">{label}</span>
-      {children}
     </div>
   );
 }

@@ -1,13 +1,10 @@
 import UserMenu from './UserMenu';
-import ThemeToggle from './ThemeToggle';
 
 interface PracticeNavBarProps {
   onBack: () => void;
   isMuted: boolean;
   onToggleMute: () => void;
   onRestart: () => void;
-  theme: 'light' | 'dark';
-  onToggleTheme: (theme: 'light' | 'dark') => void;
   timerDisplay?: number;
   isTimed: boolean;
   streak: number;
@@ -24,8 +21,6 @@ export default function PracticeNavBar({
   isMuted,
   onToggleMute,
   onRestart,
-  theme,
-  onToggleTheme,
   timerDisplay,
   isTimed,
   streak,
@@ -83,7 +78,6 @@ export default function PracticeNavBar({
         >
           <span className="material-symbols-outlined" aria-hidden="true">history</span>
         </button>
-        <ThemeToggle theme={theme} onToggle={onToggleTheme} className="text-on-surface-variant hover:text-primary transition-colors" />
         <div className="w-px h-5 bg-outline-variant/50 mx-1" />
         <UserMenu syncState={syncState} onDeleteAccount={onDeleteAccount} />
         <span

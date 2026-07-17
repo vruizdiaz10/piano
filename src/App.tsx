@@ -32,7 +32,7 @@ const SENSEI_QUOTES = [
 ]
 
 function AppContent() {
-  const { state, startGame, submitAnswer, nextNote, setLesson, setSessionTarget, setShowNoteName, setMuted, setTimed, setTheme, setNotation, restartGame } = useGameState()
+  const { state, startGame, submitAnswer, nextNote, setLesson, setSessionTarget, setShowNoteName, setMuted, setTimed, setNotation, restartGame } = useGameState()
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
   const [correctKey, setCorrectKey] = useState<number | null>(null)
   const [wrongKey, setWrongKey] = useState<number | null>(null)
@@ -109,34 +109,27 @@ function AppContent() {
   useEffect(() => {
     if (!config || !user) return
     if (config.notation !== state.notation) setNotation(config.notation)
-    if (config.theme !== state.theme) setTheme(config.theme)
     if (config.showNoteName !== state.showNoteName) setShowNoteName(config.showNoteName)
     if (config.timed !== state.isTimed) setTimed(config.timed)
     if (config.sessionTarget !== state.sessionTarget) startGame(config.sessionTarget)
-  }, [config?.notation, config?.theme, config?.showNoteName, config?.timed, config?.sessionTarget, user?.uid])
+  }, [config?.notation, config?.showNoteName, config?.timed, config?.sessionTarget, user?.uid])
 
   // Push local config changes to Firestore when logged in
   useEffect(() => {
     if (!user || !config) return
     updateConfig({
       notation: state.notation,
-      theme: state.theme,
       showNoteName: state.showNoteName,
       timed: state.isTimed,
       sessionTarget: state.sessionTarget,
     })
-  }, [state.notation, state.theme, state.showNoteName, state.isTimed, state.sessionTarget, !!user])
+  }, [state.notation, state.showNoteName, state.isTimed, state.sessionTarget, !!user])
 
   const currentLesson = LESSONS.find(l => l.id === state.lessonId)
   const clef = currentLesson?.clef ?? 'treble'
   const keyboardStart = clef === 'bass' ? 36 : 48
 
   const accuracy = state.totalAttempts > 0 ? (state.correctAttempts / state.totalAttempts) * 100 : 0
-
-  // Apply dark mode class
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', state.theme === 'dark')
-  }, [state.theme])
 
   const { midiConnected } = useMidi(
     useCallback((midi: number) => {
@@ -435,11 +428,9 @@ function AppContent() {
             firstSession: firstSessionDate ? formatDate(firstSessionDate) : 'Sin datos',
           }}
           settings={{
-            darkMode: state.theme === 'dark',
             difficulty: state.sessionTarget <= 5 ? 'facil' : state.sessionTarget <= 10 ? 'normal' : 'dificil',
           }}
           onSettingsChange={(s) => {
-            setTheme(s.darkMode ? 'dark' : 'light')
             setSessionTarget(s.difficulty === 'facil' ? 5 : s.difficulty === 'normal' ? 10 : 20)
           }}
           onDeleteAccount={handleDeleteAccount}
@@ -474,8 +465,6 @@ function AppContent() {
         isMuted={state.isMuted}
         onToggleMute={() => setMuted(!state.isMuted)}
         onRestart={() => restartGame()}
-        theme={state.theme}
-        onToggleTheme={setTheme}
         timerDisplay={timerDisplay}
         isTimed={state.isTimed}
         streak={state.streak}
