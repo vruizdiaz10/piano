@@ -1,6 +1,6 @@
 export type Notation = 'american' | 'latino'
 
-export type Clef = 'treble' | 'bass'
+export type Clef = 'treble' | 'bass' | 'both'
 
 export type NoteName = 'C' | 'C#' | 'D' | 'D#' | 'E' | 'F' | 'F#' | 'G' | 'G#' | 'A' | 'A#' | 'B'
 
@@ -11,6 +11,17 @@ export interface Note {
 }
 
 export type GamePhase = 'idle' | 'waiting' | 'feedback' | 'levelComplete'
+
+export interface QuickLessonConfig {
+  clef: 'treble' | 'bass' | 'both'
+  lines: boolean
+  spaces: boolean
+  ledgerAbove: number  // 0-3
+  ledgerBelow: number  // 0-3
+  sharps: boolean
+  timed: boolean
+  noteCount: 5 | 10 | 20
+}
 
 export type ErrorType =
   | 'line-space'
@@ -49,4 +60,7 @@ export interface GameState {
   responseTimes: number[]
   lastCorrectNote?: Note | null
   isTimed: boolean
+  customPool?: number[]
+  /** Display-only: used for staff rendering and clef switching. Note selection uses customPool. */
+  clef: Clef
 }

@@ -215,3 +215,19 @@ export function weeklyAccuracyPath(accuracies: Array<number | null>): string {
   }
   return pts.join(' ')
 }
+
+export interface MasteryStatus {
+  mastered: boolean
+  unlocked: boolean
+  bestAccuracy: number
+}
+
+export function computeMasteryStatus(lessonId: string, sessions: SessionRecord[]): MasteryStatus {
+  const lesson = LESSONS.find(l => l.id === lessonId)
+  if (!lesson) return { mastered: false, unlocked: false, bestAccuracy: 0 }
+  const mastered = isMastered(lesson, sessions)
+  const clefLessons = LESSONS.filter(l => l.clef === lesson.clef)
+  const lessonIdx = clefLessons.findIndex(l => l.id === lessonId)
+  const unlocked = lessonIdx === 0 || clefLessons.slice(0, lessonIdx).every(l => isMastered(l, sessions))
+  return { mastered, unlocked, bestAccuracy: bestAccuracyForLesson(lessonId, sessions) }
+}

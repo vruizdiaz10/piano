@@ -33,6 +33,7 @@ const INITIAL_STATE: GameState = {
   responseTimes: [],
   lastCorrectNote: null,
   isTimed: false,
+  clef: 'treble',
 }
 
 function selectNote(lessonId: string, excludeMidi?: number): Note {
