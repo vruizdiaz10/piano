@@ -14,6 +14,7 @@ import AuthProvider from './hooks/useAuthProvider'
 import { useAuth } from './hooks/useAuth'
 import { useSessionSync } from './hooks/useSessionSync'
 import { useConfigSync } from './hooks/useConfigSync'
+import { SENSEI_QUOTES, type Quote } from './data/senseiQuotes'
 
 import Toast from './components/Toast'
 import InicioScreen from './screens/InicioScreen'
@@ -23,13 +24,6 @@ import PerfilScreen from './screens/PerfilScreen'
 import ResultadosScreen from './screens/ResultadosScreen'
 
 type Screen = 'inicio' | 'dashboard' | 'biblioteca' | 'perfil' | 'practica' | 'resultados'
-
-const SENSEI_QUOTES = [
-  'La repetición es la madre del aprendizaje — y el maestro del arte.',
-  'Cada nota incorrecta es una lección disfrazada de error.',
-  'La paciencia es la virtud del pianista que alcanza la maestría.',
-  'No toques las notas, deja que ellas te toquen a ti.',
-]
 
 function AppContent() {
   const { state, startGame, submitAnswer, nextNote, setLesson, setSessionTarget, setShowNoteName, setMuted, setTimed, setNotation, restartGame } = useGameState()
@@ -44,6 +38,7 @@ function AppContent() {
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
   const { dailyStreak, markToday } = useDailyStreak()
   const liveRegionRef = useRef<HTMLDivElement>(null)
+  const recentQuotes = useRef<Set<string>>(new Set())
   const { user, loading, signOut } = useAuth()
   const { syncState, saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
   const { config, updateConfig } = useConfigSync(user)
@@ -317,6 +312,18 @@ function AppContent() {
 
   const selectedLesson = currentLesson?.name ?? 'Líneas'
 
+  const getRandomQuote = () => {
+    if (recentQuotes.current.size >= SENSEI_QUOTES.length - 1) {
+      recentQuotes.current.clear()
+    }
+    let quote: Quote
+    do {
+      quote = SENSEI_QUOTES[Math.floor(Math.random() * SENSEI_QUOTES.length)]
+    } while (recentQuotes.current.has(quote.text))
+    recentQuotes.current.add(quote.text)
+    return quote.text
+  }
+
   // ── Render ──
   if (screen === 'inicio') {
     return (
@@ -362,7 +369,7 @@ function AppContent() {
           }}
           roadmap={dash.roadmap}
           rank={dash.rank}
-          senseiQuote={SENSEI_QUOTES[dash.userLevel % SENSEI_QUOTES.length]}
+          senseiQuote={getRandomQuote()}
           userName={user?.displayName || user?.email?.split('@')[0] || 'Pianista'}
           userLevel={dash.userLevel}
           userAvatar={user?.photoURL || undefined}

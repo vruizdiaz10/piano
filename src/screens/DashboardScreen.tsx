@@ -411,7 +411,7 @@ export default function DashboardScreen({
             </p>
           </div>
 
-          {/* Sabiduría del Sensei */}
+          {/* Sabiduría Musical */}
           <div className="clay-card-dark p-8 relative overflow-hidden">
             <div className="w-16 h-16 rounded-full border-2 border-brass-highlight overflow-hidden mb-6 shadow-lg">
               {userAvatar ? (
@@ -423,7 +423,7 @@ export default function DashboardScreen({
               )}
             </div>
             <h3 className="font-label-caps text-[11px] uppercase text-brass-highlight font-bold tracking-widest mb-4">
-              Sabiduría del Sensei
+              Sabiduría Musical
             </h3>
             <div className="border-l-2 border-brass-highlight/50 pl-5 py-2">
               <p className="font-body-sm text-surface-bright italic opacity-90 leading-relaxed text-[15px]">
