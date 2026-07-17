@@ -109,7 +109,7 @@ export default function PerfilScreen({
                   aria-checked={notation === n}
                   onClick={() => onNotationChange(n)}
                   className={`clay-button-secondary flex-1 py-3 rounded-xl font-title-md text-title-md ${
-                    notation === n ? 'bg-secondary-container text-on-secondary-container' : ''
+                    notation === n ? 'clay-button-selected' : ''
                   }`}
                 >
                   {n === 'latino' ? 'Latino (Do, Re, Mi)' : 'Americano (C, D, E)'}
@@ -133,8 +133,8 @@ export default function PerfilScreen({
 
           {/* Difficulty */}
           <div>
-            <span className="font-title-md text-title-md text-primary block mb-3">Nivel de Dificultad</span>
-            <div className="flex gap-3" role="radiogroup" aria-label="Nivel de Dificultad">
+            <span className="font-title-md text-title-md text-primary block mb-3">Notas por Sesión</span>
+            <div className="flex gap-3" role="radiogroup" aria-label="Notas por Sesión">
               {(['facil', 'normal', 'dificil'] as const).map((d) => (
                 <button
                   key={d}
@@ -142,10 +142,10 @@ export default function PerfilScreen({
                   aria-checked={settings.difficulty === d}
                   onClick={() => updateSetting('difficulty', d)}
                   className={`clay-button-secondary flex-1 py-3 rounded-xl font-title-md text-title-md ${
-                    settings.difficulty === d ? 'bg-secondary-container text-on-secondary-container' : ''
+                    settings.difficulty === d ? 'clay-button-selected' : ''
                   }`}
                 >
-                  {d === 'facil' ? 'Fácil' : d === 'normal' ? 'Normal' : 'Difícil'}
+                  {d === 'facil' ? '5 Notas' : d === 'normal' ? '10 Notas' : '20 Notas'}
                 </button>
               ))}
             </div>

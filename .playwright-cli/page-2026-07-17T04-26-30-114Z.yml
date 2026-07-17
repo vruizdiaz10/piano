@@ -1,0 +1,77 @@
+- generic [ref=e166]:
+  - navigation [ref=e167]:
+    - button "Ir al inicio" [ref=e169] [cursor=pointer]: Clavis
+    - generic [ref=e170]:
+      - button "Inicio" [ref=e171] [cursor=pointer]
+      - button "Biblioteca" [ref=e172] [cursor=pointer]
+    - button "Menú de Pianista" [ref=e175] [cursor=pointer]:
+      - generic [ref=e176]:
+        - paragraph [ref=e177]: Nivel 1
+        - paragraph [ref=e178]: Pianista
+      - generic [ref=e180]: P
+      - generic [ref=e181]: expand_more
+  - main [ref=e182]:
+    - generic [ref=e183]:
+      - heading "Biblioteca de Lecciones" [level=1] [ref=e184]
+      - paragraph [ref=e185]: Tu camino hacia el dominio musical. Completa las lecciones paso a paso para desbloquear nuevos conceptos y refinar tu técnica.
+    - generic [ref=e186]:
+      - heading "Fundamentos" [level=2] [ref=e189]
+      - generic [ref=e191] [cursor=pointer]:
+        - generic [ref=e193]: check_circle
+        - generic [ref=e194]:
+          - generic [ref=e195]:
+            - heading "Las Líneas" [level=3] [ref=e196]
+            - generic [ref=e197]: Completado
+          - paragraph [ref=e198]: Introducción a las cinco líneas del pentagrama y su significado.
+          - button "replay Repasar Lección" [ref=e199]:
+            - generic [ref=e200]: replay
+            - text: Repasar Lección
+      - generic [ref=e202] [cursor=pointer]:
+        - generic [ref=e204]: check_circle
+        - generic [ref=e205]:
+          - generic [ref=e206]:
+            - heading "Los Espacios" [level=3] [ref=e207]
+            - generic [ref=e208]: Completado
+          - paragraph [ref=e209]: Descubre cómo los espacios entre líneas albergan nuevas notas.
+          - button "replay Repasar Lección" [ref=e210]:
+            - generic [ref=e211]: replay
+            - text: Repasar Lección
+      - generic [ref=e213] [cursor=pointer]:
+        - generic [ref=e215]: music_note
+        - generic [ref=e216]:
+          - generic [ref=e217]:
+            - heading "Fluidez Mixta" [level=3] [ref=e218]
+            - generic [ref=e219]: En Progreso
+          - paragraph [ref=e220]: Combina la lectura de líneas y espacios para leer tu primera partitura completa.
+          - generic [ref=e222]:
+            - generic [ref=e223]: Progreso
+            - generic [ref=e224]: 60%
+          - button "Continuar Lección arrow_forward" [ref=e227]:
+            - generic [ref=e228]: Continuar Lección
+            - generic [ref=e229]: arrow_forward
+      - heading "Técnica Intermedia" [level=2] [ref=e231]
+      - generic [ref=e233] [cursor=pointer]:
+        - generic [ref=e235]: lock
+        - generic [ref=e236]:
+          - generic [ref=e237]:
+            - heading "Escalas Mayores" [level=3] [ref=e238]
+            - generic [ref=e239]: Bloqueado
+          - paragraph [ref=e240]: Comprende la estructura de tonos y semitonos en las escalas mayores.
+      - generic [ref=e242] [cursor=pointer]:
+        - generic [ref=e244]: lock
+        - generic [ref=e245]:
+          - generic [ref=e246]:
+            - heading "Acordes Básicos" [level=3] [ref=e247]
+            - generic [ref=e248]: Bloqueado
+          - paragraph [ref=e249]: Construye tríadas mayores y menores fundamentales.
+  - contentinfo [ref=e250]:
+    - generic [ref=e251]:
+      - generic [ref=e252]: Clavis
+      - generic [ref=e253]: © 1724 Clavis Conservatory of Music. All rights reserved.
+      - navigation [ref=e254]:
+        - link "Honor Code" [disabled] [ref=e255] [cursor=pointer]:
+          - /url: "#"
+        - link "Terms of Service" [disabled] [ref=e256] [cursor=pointer]:
+          - /url: "#"
+        - link "Support" [disabled] [ref=e257] [cursor=pointer]:
+          - /url: "#"

@@ -1,5 +1,5 @@
 
-import NavUserMenu from '../components/NavUserMenu';
+import TopNavBar from '../components/TopNavBar';
 
 interface BibliotecaScreenProps {
   onNavigate: (target: string) => void;
@@ -43,43 +43,17 @@ export default function BibliotecaScreen({
 }: BibliotecaScreenProps) {
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* TopNavBar */}
-      <header className="sticky top-0 z-50 bg-sheet-cream shadow-[0_20px_20px_-5px_rgba(0,0,0,0.05),inset_4px_4px_8px_rgba(255,255,255,0.8),inset_-4px_-4px_8px_rgba(0,0,0,0.05)]">
-        <div className="flex justify-between items-center px-container-padding py-4 w-full max-w-7xl mx-auto">
-          <div className="font-display-lg text-display-lg font-semibold text-primary">
-            Clavis
-          </div>
-          <nav className="hidden md:flex gap-8">
-            {[
-              { key: 'dashboard', label: 'Inicio' },
-              { key: 'perfil', label: 'Perfil' },
-              { key: 'biblioteca', label: 'Biblioteca', active: true },
-            ].map((s) => (
-              <button
-                key={s.key}
-                onClick={() => onNavigate(s.key)}
-                className={`font-body-lg text-body-lg font-medium transition-all duration-150 hover:scale-105 active:scale-95 ${
-                  s.active
-                    ? 'text-primary border-b-2 border-brass-highlight pb-1 font-bold'
-                    : 'text-on-surface-variant hover:text-primary'
-                }`}
-              >
-                {s.label}
-              </button>
-            ))}
-          </nav>
-          <NavUserMenu
-            userName={userName}
-            userLevel={userLevel}
-            userAvatar={userAvatar}
-            onProfile={() => onNavigate('perfil')}
-            onLogout={onLogout}
-          />
-        </div>
-      </header>
+      <TopNavBar
+        activeScreen="biblioteca"
+        onNavigate={onNavigate}
+        onLogout={onLogout}
+        userName={userName}
+        userLevel={userLevel}
+        userAvatar={userAvatar}
+      />
 
       {/* Main Content */}
-      <main className="flex-grow w-full max-w-7xl mx-auto px-container-padding py-stack-lg flex flex-col items-center">
+      <main className="flex-grow w-full max-w-7xl mx-auto px-container-padding pt-28 pb-stack-lg flex flex-col items-center">
         <div className="text-center mb-stack-lg max-w-2xl">
           <h1 className="font-display-lg text-display-lg text-primary mb-stack-sm drop-shadow-sm">
             Biblioteca de Lecciones

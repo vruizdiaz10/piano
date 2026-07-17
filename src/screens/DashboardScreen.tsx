@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { RankInfo, RoadmapStep } from '../utils/dashboardStats';
 import { weeklyAccuracyPath } from '../utils/dashboardStats';
-import NavUserMenu from '../components/NavUserMenu';
+import TopNavBar from '../components/TopNavBar';
 
 interface DashboardProps {
   onNavigate: (target: string) => void;
@@ -76,46 +76,14 @@ export default function DashboardScreen({
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* TopNavBar */}
-      <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding h-20 bg-sheet-cream/90 backdrop-blur-md shadow-[0_8px_30px_-5px_rgba(61,31,16,0.05)] border-b border-outline-variant/30">
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => onNavigate('dashboard')}
-            className="font-headline-lg text-headline-lg font-bold text-primary hover:text-velvet-red transition-colors"
-            aria-label="Ir al inicio"
-          >
-            Clavis
-          </button>
-        </div>
-        <div className="hidden md:flex gap-8">
-          {[
-            { key: 'dashboard', label: 'Inicio' },
-            { key: 'biblioteca', label: 'Biblioteca' },
-          ].map((s) => (
-            <button
-              key={s.key}
-              onClick={() => onNavigate(s.key)}
-              className={`font-label-caps text-label-caps uppercase tracking-widest transition-colors ${
-                s.key === 'dashboard'
-                  ? 'text-primary border-b-2 border-primary pb-1 font-bold'
-                  : 'text-on-surface-variant font-medium hover:text-primary'
-              }`}
-            >
-              {s.label}
-            </button>
-          ))}
-        </div>
-        <div className="flex items-center gap-4">
-          <NavUserMenu
-            userName={userName}
-            userLevel={userLevel}
-            userAvatar={userAvatar}
-            onProfile={() => onNavigate('perfil')}
-            onLogout={onLogout}
-          />
-        </div>
-      </nav>
+      <TopNavBar
+        activeScreen="dashboard"
+        onNavigate={onNavigate}
+        onLogout={onLogout}
+        userName={userName}
+        userLevel={userLevel}
+        userAvatar={userAvatar}
+      />
 
       {/* Main Content */}
       <main className="flex-1 w-full max-w-[1200px] mx-auto px-container-padding pb-stack-md md:pb-stack-lg grid grid-cols-1 lg:grid-cols-12 gap-10 pt-28">

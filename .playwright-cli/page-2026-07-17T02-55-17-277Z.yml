@@ -1,0 +1,14 @@
+- main [ref=e6]:
+  - generic [ref=e7]:
+    - generic [ref=e9]: school
+    - generic [ref=e10]:
+      - heading "Clavis" [level=1] [ref=e11]
+      - paragraph [ref=e12]: Donde cada nota cuenta
+    - generic [ref=e13]:
+      - button "Continuar con Google" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+        - text: Continuar con Google
+      - button "person_off Entrar como Invitado" [ref=e20] [cursor=pointer]:
+        - generic [ref=e21]: person_off
+        - text: Entrar como Invitado
+  - paragraph [ref=e22]: Clavis Academy of Musical Excellence

@@ -1,0 +1,145 @@
+- generic [ref=e24]:
+  - navigation [ref=e25]:
+    - button "Ir al inicio" [ref=e27] [cursor=pointer]: Clavis
+    - generic [ref=e28]:
+      - button "Inicio" [ref=e29] [cursor=pointer]
+      - button "Biblioteca" [ref=e30] [cursor=pointer]
+    - generic [ref=e32]:
+      - button "Menú de Pianista" [expanded] [active] [ref=e33] [cursor=pointer]:
+        - generic [ref=e34]:
+          - paragraph [ref=e35]: Nivel 1
+          - paragraph [ref=e36]: Pianista
+        - generic [ref=e38]: P
+        - generic [ref=e39]: expand_more
+      - menu [ref=e166]:
+        - menuitem "Perfil" [ref=e167] [cursor=pointer]:
+          - generic [ref=e168]: person
+          - text: Perfil
+        - separator [ref=e169]
+        - menuitem "Cerrar sesión" [ref=e170] [cursor=pointer]:
+          - generic [ref=e171]: logout
+          - text: Cerrar sesión
+  - main [ref=e40]:
+    - generic [ref=e41]:
+      - generic [ref=e42]:
+        - generic:
+          - generic: music_note
+        - generic [ref=e43]:
+          - generic [ref=e45]: Configuración de sesión
+          - heading "ELIGE TU DESAFÍO" [level=1] [ref=e46]
+          - generic [ref=e47]:
+            - generic [ref=e48]: Tipo de Lección
+            - generic [ref=e49] [cursor=pointer]:
+              - generic [ref=e50]:
+                - generic [ref=e51]: music_note
+                - generic [ref=e52]: Líneas (Sol)
+              - generic [ref=e53]: expand_more
+          - generic [ref=e54]:
+            - button "05 Notas" [ref=e55] [cursor=pointer]:
+              - generic [ref=e56]: "05"
+              - generic [ref=e57]: Notas
+            - button "10 Notas" [pressed] [ref=e58] [cursor=pointer]:
+              - generic [ref=e59]: "10"
+              - generic [ref=e60]: Notas
+            - button "20 Notas" [ref=e61] [cursor=pointer]:
+              - generic [ref=e62]: "20"
+              - generic [ref=e63]: Notas
+          - generic [ref=e64]:
+            - generic [ref=e65]:
+              - generic [ref=e67]: timer
+              - generic [ref=e68]:
+                - heading "Modo Cronometrado" [level=3] [ref=e69]
+                - paragraph [ref=e70]: Corre contra el reloj
+            - switch "Modo Cronometrado" [ref=e71] [cursor=pointer]
+          - button "play_arrow Iniciar Sesión" [ref=e72] [cursor=pointer]:
+            - generic [ref=e73]: play_arrow
+            - text: Iniciar Sesión
+      - generic [ref=e74]:
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - heading "HOJA DE RUTA" [level=2] [ref=e77]
+            - paragraph [ref=e78]: Progreso actual en el conjunto de lecciones
+          - button "info Detalles" [ref=e79] [cursor=pointer]:
+            - generic [ref=e80]: info
+            - text: Detalles
+        - generic [ref=e81]:
+          - img
+          - generic [ref=e82]:
+            - generic [ref=e84]: piano
+            - generic [ref=e85]:
+              - text: En progreso 0%
+              - heading "Líneas (Sol)" [level=3] [ref=e86]
+              - paragraph [ref=e87]: Notas en líneas del pentagrama
+              - 'progressbar "Progreso: 0%" [ref=e88]'
+          - generic [ref=e89]:
+            - generic [ref=e91]: lock
+            - generic [ref=e92]:
+              - text: Paso 02 · Bloqueado
+              - heading "Espacios (Sol)" [level=3] [ref=e93]
+              - paragraph [ref=e94]: Notas en espacios del pentagrama
+          - generic [ref=e95]:
+            - generic [ref=e97]: lock
+            - generic [ref=e98]:
+              - text: Paso 03 · Bloqueado
+              - heading "Líneas+Espacios (Sol)" [level=3] [ref=e99]
+              - paragraph [ref=e100]: Líneas y espacios combinados
+    - generic [ref=e101]:
+      - generic [ref=e102]:
+        - generic [ref=e104]: emoji_events
+        - generic [ref=e105]:
+          - paragraph [ref=e106]: Rango
+          - heading "Bronce" [level=3] [ref=e107]
+          - 'progressbar "Rango: 0%" [ref=e108]'
+      - generic [ref=e109]:
+        - generic [ref=e110]:
+          - heading "PANEL DE CLAVIS" [level=2] [ref=e111]
+          - generic [ref=e112]:
+            - generic [ref=e113]: sensors
+            - text: Live
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - generic [ref=e117]: local_fire_department
+            - generic [ref=e118]: "0"
+            - generic [ref=e119]: Racha Diaria
+          - generic [ref=e120]:
+            - generic [ref=e122]: stars
+            - generic [ref=e123]: "0"
+            - generic [ref=e124]: Puntaje
+        - generic [ref=e125]:
+          - generic [ref=e126]:
+            - generic [ref=e127]: warning
+            - generic [ref=e128]: Notas Desafiantes
+          - paragraph [ref=e129]: Sin notas débiles aún. ¡Practica para descubrirlas!
+        - generic [ref=e130]:
+          - generic [ref=e131]:
+            - generic [ref=e132]: Precisión Semanal
+            - generic [ref=e133]: 0%
+          - img [ref=e134]
+      - generic [ref=e135]:
+        - heading "Rendimiento" [level=3] [ref=e136]
+        - generic [ref=e137]:
+          - generic "Sin práctica" [ref=e138]: L
+          - generic "Sin práctica" [ref=e139]: M
+          - generic "Sin práctica" [ref=e140]: M
+          - generic "Hoy" [ref=e141]: J
+          - generic "Pendiente" [ref=e142]: V
+          - generic "Pendiente" [ref=e143]: S
+          - generic "Pendiente" [ref=e144]: D
+        - paragraph [ref=e145]: “Cada nota incorrecta es una lección disfrazada de error.”
+      - generic [ref=e146]:
+        - generic [ref=e148]: P
+        - heading "Sabiduría del Sensei" [level=3] [ref=e149]
+        - paragraph [ref=e151]: “Cada nota incorrecta es una lección disfrazada de error.”
+      - generic [ref=e152]:
+        - generic [ref=e153]:
+          - generic [ref=e154]: Notas Tocadas
+          - generic [ref=e155]: "0"
+        - generic [ref=e156]:
+          - generic [ref=e157]: Sellos de Oro
+          - generic [ref=e158]: "0"
+        - generic [ref=e159]:
+          - generic [ref=e160]: Tiempo Total
+          - generic [ref=e161]: 0s
+  - contentinfo [ref=e162]:
+    - generic [ref=e164]: Clavis
+    - paragraph [ref=e165]: © 18th Century Conservatory - Clavis Academy of Musical Excellence.

@@ -1,0 +1,75 @@
+- generic [ref=e122]:
+  - navigation [ref=e123]:
+    - button "Ir al inicio" [ref=e125] [cursor=pointer]: Clavis
+    - generic [ref=e126]:
+      - button "Inicio" [ref=e127] [cursor=pointer]
+      - button "Biblioteca" [ref=e128] [cursor=pointer]
+    - button "Menú de Pianista" [ref=e131] [cursor=pointer]:
+      - generic [ref=e132]:
+        - paragraph [ref=e133]: Nivel 1
+        - paragraph [ref=e134]: Pianista
+      - generic [ref=e136]: P
+      - generic [ref=e137]: expand_more
+  - generic [ref=e138]:
+    - generic [ref=e139]:
+      - generic [ref=e140]: P
+      - generic [ref=e141]:
+        - heading "Pianista" [level=1] [ref=e142]
+        - generic [ref=e143]:
+          - generic [ref=e144]: workspace_premium
+          - generic [ref=e145]: Nivel 1
+      - button "logout Cerrar Sesión" [ref=e146] [cursor=pointer]:
+        - generic [ref=e147]: logout
+        - text: Cerrar Sesión
+    - generic [ref=e148]:
+      - generic [ref=e149]:
+        - generic [ref=e150]: star
+        - generic [ref=e151]: "0"
+        - generic [ref=e152]: Estrellas
+      - generic [ref=e153]:
+        - generic [ref=e154]: music_note
+        - generic [ref=e155]: "0"
+        - generic [ref=e156]: Notas Maestradas
+      - generic [ref=e157]:
+        - generic [ref=e158]: local_fire_department
+        - generic [ref=e159]: "0"
+        - generic [ref=e160]: Racha
+    - generic [ref=e161]:
+      - heading "Configuración" [level=2] [ref=e162]
+      - generic [ref=e163]:
+        - generic [ref=e164]: Idioma
+        - combobox [ref=e165]:
+          - option "Español" [selected]
+          - option "English"
+      - generic [ref=e166]:
+        - generic [ref=e167]: "Visualización: Notas Alfabéticas"
+        - switch "Notas Alfabéticas" [ref=e168] [cursor=pointer]
+      - generic [ref=e169]:
+        - generic [ref=e170]: "Tecla Correcta: Flash de Éxito"
+        - switch "Flash de Éxito en tecla correcta" [checked] [ref=e171] [cursor=pointer]
+      - generic [ref=e172]:
+        - generic [ref=e173]: "Tecla Incorrecta: Flash de Error"
+        - switch "Flash de Error en tecla incorrecta" [checked] [ref=e174] [cursor=pointer]
+      - generic [ref=e175]:
+        - generic [ref=e176]: "Tema: Modo Oscuro"
+        - switch "Modo Oscuro" [ref=e177] [cursor=pointer]
+      - generic [ref=e178]:
+        - generic [ref=e179]: Nivel de Dificultad
+        - radiogroup "Nivel de Dificultad" [ref=e180]:
+          - radio "Fácil" [ref=e181] [cursor=pointer]
+          - radio "Normal" [checked] [ref=e182] [cursor=pointer]
+          - radio "Difícil" [ref=e183] [cursor=pointer]
+    - generic [ref=e184]:
+      - heading "Mi Perfil" [level=2] [ref=e185]
+      - generic [ref=e186]:
+        - generic [ref=e187]: Notas Tocadas
+        - generic [ref=e188]: 1,245
+      - generic [ref=e189]:
+        - generic [ref=e190]: Tiempo Tocando
+        - generic [ref=e191]: 12h 30m
+      - generic [ref=e192]:
+        - generic [ref=e193]: Primera Sesión
+        - generic [ref=e194]: 15 Ene 2025
+    - generic [ref=e195]:
+      - heading "Zona de Peligro" [level=2] [ref=e196]
+      - button "Borrar Cuenta" [ref=e197] [cursor=pointer]
