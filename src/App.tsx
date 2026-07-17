@@ -440,6 +440,7 @@ function AppContent() {
           }}
           onSettingsChange={(s) => {
             setTheme(s.darkMode ? 'dark' : 'light')
+            setSessionTarget(s.difficulty === 'facil' ? 5 : s.difficulty === 'normal' ? 10 : 20)
           }}
           onDeleteAccount={handleDeleteAccount}
           onLogout={handleLogout}

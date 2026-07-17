@@ -12,6 +12,13 @@ function loadNotation(): Notation {
   return (localStorage.getItem('piano-notation') as Notation) ?? 'american'
 }
 
+function loadTheme(): 'light' | 'dark' {
+  if (typeof window === 'undefined') return 'light'
+  const stored = localStorage.getItem('piano-theme') as 'light' | 'dark' | null
+  if (stored) return stored
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 const INITIAL_STATE: GameState = {
   notation: loadNotation(),
   phase: 'idle',
@@ -29,7 +36,7 @@ const INITIAL_STATE: GameState = {
   sessionTarget: SESSION_TARGET,
   startTime: null,
   isMuted: false,
-  theme: (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light',
+  theme: loadTheme(),
   noteShownAt: 0,
   responseTimes: [],
   lastCorrectNote: null,
@@ -138,6 +145,7 @@ export function useGameState() {
   }, [])
 
   const setTheme = useCallback((theme: 'light' | 'dark') => {
+    localStorage.setItem('piano-theme', theme)
     setState(prev => ({ ...prev, theme }))
   }, [])
 
