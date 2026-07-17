@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { User } from 'firebase/auth'
-import { SENSEI_QUOTES } from '../data/senseiQuotes'
+import { SENSEI_QUOTES, type Quote } from '../data/senseiQuotes'
 import { loadQuoteHistory, saveQuoteHistory } from '../firebase/firestore'
 
 function getToday(): string {
@@ -29,7 +29,8 @@ function saveLocal(indices: number[]): void {
 }
 
 export function useQuoteHistory(user: User | null) {
-  const [shownIndices, setShownIndices] = useState<number[]>(() => loadLocal())
+  const [quote, setQuote] = useState(() => pickQuote(loadLocal()))
+  const shownRef = useRef<number[]>(loadLocal())
 
   // Sync from Firestore on mount (authenticated users only)
   useEffect(() => {
@@ -37,46 +38,36 @@ export function useQuoteHistory(user: User | null) {
     const date = getToday()
     loadQuoteHistory(user.uid, date).then((firestoreIndices) => {
       if (firestoreIndices.length === 0) return
-      setShownIndices((prev) => {
-        const merged = [...new Set([...prev, ...firestoreIndices])]
-        if (merged.length > prev.length) {
-          saveLocal(merged) // update localStorage with merged set
-        }
-        return merged
-      })
-    }).catch(() => { /* offline or error — localStorage is source of truth */ })
+      shownRef.current = [...new Set([...shownRef.current, ...firestoreIndices])]
+      saveLocal(shownRef.current)
+    }).catch(() => { /* offline — localStorage is source of truth */ })
   }, [user])
 
-  const getRandomQuote = useCallback(() => {
-    const pool = SENSEI_QUOTES
-    const available = pool
-      .map((q, i) => ({ q, i }))
-      .filter(({ i }) => !shownIndices.includes(i))
-
-    let selected: typeof pool[number]
-    let selectedIndex: number
-
-    if (available.length > 0) {
-      const pick = available[Math.floor(Math.random() * available.length)]
-      selected = pick.q
-      selectedIndex = pick.i
-    } else {
-      // Pool exhausted — allow repeats
-      selectedIndex = Math.floor(Math.random() * pool.length)
-      selected = pool[selectedIndex]
-    }
-
-    const newIndices = [...shownIndices, selectedIndex]
-    setShownIndices(newIndices)
-    saveLocal(newIndices)
-
-    // Persist to Firestore if authenticated
+  // Pick a new quote (called from event handlers, not during render)
+  const nextQuote = () => {
+    const q = pickQuote(shownRef.current)
+    shownRef.current = [...shownRef.current, q.index]
+    saveLocal(shownRef.current)
+    setQuote(q)
     if (user) {
-      saveQuoteHistory(user.uid, getToday(), newIndices).catch(() => { /* noop */ })
+      saveQuoteHistory(user.uid, getToday(), shownRef.current).catch(() => { /* noop */ })
     }
+    return q
+  }
 
-    return selected
-  }, [shownIndices, user])
+  return { quote, nextQuote }
+}
 
-  return { getRandomQuote }
+function pickQuote(shownIndices: number[]): Quote & { index: number } {
+  const pool = SENSEI_QUOTES
+  const available = pool
+    .map((q, i) => ({ ...q, index: i }))
+    .filter(({ index }) => !shownIndices.includes(index))
+
+  if (available.length > 0) {
+    return available[Math.floor(Math.random() * available.length)]
+  }
+  // Pool exhausted — allow repeats
+  const index = Math.floor(Math.random() * pool.length)
+  return { ...pool[index], index }
 }

@@ -43,7 +43,7 @@ function AppContent() {
   const { user, loading, signOut } = useAuth()
   const { syncState, saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
   const { config, updateConfig } = useConfigSync(user)
-  const { getRandomQuote } = useQuoteHistory(user)
+  const { quote: currentQuote, nextQuote } = useQuoteHistory(user)
   const [isPaused, setIsPaused] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'warning' | 'error' } | null>(null)
 
@@ -54,6 +54,7 @@ function AppContent() {
   // Skip welcome screen if user is already logged in
   useEffect(() => {
     if (!loading && user && screen === 'inicio') {
+      nextQuote()
       setScreen('dashboard')
     }
   }, [loading, user, screen])
@@ -290,7 +291,7 @@ function AppContent() {
 
   const handleGuestEnter = () => {
     setIsStarting(true)
-    setTimeout(() => { setScreen('dashboard'); setIsStarting(false) }, 600)
+    setTimeout(() => { nextQuote(); setScreen('dashboard'); setIsStarting(false) }, 600)
   }
 
   const handleGoogleSignIn = async () => {
@@ -360,7 +361,7 @@ function AppContent() {
           }}
           roadmap={dash.roadmap}
           rank={dash.rank}
-          senseiQuote={getRandomQuote()}
+          senseiQuote={currentQuote}
           userName={user?.displayName || user?.email?.split('@')[0] || 'Pianista'}
           userLevel={dash.userLevel}
           userAvatar={user?.photoURL || undefined}
