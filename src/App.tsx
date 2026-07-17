@@ -14,7 +14,8 @@ import AuthProvider from './hooks/useAuthProvider'
 import { useAuth } from './hooks/useAuth'
 import { useSessionSync } from './hooks/useSessionSync'
 import { useConfigSync } from './hooks/useConfigSync'
-import { SENSEI_QUOTES, type Quote } from './data/senseiQuotes'
+import { useQuoteHistory } from './hooks/useQuoteHistory'
+
 
 import Toast from './components/Toast'
 import InicioScreen from './screens/InicioScreen'
@@ -38,10 +39,11 @@ function AppContent() {
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
   const { dailyStreak, markToday } = useDailyStreak()
   const liveRegionRef = useRef<HTMLDivElement>(null)
-  const recentQuotes = useRef<Set<string>>(new Set())
+
   const { user, loading, signOut } = useAuth()
   const { syncState, saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
   const { config, updateConfig } = useConfigSync(user)
+  const { getRandomQuote } = useQuoteHistory(user)
   const [isPaused, setIsPaused] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'warning' | 'error' } | null>(null)
 
@@ -312,17 +314,6 @@ function AppContent() {
 
   const selectedLesson = currentLesson?.name ?? 'Líneas'
 
-  const getRandomQuote = () => {
-    if (recentQuotes.current.size >= SENSEI_QUOTES.length - 1) {
-      recentQuotes.current.clear()
-    }
-    let quote: Quote
-    do {
-      quote = SENSEI_QUOTES[Math.floor(Math.random() * SENSEI_QUOTES.length)]
-    } while (recentQuotes.current.has(quote.text))
-    recentQuotes.current.add(quote.text)
-    return quote
-  }
 
   // ── Render ──
   if (screen === 'inicio') {
