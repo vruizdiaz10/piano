@@ -27,10 +27,12 @@ import ResultadosScreen from './screens/ResultadosScreen'
 type Screen = 'inicio' | 'dashboard' | 'biblioteca' | 'perfil' | 'practica' | 'resultados'
 
 function AppContent() {
-  const { state, startGame, submitAnswer, nextNote, setLesson, setSessionTarget, setShowNoteName, setMuted, setTimed, setNotation, restartGame } = useGameState()
+  const { state, startGame, submitAnswer, nextNote, setLesson, setSessionTarget, setShowNoteName, setMuted, setTimed, setNotation, restartGame, setClef } = useGameState()
   const [highlightKey, setHighlightKey] = useState<number | null>(null)
   const [correctKey, setCorrectKey] = useState<number | null>(null)
   const [wrongKey, setWrongKey] = useState<number | null>(null)
+  const [lastSequentialLesson, setLastSequentialLesson] = useState<string>('lines')
+  const sessions = getSessions()
 
   const [staffFlash, setStaffFlash] = useState<'correct' | 'wrong' | null>(null)
   const [trail, setTrail] = useState<Array<{ note: import('./types').Note; id: number }>>([])
@@ -39,6 +41,13 @@ function AppContent() {
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
   const { dailyStreak, markToday } = useDailyStreak()
   const liveRegionRef = useRef<HTMLDivElement>(null)
+
+  // Quick lesson handler for DashboardScreen generator UI
+  const handleQuickLesson = useCallback((config: import('./types').QuickLessonConfig) => {
+    setScreen('practica')
+    // TODO: Configure game state with generator UI config
+    console.log('Quick lesson config:', config)
+  }, [])
 
   const { user, loading, signOut } = useAuth()
   const { syncState, saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
@@ -51,6 +60,16 @@ function AppContent() {
   const [screen, setScreen] = useState<Screen>('inicio')
   const [isStarting, setIsStarting] = useState(false)
 
+  // Dashboard helper state for TopNavBar buttons
+  const [isTimerActive, setIsTimerActive] = useState(false)
+  const [isHelpVisible, setIsHelpVisible] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
+
+  // Toggle handlers for TopNavBar buttons
+  const toggleHelp = () => setIsHelpVisible(prev => !prev);
+  const toggleTimer = () => setIsTimerActive(prev => !prev);
+  const toggleMute = () => setIsMuted(prev => !prev);
+
   // Skip welcome screen if user is already logged in
   useEffect(() => {
     if (!loading && user && screen === 'inicio') {
@@ -62,11 +81,16 @@ function AppContent() {
   const handleNavigate = (target: string) => setScreen(target as Screen)
 
   const handleStartGame = useCallback((target?: string) => {
-    if (target) setLesson(target)
+    const lessonId = target ?? lastSequentialLesson
+    const lesson = LESSONS.find(l => l.id === lessonId)
+    if (lesson) {
+      setLesson(lessonId)
+      setClef(lesson.clef)
+    }
     markToday()
     startGame()
     setScreen('practica')
-  }, [markToday, startGame, setLesson])
+  }, [markToday, startGame, setLesson, setClef, lastSequentialLesson])
 
   const handleDeleteAccount = async () => {
     if (!user) return
@@ -88,6 +112,15 @@ function AppContent() {
       setScreen('inicio')
     } catch { /* noop */ }
   }
+
+  const handleSelectLesson = useCallback((lessonId: string) => {
+    setLesson(lessonId)
+    const lesson = LESSONS.find(l => l.id === lessonId)
+    if (lesson) {
+      setClef(lesson.clef)
+      setLastSequentialLesson(lessonId)
+    }
+  }, [setLesson, setClef])
 
   // First-login migration: localStorage → Firestore
   useEffect(() => {
@@ -338,16 +371,13 @@ function AppContent() {
           onNavigate={handleNavigate}
           onLogout={handleLogout}
           onStartGame={() => handleStartGame()}
-          lessonTypes={LESSONS.map(l => l.name)}
-          selectedLesson={selectedLesson}
-          onSelectLesson={(name) => {
-            const lesson = LESSONS.find(l => l.name === name)
-            if (lesson) setLesson(lesson.id)
-          }}
-          noteCount={state.sessionTarget}
-          onSelectNoteCount={(n) => setSessionTarget(n)}
-          timedMode={state.isTimed}
-          onToggleTimed={() => setTimed(!state.isTimed)}
+          onQuickLesson={handleQuickLesson}
+          onToggleHelp={toggleHelp}
+          onToggleTimer={toggleTimer}
+          onToggleMute={toggleMute}
+          isMuted={isMuted}
+          isHelpVisible={isHelpVisible}
+          isTimerActive={isTimerActive}
           stats={{
             streak: dailyStreak,
             score: dash.score,
@@ -377,11 +407,12 @@ function AppContent() {
         <BibliotecaScreen
           onNavigate={handleNavigate}
           onLogout={handleLogout}
-          onSelectLesson={(id) => setLesson(id)}
+          onSelectLesson={handleSelectLesson}
           onStartGame={() => handleStartGame()}
           userName={user?.displayName || user?.email?.split('@')[0] || 'Pianista'}
           userLevel={Math.floor(state.bestStreak / 10) + 1}
           userAvatar={user?.photoURL || undefined}
+          sessions={sessions}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
       </div>

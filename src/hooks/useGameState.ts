@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { GameState, Note, ErrorType, Notation } from '../types'
+import { GameState, Note, ErrorType, Notation, Clef } from '../types'
 import { midiToNote } from '../utils/midiToNote'
 import { analyzeError } from '../utils/errorAnalysis'
 import { addWeakNote, getWeakNotes } from '../utils/weakPool'
@@ -155,8 +155,17 @@ export function useGameState() {
     })
   }, [])
 
+  const setCustomPool = useCallback((pool: number[] | undefined) => {
+    setState(prev => ({ ...prev, customPool: pool }))
+  }, [])
+
+  const setClef = useCallback((clef: Clef) => {
+    setState(prev => ({ ...prev, clef }))
+  }, [])
+
   return {
     state, startGame, submitAnswer, nextNote,
     setLesson, setSessionTarget, setShowNoteName, setMuted, setTimed, setNotation, restartGame,
+    setCustomPool, setClef,
   }
 }

@@ -9,6 +9,7 @@ interface BibliotecaScreenProps {
   userName?: string;
   userLevel?: number;
   userAvatar?: string;
+  sessions?: import('../utils/sessionHistory').SessionRecord[];
 }
 
 interface LessonNode {

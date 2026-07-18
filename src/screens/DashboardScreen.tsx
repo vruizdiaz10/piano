@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import type { QuickLessonConfig } from '../types'
 import type { RankInfo, RoadmapStep } from '../utils/dashboardStats';
 import type { Quote } from '../data/senseiQuotes';
@@ -7,15 +7,8 @@ import TopNavBar from '../components/TopNavBar';
 
 interface DashboardProps {
   onNavigate: (target: string) => void;
-  onLogout: () => void;
+  onLogout?: () => void;
   onStartGame: () => void;
-  lessonTypes: string[];
-  selectedLesson: string;
-  onSelectLesson: (lesson: string) => void;
-  noteCount: number;
-  onSelectNoteCount: (count: number) => void;
-  timedMode: boolean;
-  onToggleTimed: () => void;
   stats: {
     streak: number;
     score: string;
@@ -33,7 +26,7 @@ interface DashboardProps {
   userName?: string;
   userLevel?: number;
   userAvatar?: string;
-  onQuickLesson?: (config: QuickLessonConfig) => void; // Added from task brief
+  onQuickLesson?: (config: QuickLessonConfig) => void;
 }
 
 const WEEKDAY_LABELS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
@@ -41,14 +34,7 @@ const WEEKDAY_LABELS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 export default function DashboardScreen({
   onNavigate,
   onLogout,
-  onStartGame,
-  lessonTypes,
-  selectedLesson,
-  onSelectLesson,
-  noteCount,
-  onSelectNoteCount,
-  timedMode,
-  onToggleTimed,
+  onStartGame: _onStartGame,
   stats,
   roadmap,
   rank,
@@ -56,11 +42,8 @@ export default function DashboardScreen({
   userName = 'Pianista',
   userLevel = 1,
   userAvatar,
-  onQuickLesson, // Added from task brief
+  onQuickLesson,
 }: DashboardProps) {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
   // State for the new generator UI and onboarding banner
   const [config, setConfig] = useState<QuickLessonConfig>({
     clef: 'treble',
@@ -76,17 +59,6 @@ export default function DashboardScreen({
   const [showOnboarding, setShowOnboarding] = useState(() => {
     return !localStorage.getItem('piano-onboarding-seen');
   });
-
-  useEffect(() => {
-    if (!showDropdown) return
-    const handleClick = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setShowDropdown(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [showDropdown])
 
   const chartPath = weeklyAccuracyPath(stats.weeklyAccuracies)
   const todayIdx = (() => {
@@ -131,7 +103,7 @@ export default function DashboardScreen({
           <section className="clay-card p-6 sm:p-8">
             <h3 className="font-headline-lg-mobile md:font-headline-lg text-foreground mb-4 flex items-center gap-2">
               <span className="material-symbols-outlined text-primary">bolt</span>
-              Generador Rápido
+              Lección Rápida
             </h3>
 
             {/* Default controls */}
@@ -189,106 +161,89 @@ export default function DashboardScreen({
                   <span className="clay-switch-knob" />
                 </button>
               </div>
-            </div>
 
-            {/* Advanced toggle — using clay-input-key */}
-            <button
-              onClick={() => setShowAdvanced(!showAdvanced)}
-              aria-expanded={showAdvanced}
-              className="w-full mt-4 py-2 clay-input-key flex items-center justify-center gap-1 text-primary"
-            >
-              <span className="font-label-caps text-label-caps uppercase">{showAdvanced ? 'Ocultar opciones' : 'Personalizar'}</span>
-              <span className={`material-symbols-outlined text-sm transition-transform ${showAdvanced ? 'rotate-180' : ''}`}>
-                expand_more
-              </span>
-            </button>
-
-            {/* Advanced controls */}
-            {showAdvanced && (
-              <div className="mt-4 space-y-4 border-t border-outline-variant/30 pt-4">
-                {/* Lines/Spaces — using clay-switch */}
-                <div className="flex gap-4">
-                  <div className="flex-1 flex items-center justify-between">
-                    <span className="text-body-md font-medium text-on-surface-variant">Líneas</span>
-                    <button
-                      role="switch"
-                      aria-checked={config.lines}
-                      aria-label="Líneas"
-                      onClick={() => setConfig(prev => ({ ...prev, lines: !prev.lines }))}
-                      className={`clay-switch ${config.lines ? 'on' : ''}`}
-                    >
-                      <span className="clay-switch-knob" />
-                    </button>
-                  </div>
-                  <div className="flex-1 flex items-center justify-between">
-                    <span className="text-body-md font-medium text-on-surface-variant">Espacios</span>
-                    <button
-                      role="switch"
-                      aria-checked={config.spaces}
-                      aria-label="Espacios"
-                      onClick={() => setConfig(prev => ({ ...prev, spaces: !prev.spaces }))}
-                      className={`clay-switch ${config.spaces ? 'on' : ''}`}
-                    >
-                      <span className="clay-switch-knob" />
-                    </button>
-                  </div>
-                </div>
-
-                {(!config.lines && !config.spaces) && (
-                  <p className="text-body-sm text-velvet-red text-center">Selecciona al menos líneas o espacios</p>
-                )}
-
-                {/* Ledger lines — w-12 h-12 steppers */}
-                <div className="flex gap-4">
-                  <div className="flex-1">
-                    <label className="text-body-sm font-medium text-on-surface-variant mb-2 block">Adic. arriba</label>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setConfig(prev => ({ ...prev, ledgerAbove: Math.max(0, prev.ledgerAbove - 1) }))}
-                        aria-label="Reducir adicionales arriba"
-                        className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
-                      >-</button>
-                      <span className="flex-1 text-center text-title-md font-bold" aria-live="polite">{config.ledgerAbove}</span>
-                      <button
-                        onClick={() => setConfig(prev => ({ ...prev, ledgerAbove: Math.min(3, prev.ledgerAbove + 1) }))}
-                        aria-label="Aumentar adicionales arriba"
-                        className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
-                      >+</button>
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <label className="text-body-sm font-medium text-on-surface-variant mb-2 block">Adic. abajo</label>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setConfig(prev => ({ ...prev, ledgerBelow: Math.max(0, prev.ledgerBelow - 1) }))}
-                        aria-label="Reducir adicionales abajo"
-                        className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
-                      >-</button>
-                      <span className="flex-1 text-center text-title-md font-bold" aria-live="polite">{config.ledgerBelow}</span>
-                      <button
-                        onClick={() => setConfig(prev => ({ ...prev, ledgerBelow: Math.min(3, prev.ledgerBelow + 1) }))}
-                        aria-label="Aumentar adicionales abajo"
-                        className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
-                      >+</button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Sharps — using clay-switch */}
-                <div className="flex items-center justify-between">
-                  <span className="text-body-md font-medium text-on-surface-variant">Sostenidos</span>
+              {/* Lines/Spaces — using clay-switch */}
+              <div className="flex gap-4">
+                <div className="flex-1 flex items-center justify-between">
+                  <span className="text-body-md font-medium text-on-surface-variant">Líneas</span>
                   <button
                     role="switch"
-                    aria-checked={config.sharps}
-                    aria-label="Sostenidos"
-                    onClick={() => setConfig(prev => ({ ...prev, sharps: !prev.sharps }))}
-                    className={`clay-switch ${config.sharps ? 'on' : ''}`}
+                    aria-checked={config.lines}
+                    aria-label="Líneas"
+                    onClick={() => setConfig(prev => ({ ...prev, lines: !prev.lines }))}
+                    className={`clay-switch ${config.lines ? 'on' : ''}`}
+                  >
+                    <span className="clay-switch-knob" />
+                  </button>
+                </div>
+                <div className="flex-1 flex items-center justify-between">
+                  <span className="text-body-md font-medium text-on-surface-variant">Espacios</span>
+                  <button
+                    role="switch"
+                    aria-checked={config.spaces}
+                    aria-label="Espacios"
+                    onClick={() => setConfig(prev => ({ ...prev, spaces: !prev.spaces }))}
+                    className={`clay-switch ${config.spaces ? 'on' : ''}`}
                   >
                     <span className="clay-switch-knob" />
                   </button>
                 </div>
               </div>
-            )}
+
+              {(!config.lines && !config.spaces) && (
+                <p className="text-body-sm text-velvet-red text-center">Selecciona al menos líneas o espacios</p>
+              )}
+
+              {/* Ledger lines — w-12 h-12 steppers */}
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <label className="text-body-sm font-medium text-on-surface-variant mb-2 block">Adic. arriba</label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setConfig(prev => ({ ...prev, ledgerAbove: Math.max(0, prev.ledgerAbove - 1) }))}
+                      aria-label="Reducir adicionales arriba"
+                      className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
+                    >-</button>
+                    <span className="flex-1 text-center text-title-md font-bold" aria-live="polite">{config.ledgerAbove}</span>
+                    <button
+                      onClick={() => setConfig(prev => ({ ...prev, ledgerAbove: Math.min(3, prev.ledgerAbove + 1) }))}
+                      aria-label="Aumentar adicionales arriba"
+                      className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
+                    >+</button>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <label className="text-body-sm font-medium text-on-surface-variant mb-2 block">Adic. abajo</label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setConfig(prev => ({ ...prev, ledgerBelow: Math.max(0, prev.ledgerBelow - 1) }))}
+                      aria-label="Reducir adicionales abajo"
+                      className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
+                    >-</button>
+                    <span className="flex-1 text-center text-title-md font-bold" aria-live="polite">{config.ledgerBelow}</span>
+                    <button
+                      onClick={() => setConfig(prev => ({ ...prev, ledgerBelow: Math.min(3, prev.ledgerBelow + 1) }))}
+                      aria-label="Aumentar adicionales abajo"
+                      className="w-12 h-12 rounded-xl clay-input-key flex items-center justify-center text-lg"
+                    >+</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sharps — using clay-switch */}
+              <div className="flex items-center justify-between">
+                <span className="text-body-md font-medium text-on-surface-variant">Sostenidos</span>
+                <button
+                  role="switch"
+                  aria-checked={config.sharps}
+                  aria-label="Sostenidos"
+                  onClick={() => setConfig(prev => ({ ...prev, sharps: !prev.sharps }))}
+                  className={`clay-switch ${config.sharps ? 'on' : ''}`}
+                >
+                  <span className="clay-switch-knob" />
+                </button>
+              </div>
+            </div>
 
             {/* Start button — using existing clay-btn-primary CTA */}
             <button
@@ -577,7 +532,7 @@ export default function DashboardScreen({
             <button
               key={item.key}
               onClick={() => onNavigate(item.key)}
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-colors ${ {/* py-2 applied from task brief */}
+              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-colors ${
                 item.key === 'dashboard'
                   ? 'text-primary'
                   : 'text-on-surface-variant'
