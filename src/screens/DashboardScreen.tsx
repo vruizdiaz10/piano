@@ -27,6 +27,13 @@ interface DashboardProps {
   userLevel?: number;
   userAvatar?: string;
   onQuickLesson?: (config: QuickLessonConfig) => void;
+  // TopNavBar dashboard props
+  onToggleHelp?: () => void;
+  onToggleTimer?: () => void;
+  onToggleMute?: () => void;
+  isMuted?: boolean;
+  isHelpVisible?: boolean;
+  isTimerActive?: boolean;
 }
 
 const WEEKDAY_LABELS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
@@ -43,6 +50,12 @@ export default function DashboardScreen({
   userLevel = 1,
   userAvatar,
   onQuickLesson,
+  onToggleHelp,
+  onToggleTimer,
+  onToggleMute,
+  isMuted = false,
+  isHelpVisible = false,
+  isTimerActive = false,
 }: DashboardProps) {
   // State for the new generator UI and onboarding banner
   const [config, setConfig] = useState<QuickLessonConfig>({
@@ -55,7 +68,6 @@ export default function DashboardScreen({
     timed: true,
     noteCount: 20,
   });
-  const [showAdvanced, setShowAdvanced] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(() => {
     return !localStorage.getItem('piano-onboarding-seen');
   });
@@ -75,6 +87,12 @@ export default function DashboardScreen({
         userName={userName}
         userLevel={userLevel}
         userAvatar={userAvatar}
+        onToggleHelp={onToggleHelp}
+        onToggleTimer={onToggleTimer}
+        onToggleMute={onToggleMute}
+        isMuted={isMuted}
+        isHelpVisible={isHelpVisible}
+        isTimerActive={isTimerActive}
       />
 
       {/* Main Content */}

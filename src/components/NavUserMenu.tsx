@@ -5,7 +5,7 @@ interface NavUserMenuProps {
   userLevel?: number
   userAvatar?: string
   onProfile: () => void
-  onLogout: () => void
+  onLogout?: () => void
 }
 
 export default function NavUserMenu({
@@ -91,18 +91,20 @@ export default function NavUserMenu({
             Perfil
           </button>
           <div className="h-px bg-outline-variant/40 my-1.5" role="separator" />
-          <button
-            type="button"
-            role="menuitem"
-            onClick={() => {
-              setOpen(false)
-              onLogout()
-            }}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left font-title-md text-sm text-velvet-red hover:bg-error-container/40 transition-colors"
-          >
-            <span className="material-symbols-outlined text-[20px]" aria-hidden="true">logout</span>
-            Cerrar sesión
-          </button>
+          {onLogout && (
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setOpen(false)
+                onLogout()
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left font-title-md text-sm text-velvet-red hover:bg-error-container/40 transition-colors"
+            >
+              <span className="material-symbols-outlined text-[20px]" aria-hidden="true">logout</span>
+              Cerrar sesión
+            </button>
+          )}
         </div>
       )}
     </div>
