@@ -36,8 +36,8 @@ const INITIAL_STATE: GameState = {
   clef: 'treble',
 }
 
-function selectNote(lessonId: string, excludeMidi?: number): Note {
-  const pool = getLessonPool(lessonId)
+function selectNote(state: GameState, excludeMidi?: number): Note {
+  const pool = state.customPool ?? getLessonPool(state.lessonId)
   const filtered = pool.length > 1 ? pool.filter(m => m !== excludeMidi) : pool
   const weak = getWeakNotes().filter(m => filtered.includes(m))
   // ponytail: 2:1 bias for weak notes, simple random switch
@@ -49,11 +49,12 @@ function selectNote(lessonId: string, excludeMidi?: number): Note {
 export function useGameState() {
   const [state, setState] = useState<GameState>(INITIAL_STATE)
 
-  const startGame = useCallback((target?: number) => {
+  const startGame = useCallback((target?: number, pool?: number[]) => {
     setState(prev => {
-      const note = selectNote(prev.lessonId)
+      const note = selectNote({ ...prev, customPool: pool !== undefined ? pool : undefined })
       return {
         ...prev, phase: 'waiting', currentNote: note,
+        customPool: pool !== undefined ? pool : undefined,
         streak: 0, bestStreak: 0, totalAttempts: 0, correctAttempts: 0,
         lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null,
         startTime: Date.now(), recovering: false,
@@ -112,13 +113,13 @@ export function useGameState() {
 
   const nextNote = useCallback(() => {
     setState(prev => {
-      const note = selectNote(prev.lessonId, prev.currentNote?.midi)
+      const note = selectNote(prev, prev.currentNote?.midi)
       return { ...prev, phase: 'waiting', currentNote: note, lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null, recovering: false, noteShownAt: Date.now(), lastCorrectNote: null }
     })
   }, [])
 
   const setLesson = useCallback((lessonId: string) => {
-    setState(prev => ({ ...prev, lessonId }))
+    setState(prev => ({ ...prev, lessonId, customPool: undefined }))
   }, [])
 
   const setSessionTarget = useCallback((target: number) => {
@@ -144,7 +145,7 @@ export function useGameState() {
 
   const restartGame = useCallback(() => {
     setState(prev => {
-      const note = selectNote(prev.lessonId)
+      const note = selectNote(prev)
       return {
         ...prev, phase: 'waiting', currentNote: note,
         streak: 0, bestStreak: 0, totalAttempts: 0, correctAttempts: 0,
