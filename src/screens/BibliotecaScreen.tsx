@@ -1,6 +1,6 @@
 import TopNavBar from '../components/TopNavBar'
 import { LESSONS } from '../data/lessons'
-import { computeMasteryStatus, type MasteryStatus } from '../utils/dashboardStats'
+import { computeMasteryStatus } from '../utils/dashboardStats'
 import type { SessionRecord } from '../utils/sessionHistory'
 
 interface LessonNode {

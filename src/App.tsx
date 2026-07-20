@@ -49,13 +49,13 @@ function AppContent() {
 
   const handleQuickLesson = useCallback((config: QuickLessonConfig) => {
     setSavedSettings({ target: state.sessionTarget, timed: state.isTimed })
-    state.setLesson('custom')
-    state.setClef(config.clef)
-    state.setTimed(config.timed)
+    setLesson('custom')
+    setClef(config.clef)
+    setTimed(config.timed)
     const pool = buildCustomPool(config)
-    state.startGame(config.noteCount, pool)
+    startGame(config.noteCount, pool)
     setScreen('practica')
-  }, [state])
+  }, [state.sessionTarget, state.isTimed, setLesson, setClef, setTimed, startGame])
 
   const { user, loading, signOut } = useAuth()
   const { syncState, saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
@@ -132,12 +132,12 @@ function AppContent() {
 
   useEffect(() => {
     if (screen === 'dashboard' && savedSettings) {
-      state.setSessionTarget(savedSettings.target)
-      state.setTimed(savedSettings.timed)
-      state.setClef('treble') // reset to default for sequential
+      setSessionTarget(savedSettings.target)
+      setTimed(savedSettings.timed)
+      setClef('treble') // reset to default for sequential
       setSavedSettings(null)
     }
-  }, [screen, savedSettings, state])
+  }, [screen, savedSettings, setSessionTarget, setTimed, setClef])
 
   // First-login migration: localStorage → Firestore
   useEffect(() => {
