@@ -1,5 +1,17 @@
+import TopNavBar from '../components/TopNavBar'
+import { LESSONS } from '../data/lessons'
+import { computeMasteryStatus, type MasteryStatus } from '../utils/dashboardStats'
+import type { SessionRecord } from '../utils/sessionHistory'
 
-import TopNavBar from '../components/TopNavBar';
+interface LessonNode {
+  id: string;
+  title: string;
+  description: string;
+  status: 'completed' | 'active' | 'locked';
+  accuracy?: number;
+  icon: string;
+  offset?: 'left' | 'right' | 'center';
+}
 
 interface BibliotecaScreenProps {
   onNavigate: (target: string) => void;
@@ -9,29 +21,8 @@ interface BibliotecaScreenProps {
   userName?: string;
   userLevel?: number;
   userAvatar?: string;
-  sessions?: import('../utils/sessionHistory').SessionRecord[];
+  sessions?: SessionRecord[];
 }
-
-interface LessonNode {
-  id: string;
-  title: string;
-  description: string;
-  status: 'completed' | 'active' | 'locked';
-  progress?: number;
-  icon: string;
-  offset?: 'left' | 'right' | 'center';
-}
-
-const FUNDAMENTOS: LessonNode[] = [
-  { id: 'lines', title: 'Las Líneas', description: 'Introducción a las cinco líneas del pentagrama y su significado.', status: 'completed', icon: 'check_circle' },
-  { id: 'spaces', title: 'Los Espacios', description: 'Descubre cómo los espacios entre líneas albergan nuevas notas.', status: 'completed', icon: 'check_circle' },
-  { id: 'mixed', title: 'Fluidez Mixta', description: 'Combina la lectura de líneas y espacios para leer tu primera partitura completa.', status: 'active', progress: 60, icon: 'music_note' },
-];
-
-const INTERMEDIA: LessonNode[] = [
-  { id: 'scales', title: 'Escalas Mayores', description: 'Comprende la estructura de tonos y semitonos en las escalas mayores.', status: 'locked', icon: 'lock' },
-  { id: 'chords', title: 'Acordes Básicos', description: 'Construye tríadas mayores y menores fundamentales.', status: 'locked', icon: 'lock' },
-];
 
 export default function BibliotecaScreen({
   onNavigate,
@@ -41,7 +32,27 @@ export default function BibliotecaScreen({
   userName = 'Pianista',
   userLevel = 1,
   userAvatar,
+  sessions = [],
 }: BibliotecaScreenProps) {
+  const trebleLessons = LESSONS.filter(l => l.clef === 'treble')
+  const bassLessons = LESSONS.filter(l => l.clef === 'bass')
+
+  function getStatus(lessonId: string): { status: 'completed' | 'active' | 'locked'; accuracy: number } {
+    const ms = computeMasteryStatus(lessonId, sessions)
+    return { status: ms.mastered ? 'completed' : ms.unlocked ? 'active' : 'locked', accuracy: ms.bestAccuracy }
+  }
+
+  function getActiveIndex(lessons: typeof LESSONS): number {
+    const idx = lessons.findIndex(l => !computeMasteryStatus(l.id, sessions).mastered)
+    return idx === -1 ? lessons.length - 1 : idx
+  }
+
+  const trebleActiveIdx = getActiveIndex(trebleLessons)
+  const bassActiveIdx = getActiveIndex(bassLessons)
+  // ponytail: O(n*m) fine for 18 lessons, batch-compute if lesson count grows
+  const trebleCompleted = trebleLessons.filter(l => computeMasteryStatus(l.id, sessions).mastered).length
+  const bassCompleted = bassLessons.filter(l => computeMasteryStatus(l.id, sessions).mastered).length
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <TopNavBar
@@ -65,31 +76,66 @@ export default function BibliotecaScreen({
         </div>
 
         {/* Learning Path */}
-        <div className="relative w-full max-w-3xl flex flex-col items-center gap-16 py-8">
-          {/* Connecting Line */}
+        <div className="relative w-full max-w-3xl flex flex-col items-center gap-6 py-8">
           <div className="path-line" />
 
-          {/* Category: Fundamentos */}
+          {/* Treble Section */}
           <div className="w-full text-center z-10 mb-4 bg-background/90 py-2 rounded-xl border border-brass-highlight/30 clay-card max-w-sm mx-auto">
             <h2 className="font-label-caps text-label-caps text-secondary uppercase tracking-widest">
-              Fundamentos
+              Clave de Sol
             </h2>
+            <span className="text-body-sm text-on-surface-variant">{trebleCompleted}/{trebleLessons.length} completadas</span>
           </div>
 
-          {FUNDAMENTOS.map((node, i) => (
-            <LessonNodeCard key={node.id} node={node} index={i} onSelect={onSelectLesson} onStartGame={onStartGame} />
-          ))}
+          {trebleLessons.map((lesson, i) => {
+            const { status, accuracy } = getStatus(lesson.id)
+            const isActive = i === trebleActiveIdx && status !== 'completed'
+            return (
+              <LessonNodeCard
+                key={lesson.id}
+                node={{
+                  id: lesson.id,
+                  title: lesson.name,
+                  description: lesson.desc,
+                  status: isActive ? 'active' : status,
+                  accuracy,
+                  icon: status === 'completed' ? 'check_circle' : isActive ? 'music_note' : 'lock',
+                }}
+                index={i}
+                onSelect={onSelectLesson}
+                onStartGame={onStartGame}
+              />
+            )
+          })}
 
-          {/* Category: Técnica Intermedia */}
-          <div className="w-full text-center z-10 my-4 bg-background/90 py-2 rounded-xl border border-outline-variant/30 clay-card max-w-sm mx-auto opacity-70">
+          {/* Bass Section — extra top margin for visual break */}
+          <div className="w-full text-center z-10 mt-12 mb-4 bg-background/90 py-2 rounded-xl border border-outline-variant/30 clay-card max-w-sm mx-auto">
             <h2 className="font-label-caps text-label-caps text-outline uppercase tracking-widest">
-              Técnica Intermedia
+              Clave de Fa
             </h2>
+            <span className="text-body-sm text-on-surface-variant">{bassCompleted}/{bassLessons.length} completadas</span>
           </div>
 
-          {INTERMEDIA.map((node, i) => (
-            <LessonNodeCard key={node.id} node={node} index={i + 3} onSelect={onSelectLesson} onStartGame={onStartGame} />
-          ))}
+          {bassLessons.map((lesson, i) => {
+            const { status, accuracy } = getStatus(lesson.id)
+            const isActive = i === bassActiveIdx && status !== 'completed'
+            return (
+              <LessonNodeCard
+                key={lesson.id}
+                node={{
+                  id: lesson.id,
+                  title: lesson.name,
+                  description: lesson.desc,
+                  status: isActive ? 'active' : status,
+                  accuracy,
+                  icon: status === 'completed' ? 'check_circle' : isActive ? 'music_note' : 'lock',
+                }}
+                index={i + trebleLessons.length}
+                onSelect={onSelectLesson}
+                onStartGame={onStartGame}
+              />
+            )
+          })}
         </div>
       </main>
 
@@ -104,7 +150,7 @@ export default function BibliotecaScreen({
             <button
               key={item.key}
               onClick={() => onNavigate(item.key)}
-              className={`flex flex-col items-center gap-1 px-4 py-1 rounded-xl transition-colors ${
+              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-colors ${
                 item.key === 'biblioteca'
                   ? 'text-primary'
                   : 'text-on-surface-variant'
@@ -217,14 +263,14 @@ function LessonNodeCard({
           </p>
 
           {/* Progress bar for active */}
-          {isActive && node.progress !== undefined && (
+          {isActive && node.accuracy !== undefined && node.accuracy > 0 && (
             <div className="w-full mb-6">
               <div className="flex justify-between text-body-sm text-on-surface-variant mb-2">
-                <span>Progreso</span>
-                <span className="font-bold">{node.progress}%</span>
+                <span>Precisión</span>
+                <span className="font-bold">{Math.round(node.accuracy)}%</span>
               </div>
               <div className="h-4 clay-progress-bar w-full">
-                <div className="h-full clay-progress-fill" style={{ width: `${node.progress}%` }} />
+                <div className="h-full clay-progress-fill" style={{ width: `${node.accuracy}%` }} />
               </div>
             </div>
           )}
