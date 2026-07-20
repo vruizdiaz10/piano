@@ -1,4 +1,4 @@
-
+import { useEffect } from 'react'
 
 interface SessionStats {
   score: number;
@@ -18,11 +18,28 @@ interface ResultadosScreenProps {
 }
 
 export default function ResultadosScreen({ stats, onDashboard, onRetry, onNext }: ResultadosScreenProps) {
+  // Prevent background scroll while the scrim is open
+  useEffect(() => {
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = prev }
+  }, [])
+
   return (
-    <div className="concert-hall-bg min-h-screen flex items-center justify-center p-4 md:p-8">
-      <div className="fixed inset-0 bg-overlay -z-10" />
-      <main className="w-full max-w-[800px] mx-auto z-10 relative">
-        <div className="clay-card p-6 md:p-10 flex flex-col items-center text-center space-y-stack-md">
+    <div
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-8 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Sesión completada"
+    >
+      {/* Scrim / backdrop */}
+      <div
+        className="fixed inset-0 bg-mahogany-dark/75 backdrop-blur-md"
+        aria-hidden="true"
+      />
+
+      <main className="relative z-10 w-full max-w-[800px] my-auto">
+        <div className="clay-card p-6 md:p-10 flex flex-col items-center text-center space-y-stack-md shadow-2xl">
           {/* Header */}
           <div className="space-y-stack-sm">
             <span
