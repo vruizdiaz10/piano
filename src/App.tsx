@@ -5,6 +5,8 @@ import { saveSession, getSessions } from './utils/sessionHistory'
 import { computeDashboardStats } from './utils/dashboardStats'
 import { useMidi } from './hooks/useMidi'
 import { useSound } from './hooks/useSound'
+import { buildCustomPool } from './utils/notePool'
+import type { QuickLessonConfig } from './types'
 import { getLessonPool, LESSONS } from './data/lessons'
 import Staff from './components/Staff'
 import PianoKeyboard from './components/PianoKeyboard'
@@ -42,12 +44,18 @@ function AppContent() {
   const { dailyStreak, markToday } = useDailyStreak()
   const liveRegionRef = useRef<HTMLDivElement>(null)
 
-  // Quick lesson handler for DashboardScreen generator UI
-  const handleQuickLesson = useCallback((config: import('./types').QuickLessonConfig) => {
+  // Save/restore user prefs around quick lessons (prevent Firestore overwrite)
+  const [savedSettings, setSavedSettings] = useState<{ target: number; timed: boolean } | null>(null)
+
+  const handleQuickLesson = useCallback((config: QuickLessonConfig) => {
+    setSavedSettings({ target: state.sessionTarget, timed: state.isTimed })
+    state.setLesson('custom')
+    state.setClef(config.clef)
+    state.setTimed(config.timed)
+    const pool = buildCustomPool(config)
+    state.startGame(config.noteCount, pool)
     setScreen('practica')
-    // TODO: Configure game state with generator UI config
-    console.log('Quick lesson config:', config)
-  }, [])
+  }, [state])
 
   const { user, loading, signOut } = useAuth()
   const { syncState, saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
@@ -122,6 +130,15 @@ function AppContent() {
     }
   }, [setLesson, setClef])
 
+  useEffect(() => {
+    if (screen === 'dashboard' && savedSettings) {
+      state.setSessionTarget(savedSettings.target)
+      state.setTimed(savedSettings.timed)
+      state.setClef('treble') // reset to default for sequential
+      setSavedSettings(null)
+    }
+  }, [screen, savedSettings, state])
+
   // First-login migration: localStorage → Firestore
   useEffect(() => {
     if (user && config) {
@@ -148,6 +165,7 @@ function AppContent() {
   // Push local config changes to Firestore when logged in
   useEffect(() => {
     if (!user || !config) return
+    if (state.lessonId === 'custom') return  // skip during quick lessons
     updateConfig({
       notation: state.notation,
       showNoteName: state.showNoteName,
@@ -157,8 +175,11 @@ function AppContent() {
   }, [state.notation, state.showNoteName, state.isTimed, state.sessionTarget, !!user])
 
   const currentLesson = LESSONS.find(l => l.id === state.lessonId)
-  const clef = currentLesson?.clef ?? 'treble'
-  const keyboardStart = clef === 'bass' ? 36 : 48
+  const clef =
+    state.clef === 'both'
+      ? (state.currentNote && state.currentNote.midi <= 60 ? 'bass' : 'treble')
+      : (currentLesson?.clef ?? state.clef ?? 'treble')
+  const keyboardStart = state.clef === 'both' ? 36 : (currentLesson?.clef === 'bass' ? 36 : 48)
 
   const accuracy = state.totalAttempts > 0 ? (state.correctAttempts / state.totalAttempts) * 100 : 0
 
@@ -364,7 +385,7 @@ function AppContent() {
   }
 
   if (screen === 'dashboard') {
-    const dash = computeDashboardStats(state.lessonId, state.notation)
+    const dash = computeDashboardStats(lastSequentialLesson, state.notation)
     return (
       <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
         <DashboardScreen
@@ -516,7 +537,7 @@ function AppContent() {
             <div className={`absolute inset-0 rounded-3xl transition-opacity duration-300 pointer-events-none mix-blend-overlay ${staffFlash === 'correct' ? 'opacity-100' : staffFlash === 'wrong' ? 'opacity-100' : 'opacity-0'}`} style={{ background: staffFlash === 'correct' ? 'radial-gradient(circle, rgba(34,197,94,0.2) 0%, transparent 70%)' : 'radial-gradient(circle, rgba(168,32,36,0.2) 0%, transparent 70%)' }} />
             <div className={`clay-surface rounded-xl p-4 sm:p-6 relative mx-auto w-full max-w-xl flex flex-col items-center justify-center min-h-[180px] transition-colors duration-300 ${staffClass}`}>
               <div className="mt-2 w-full">
-                <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} lastCorrectNote={state.lastCorrectNote} notation={state.notation} />
+                <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={state.customPool ?? getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} lastCorrectNote={state.lastCorrectNote} notation={state.notation} />
               </div>
             </div>
             <div className="absolute bottom-0 left-0 w-full h-6 bg-mahogany-dark/90 rounded-b-xl border-t border-brass-highlight/20 shadow-[0_-5px_15px_rgba(0,0,0,0.5)]" />
