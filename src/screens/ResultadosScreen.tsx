@@ -14,7 +14,7 @@ interface ResultadosScreenProps {
   stats: SessionStats;
   onDashboard: () => void;
   onRetry: () => void;
-  onNext: () => void;
+  onNext?: () => void;
 }
 
 export default function ResultadosScreen({ stats, onDashboard, onRetry, onNext }: ResultadosScreenProps) {
@@ -38,8 +38,8 @@ export default function ResultadosScreen({ stats, onDashboard, onRetry, onNext }
         aria-hidden="true"
       />
 
-      <main className="relative z-10 w-full max-w-[800px] my-auto">
-        <div className="clay-card p-6 md:p-10 flex flex-col items-center text-center space-y-stack-md shadow-2xl">
+      <main className="relative z-10 w-full max-w-[800px] my-auto min-h-0 max-h-full flex flex-col">
+        <div className="clay-card p-6 md:p-10 flex flex-col items-center text-center space-y-stack-md shadow-2xl overflow-y-auto max-h-full">
           {/* Header */}
           <div className="space-y-stack-sm">
             <span
@@ -146,13 +146,15 @@ export default function ResultadosScreen({ stats, onDashboard, onRetry, onNext }
               <span className="material-symbols-outlined mr-2">replay</span>
               Reintentar Lección
             </button>
-            <button
-              onClick={onNext}
-              className="clay-button-primary flex-1 py-5 px-8 rounded-2xl font-title-md text-title-md flex items-center justify-center z-10"
-            >
-              <span className="material-symbols-outlined mr-2">arrow_forward</span>
-              Siguiente Lección
-            </button>
+            {onNext && (
+              <button
+                onClick={onNext}
+                className="clay-button-primary flex-1 py-5 px-8 rounded-2xl font-title-md text-title-md flex items-center justify-center z-10"
+              >
+                <span className="material-symbols-outlined mr-2">arrow_forward</span>
+                Siguiente Lección
+              </button>
+            )}
           </div>
         </div>
       </main>

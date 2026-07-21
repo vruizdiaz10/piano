@@ -8,7 +8,7 @@ import TopNavBar from '../components/TopNavBar';
 interface DashboardProps {
   onNavigate: (target: string) => void;
   onLogout?: () => void;
-  onStartGame: () => void;
+  onStartGame: (lessonId?: string) => void;
   stats: {
     streak: number;
     score: string;
@@ -304,12 +304,18 @@ export default function DashboardScreen({
                 const isReverse = i % 2 === 1
                 const isCurrent = step.status === 'current'
                 const isDone = step.status === 'done'
+                const isLocked = step.status === 'locked'
                 return (
                   <div
                     key={step.id}
+                    onClick={() => {
+                      if (!isLocked) {
+                        _onStartGame(step.id)
+                      }
+                    }}
                     className={`relative flex items-center z-10 ${i < roadmap.length - 1 ? 'mb-32' : ''} ${
                       isReverse ? 'flex-row-reverse justify-between w-full md:pr-12' : ''
-                    }`}
+                    } ${!isLocked ? 'cursor-pointer group' : ''}`}
                   >
                     <div
                       className={`${isReverse ? '' : 'absolute -left-16 md:-left-28'} w-20 h-20 ${
@@ -334,7 +340,7 @@ export default function DashboardScreen({
                             ? `Paso ${String(i + 1).padStart(2, '0')} · Completado`
                             : `Paso ${String(i + 1).padStart(2, '0')} · Bloqueado`}
                       </span>
-                      <h3 className="font-headline-lg text-3xl text-primary uppercase tracking-wide mt-1">{step.title}</h3>
+                      <h3 className={`font-headline-lg text-3xl text-primary uppercase tracking-wide mt-1 ${!isLocked ? 'group-hover:text-secondary transition-colors' : ''}`}>{step.title}</h3>
                       <p
                         className={`font-body-sm text-body-sm text-on-surface-variant max-w-xs mt-2 leading-relaxed ${
                           isReverse ? 'ml-auto' : ''

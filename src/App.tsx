@@ -88,17 +88,31 @@ function AppContent() {
 
   const handleNavigate = (target: string) => setScreen(target as Screen)
 
-  const handleStartGame = useCallback((target?: string) => {
-    const lessonId = target ?? lastSequentialLesson
-    const lesson = LESSONS.find(l => l.id === lessonId)
+  const handleStartGame = useCallback((target?: string, lessonId?: string) => {
+    const id = lessonId ?? target ?? lastSequentialLesson
+    const lesson = LESSONS.find(l => l.id === id)
     if (lesson) {
-      setLesson(lessonId)
+      setLesson(id)
       setClef(lesson.clef)
+      setLastSequentialLesson(id)
     }
     markToday()
     startGame()
     setScreen('practica')
   }, [markToday, startGame, setLesson, setClef, lastSequentialLesson])
+
+  const handleNextLesson = useCallback(() => {
+    const current = LESSONS.find(l => l.id === state.lessonId)
+    if (!current) return handleStartGame()
+    const sameClef = LESSONS.filter(l => l.clef === current.clef)
+    const idx = sameClef.findIndex(l => l.id === current.id)
+    const next = sameClef[(idx + 1) % sameClef.length]
+    setLesson(next.id)
+    setClef(next.clef)
+    markToday()
+    startGame()
+    setScreen('practica')
+  }, [state.lessonId, markToday, startGame, setLesson, setClef, handleStartGame])
 
   const handleDeleteAccount = async () => {
     if (!user) return
@@ -120,15 +134,6 @@ function AppContent() {
       setScreen('inicio')
     } catch { /* noop */ }
   }
-
-  const handleSelectLesson = useCallback((lessonId: string) => {
-    setLesson(lessonId)
-    const lesson = LESSONS.find(l => l.id === lessonId)
-    if (lesson) {
-      setClef(lesson.clef)
-      setLastSequentialLesson(lessonId)
-    }
-  }, [setLesson, setClef])
 
   useEffect(() => {
     if (screen === 'dashboard' && savedSettings) {
@@ -156,6 +161,7 @@ function AppContent() {
   // Sync Firestore config → local state on login
   useEffect(() => {
     if (!config || !user) return
+    if (state.lessonId === 'custom') return  // skip during quick lessons
     if (config.notation !== state.notation) setNotation(config.notation)
     if (config.showNoteName !== state.showNoteName) setShowNoteName(config.showNoteName)
     if (config.timed !== state.isTimed) setTimed(config.timed)
@@ -312,6 +318,8 @@ function AppContent() {
 
   // Countdown timer
   const tickRef = useRef(0)
+  const phaseRef = useRef(state.phase)
+  phaseRef.current = state.phase
   const [timerDisplay, setTimerDisplay] = useState(5)
   useEffect(() => {
     tickRef.current = 0
@@ -319,7 +327,7 @@ function AppContent() {
     setTimerDisplay(duration)
     if (!state.isTimed || state.phase !== 'waiting') return
     const interval = setInterval(() => {
-      if (isPaused) return
+      if (isPaused || phaseRef.current !== 'waiting') return
       tickRef.current += 1
       setTimerDisplay(duration - tickRef.current)
       if (tickRef.current >= duration) {
@@ -328,7 +336,7 @@ function AppContent() {
       }
     }, 1000)
     return () => { clearInterval(interval) }
-  }, [state.isTimed, state.phase, state.noteShownAt, isPaused])
+  }, [state.isTimed, state.phase, state.noteShownAt, isPaused, state.sessionTarget, submitAnswer])
 
   const handleKeyboardPlay = useCallback((note: { name: string; octave: number; midi: number }) => {
     if (isPaused) return
@@ -391,7 +399,7 @@ function AppContent() {
         <DashboardScreen
           onNavigate={handleNavigate}
           onLogout={handleLogout}
-          onStartGame={() => handleStartGame()}
+          onStartGame={handleStartGame}
           onQuickLesson={handleQuickLesson}
           onToggleHelp={toggleHelp}
           onToggleTimer={toggleTimer}
@@ -428,8 +436,7 @@ function AppContent() {
         <BibliotecaScreen
           onNavigate={handleNavigate}
           onLogout={handleLogout}
-          onSelectLesson={handleSelectLesson}
-          onStartGame={() => handleStartGame()}
+          onStartGame={handleStartGame}
           userName={user?.displayName || user?.email?.split('@')[0] || 'Pianista'}
           userLevel={Math.floor(state.bestStreak / 10) + 1}
           userAvatar={user?.photoURL || undefined}
@@ -499,7 +506,7 @@ function AppContent() {
           stats={sessionStats}
           onDashboard={() => setScreen('dashboard')}
           onRetry={() => { restartGame(); setScreen('practica') }}
-          onNext={() => { startGame(); setScreen('practica') }}
+          onNext={state.lessonId === 'custom' ? undefined : handleNextLesson}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
       </div>
@@ -601,7 +608,7 @@ function AppContent() {
           stats={sessionStats}
           onDashboard={() => setScreen('dashboard')}
           onRetry={() => { restartGame(); setScreen('practica') }}
-          onNext={() => { startGame(); setScreen('practica') }}
+          onNext={state.lessonId === 'custom' ? undefined : handleNextLesson}
         />
       )}
 

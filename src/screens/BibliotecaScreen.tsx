@@ -16,8 +16,7 @@ interface LessonNode {
 interface BibliotecaScreenProps {
   onNavigate: (target: string) => void;
   onLogout: () => void;
-  onSelectLesson: (lessonId: string) => void;
-  onStartGame: () => void;
+  onStartGame: (lessonId?: string) => void;
   userName?: string;
   userLevel?: number;
   userAvatar?: string;
@@ -27,7 +26,6 @@ interface BibliotecaScreenProps {
 export default function BibliotecaScreen({
   onNavigate,
   onLogout,
-  onSelectLesson,
   onStartGame,
   userName = 'Pianista',
   userLevel = 1,
@@ -102,7 +100,6 @@ export default function BibliotecaScreen({
                   icon: status === 'completed' ? 'check_circle' : isActive ? 'music_note' : 'lock',
                 }}
                 index={i}
-                onSelect={onSelectLesson}
                 onStartGame={onStartGame}
               />
             )
@@ -131,7 +128,6 @@ export default function BibliotecaScreen({
                   icon: status === 'completed' ? 'check_circle' : isActive ? 'music_note' : 'lock',
                 }}
                 index={i + trebleLessons.length}
-                onSelect={onSelectLesson}
                 onStartGame={onStartGame}
               />
             )
@@ -186,13 +182,11 @@ export default function BibliotecaScreen({
 function LessonNodeCard({
   node,
   index,
-  onSelect,
   onStartGame,
 }: {
   node: LessonNode;
   index: number;
-  onSelect: (id: string) => void;
-  onStartGame: () => void;
+  onStartGame: (lessonId?: string) => void;
 }) {
   const isLocked = node.status === 'locked';
   const isActive = node.status === 'active';
@@ -278,7 +272,7 @@ function LessonNodeCard({
           {/* Actions */}
           {isCompleted && (
             <button
-              onClick={() => { onSelect(node.id); onStartGame(); }}
+              onClick={() => { onStartGame(node.id); }}
               className="font-title-md text-title-md text-primary font-medium hover:text-velvet-red transition-colors flex items-center justify-center sm:justify-start gap-1"
             >
               <span className="material-symbols-outlined text-sm">replay</span> Repasar Lección
@@ -286,7 +280,7 @@ function LessonNodeCard({
           )}
           {isActive && (
             <button
-              onClick={() => { onSelect(node.id); onStartGame(); }}
+              onClick={() => { onStartGame(node.id); }}
               className="clay-btn-primary w-full sm:w-auto px-8 py-3 font-title-md text-title-md flex items-center justify-center gap-2 mx-auto sm:mx-0"
             >
               <span>Continuar Lección</span>

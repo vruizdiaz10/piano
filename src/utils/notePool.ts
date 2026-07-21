@@ -38,24 +38,30 @@ function filterByPosition(
   })
 }
 
+// Basic natural-only lessons — used as base pool (no sharps, no ledger extras)
+const BASIC_TREBLE = ['lines', 'spaces', 'lines-spaces', 'staff-range']
+const BASIC_BASS = ['bass-lines', 'bass-spaces', 'bass-lines-spaces', 'bass-staff-range']
+
 /**
  * Build a MIDI note pool from a QuickLessonConfig.
- * Filters existing lesson pools by position classification (line/space),
- * adds ledger lines and sharps with the same filter applied.
+ * Base pool = only natural-note staff lessons (no sharps, no ledger).
+ * Ledger lines and accidentals added only when enabled.
  */
 export function buildCustomPool(config: QuickLessonConfig): number[] {
   const { clef, lines, spaces, ledgerAbove, ledgerBelow, sharps } = config
 
-  // 1. Base pool by clef
-  let allMidi: number[]
+  // 1. Base pool: only basic natural lessons (no accidentals, no ledger lessons)
+  const basicIds = clef === 'bass' ? BASIC_BASS : BASIC_TREBLE
+  let allMidi = [...new Set(
+    LESSONS.filter(l => basicIds.includes(l.id)).flatMap(l => l.pool)
+  )]
+
   if (clef === 'both') {
-    const treblePool = LESSONS.filter(l => l.clef === 'treble').flatMap(l => l.pool)
-    const bassPool = LESSONS.filter(l => l.clef === 'bass')
+    const trebleMidi = LESSONS.filter(l => BASIC_TREBLE.includes(l.id)).flatMap(l => l.pool)
+    const bassMidi = LESSONS.filter(l => BASIC_BASS.includes(l.id))
       .flatMap(l => l.pool)
       .filter(m => m < 60 || m > 64) // remove overlap zone (C4-E4)
-    allMidi = [...new Set([...treblePool, ...bassPool])]
-  } else {
-    allMidi = [...new Set(LESSONS.filter(l => l.clef === clef).flatMap(l => l.pool))]
+    allMidi = [...new Set([...trebleMidi, ...bassMidi])]
   }
 
   // 2. Filter by lines/spaces
@@ -71,7 +77,7 @@ export function buildCustomPool(config: QuickLessonConfig): number[] {
     filtered = [...new Set([...filteredTreble, ...filteredBass])]
   }
 
-  // 3. Add ledger lines above (with same line/space filter)
+  // 3. Add ledger lines above (only if requested)
   if (ledgerAbove > 0) {
     const addLedger = (lessonId: string, ledgerClef: 'treble' | 'bass') => {
       const lesson = LESSONS.find(l => l.id === lessonId)
@@ -84,7 +90,7 @@ export function buildCustomPool(config: QuickLessonConfig): number[] {
     if (clef === 'bass' || clef === 'both') addLedger('bass-above', 'bass')
   }
 
-  // 4. Add ledger lines below (with same line/space filter)
+  // 4. Add ledger lines below (only if requested)
   if (ledgerBelow > 0) {
     const addLedger = (lessonId: string, ledgerClef: 'treble' | 'bass') => {
       const lesson = LESSONS.find(l => l.id === lessonId)
@@ -97,7 +103,7 @@ export function buildCustomPool(config: QuickLessonConfig): number[] {
     if (clef === 'bass' || clef === 'both') addLedger('bass-below', 'bass')
   }
 
-  // 5. Add sharps (with same line/space filter)
+  // 5. Add sharps (only if enabled)
   if (sharps) {
     const accidentalIds = clef === 'bass' || clef === 'both'
       ? ['accidentals', 'bass-accidentals']
