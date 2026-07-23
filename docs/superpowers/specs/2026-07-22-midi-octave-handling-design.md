@@ -64,6 +64,8 @@ No changes — the note object already carries the correct name/octave from the 
 
 ## 2. Octave Bar (Toggleable)
 
+The octave bar and smart detection work independently. Smart detection is always on — it matches by pitch class regardless of octave. The octave bar shifts which physical keys map to which notes, so the user can align their controller's range with the displayed notes. Both mechanisms can be active simultaneously.
+
 ### Behavior
 
 - A toggle button in the practice nav bar (next to the MIDI indicator)
