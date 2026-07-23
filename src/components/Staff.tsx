@@ -1,6 +1,6 @@
 import { Note, Clef } from '../types'
 import { noteToPosition } from '../utils/noteToPosition'
-import { midiToNote } from '../utils/midiToNote'
+
 import { displayNoteName } from '../utils/notation'
 
 const LINE_SPACING = 16
@@ -13,7 +13,6 @@ const STEM_LENGTH = LINE_SPACING * 3.5
 interface StaffProps {
   note?: Note | null
   showNoteName: boolean
-  lessonPool?: number[]
   trail?: Array<{ note: Note; id: number }>
   noteExpression?: 'happy' | 'sad' | null
   isMuted?: boolean
@@ -27,21 +26,9 @@ function getAccidental(name: string): string | null {
   return null
 }
 
-export default function Staff({ note, showNoteName, lessonPool, trail, noteExpression, isMuted, clef = 'treble', lastCorrectNote, notation }: StaffProps) {
+export default function Staff({ note, showNoteName, trail, noteExpression, isMuted, clef = 'treble', lastCorrectNote, notation }: StaffProps) {
   const SVG_TOP_PAD = 20
   const height = STAFF_TOP + LINE_SPACING * 8 + 40
-
-  const rangeDots = lessonPool && lessonPool.length > 1
-    ? (() => {
-        const minMidi = Math.min(...lessonPool)
-        const maxMidi = Math.max(...lessonPool)
-        const minPos = noteToPosition(midiToNote(minMidi), clef)
-        const maxPos = noteToPosition(midiToNote(maxMidi), clef)
-        const minY = STAFF_TOP - minPos * LINE_SPACING / 2 + LINE_SPACING * 4
-        const maxY = STAFF_TOP - maxPos * LINE_SPACING / 2 + LINE_SPACING * 4
-        return <><circle cx={STAFF_LEFT - 12} cy={minY} r={4} fill="#9CA3AF" opacity={0.35} /><circle cx={STAFF_LEFT - 12} cy={maxY} r={4} fill="#9CA3AF" opacity={0.35} /></>
-      })()
-    : null
 
   return (
     <div className="flex justify-center">
@@ -68,7 +55,6 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
             {'\uD83D\uDCA4'}
           </text>
         )}
-        {rangeDots}
         {trail && trail.map((entry, idx) => {
           const pos = noteToPosition(entry.note, clef)
           const y = STAFF_TOP - pos * LINE_SPACING / 2 + LINE_SPACING * 4
@@ -115,11 +101,17 @@ export default function Staff({ note, showNoteName, lessonPool, trail, noteExpre
                   )
                 })()}
               </g>
-              {showNoteName && (
-                <text x={x} y={y - 24} textAnchor="middle" fontSize={14} className="fill-muted-foreground">
-                  {displayNoteName(note.name, notation)}{note.octave}
-                </text>
-              )}
+              {showNoteName && (() => {
+                const label = `${displayNoteName(note.name, notation)}${note.octave}`
+                const pillW = 44
+                const pillH = 20
+                return (
+                  <g>
+                    <rect x={x - pillW / 2} y={y - 34} width={pillW} height={pillH} rx={10} className="fill-primary" />
+                    <text x={x} y={y - 20} textAnchor="middle" fontSize={12} fontWeight="bold" className="fill-on-primary">{label}</text>
+                  </g>
+                )
+              })()}
 {noteExpression && (
   <circle cx={x + NOTE_RADIUS + 18} cy={y} r={6} className={noteExpression === 'happy' ? 'fill-green-500' : 'fill-red-500'} />
 )}

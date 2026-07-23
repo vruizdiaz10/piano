@@ -77,6 +77,15 @@ export function buildCustomPool(config: QuickLessonConfig): number[] {
     filtered = [...new Set([...filteredTreble, ...filteredBass])]
   }
 
+  // Filter out notes outside allowed ledger range
+  const minPos = ledgerBelow > 0 ? -(ledgerBelow * 2) : 0
+  const maxPos = ledgerAbove > 0 ? 8 + (ledgerAbove * 2) : 8
+  filtered = filtered.filter(midi => {
+    const note = midiToNote(midi)
+    const pos = noteToPosition(note, clef === 'both' ? (midi < 60 ? 'bass' : 'treble') : clef)
+    return pos >= minPos && pos <= maxPos
+  })
+
   // 3. Add ledger lines above (only if requested)
   if (ledgerAbove > 0) {
     const addLedger = (lessonId: string, ledgerClef: 'treble' | 'bass') => {

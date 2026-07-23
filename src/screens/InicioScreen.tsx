@@ -1,4 +1,4 @@
-
+import logoUrl from '../assets/logo.svg';
 
 interface InicioScreenProps {
   onSignInGoogle: () => void;
@@ -13,14 +13,7 @@ export default function InicioScreen({ onSignInGoogle, onEnterGuest, isLoading }
       <main className="w-full max-w-[520px] mx-auto z-10 relative">
         <div className="clay-card p-8 md:p-12 flex flex-col items-center text-center space-y-8">
           {/* Logo */}
-          <div className="clay-icon-raised w-24 h-24 flex items-center justify-center">
-            <span
-              className="material-symbols-outlined text-primary-container"
-              style={{ fontSize: 48, fontVariationSettings: "'FILL' 0" }}
-            >
-              school
-            </span>
-          </div>
+          <img src={logoUrl} alt="Clavis" className="w-36 h-auto" />
 
           {/* Title + Tagline */}
           <div className="space-y-3">
@@ -66,7 +59,7 @@ export default function InicioScreen({ onSignInGoogle, onEnterGuest, isLoading }
 
         {/* Footer */}
         <p className="text-center font-body-sm text-body-sm text-on-surface-variant mt-6 opacity-60">
-          Clavis Academy of Musical Excellence
+          © 2025 <a href="https://linktr.ee/vruizdiaz" target="_blank" rel="noopener noreferrer" className="hover:text-surface-bright transition-colors">Víctor Enrique Ruiz Díaz Music</a>
         </p>
       </main>
     </div>

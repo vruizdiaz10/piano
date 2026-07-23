@@ -1,4 +1,4 @@
-# MIDI Octave Handling — Smart Detection + Octave Bar
+# MIDI Octave Handling — Conditional Smart Detection + Octave Bar
 
 ## Problem
 
@@ -8,63 +8,117 @@ MIDI controllers with fewer octaves than the displayed notes cause false errors.
 
 Two mechanisms:
 
-1. **Smart octave detection** (always on, default) — accept notes by pitch class, ignoring octave
+1. **Conditional smart octave detection** — accept notes by pitch class ONLY when the target note is outside the controller's detected range
 2. **Octave bar** (toggleable UI) — manual octave range shift with +/- controls
 
 ---
 
-## 1. Smart Octave Detection
+## 1. Conditional Smart Octave Detection
 
-### Behavior
+### Why Conditional
 
-When a MIDI note arrives:
-- Extract pitch class (C, C#, D, ..., B) from both the pressed note and the target note
-- If pitch classes match → accept as correct, regardless of octave
-- Apply an `octaveOffset` so the feedback displays the correct target octave (not the pressed one)
-- If pitch classes do NOT match → proceed with existing error analysis (step, skip, accidental, etc.)
+Unconditional pitch-class matching breaks when the same note appears in different octaves (e.g., E4 and E5 in the same lesson). If the user presses E, the app can't know which E they meant. Smart detection must only activate when the target note is **physically unreachable** on the controller.
+
+### Controller Range Detection (Hybrid)
+
+**Auto-detect (default):**
+- Track `controllerMin` and `controllerMax` — the lowest and highest MIDI notes received from the controller
+- Start with no known range (smart detection disabled until we have data)
+- Each new note expands the known range: `controllerMin = min(controllerMin, midi)`, `controllerMax = max(controllerMax, midi)`
+- After receiving at least 2 distinct notes, we have a range to work with
+
+**Manual override (settings):**
+- A "Configurar controlador" option in PerfilScreen or PracticeNavBar
+- User presses their lowest key → record as `controllerMin`
+- User presses their highest key → record as `controllerMax`
+- Manual range overrides auto-detect until session ends
+- Saved to Firestore as `controllerRange?: { min: number, max: number }` in UserDoc
+
+**Range stored in:** `useGameState` as `controllerRange: { min: number, max: number } | null`
+
+### Matching Logic
+
+When a MIDI note arrives in `submitAnswer`:
+
+```
+1. Exact match? → correct (existing behavior)
+2. No exact match → is target outside controller range?
+   a. Range known AND target.midi < range.min OR target.midi > range.max
+      → pitch-class match? correct (with octave offset for display)
+   b. Range unknown OR target within range
+      → wrong answer (existing error analysis)
+3. Wrong note → existing error analysis (step, skip, accidental, etc.)
+```
 
 ### Implementation
 
 **`src/hooks/useGameState.ts`**
 
-Add state: `octaveOffset: number` (default 0)
+Add state:
+```typescript
+controllerRange: { min: number, max: number } | null
+```
 
 Modify `submitAnswer(midi: number)`:
 ```typescript
-// Inside submitAnswer, before the existing comparison:
-const targetPitchClass = prev.currentNote.midi % 12
-const pressedPitchClass = midi % 12
-const isCorrectPitchClass = targetPitchClass === pressedPitchClass
+const target = prev.currentNote
+const exactMatch = midi === target.midi
 
-// If same pitch class but different octave, treat as correct
-const isCorrect = isCorrectPitchClass || midi === prev.currentNote.midi
+if (exactMatch) {
+  // existing correct logic
+  return { ...prev, /* ... */ }
+}
+
+// Check if target is outside controller range
+const range = prev.controllerRange
+const targetOutsideRange = range && (target.midi < range.min || target.midi > range.max)
+
+if (targetOutsideRange) {
+  const targetPitchClass = target.midi % 12
+  const pressedPitchClass = midi % 12
+  if (targetPitchClass === pressedPitchClass) {
+    // Correct by pitch class — target is unreachable, this is the right note
+    const offset = target.midi - midi
+    return { ...prev, /* correct logic, store offset for display */ }
+  }
+}
+
+// Wrong answer — existing error analysis
 ```
 
-When `isCorrectPitchClass` is true but `midi !== prev.currentNote.midi`:
-- The note is correct (pitch class matches)
-- The `octaveOffset` is calculated: `prev.currentNote.midi - midi` (difference in semitones)
-- Store this offset so feedback displays the right octave name
-- The note's displayed name uses the TARGET octave, not the pressed octave
+Update controller range on each note received:
+```typescript
+// In the MIDI callback or at start of submitAnswer:
+if (!prev.controllerRange) {
+  controllerRange = { min: midi, max: midi }
+} else {
+  controllerRange = {
+    min: Math.min(prev.controllerRange.min, midi),
+    max: Math.max(prev.controllerRange.max, midi)
+  }
+}
+```
 
-**`src/utils/errorAnalysis.ts`**
+**`src/firebase/firestore.ts`**
 
-No changes needed — error analysis runs only when the answer is wrong. If pitch class matches, it's already marked correct before analysis runs.
-
-**`src/utils/notation.ts` / `displayNoteName`**
-
-No changes — the note object already carries the correct name/octave from the lesson data.
+Add to `UserDoc`:
+```typescript
+controllerRange?: { min: number, max: number }
+```
 
 ### Edge Cases
 
-- **Enharmonic equivalents**: C# and Db share the same MIDI number, so pitch class comparison (`midi % 12`) handles this correctly
-- **Sharps/flats in lessons**: If the target is C#4 and user plays C#3, pitch classes match (both are pitch class 1) → correct
-- **Wrong note entirely**: Pitch class doesn't match → existing error analysis applies
+- **E4 and E5 in same lesson**: If controller range includes both (e.g., C3–C5), both are within range → no pitch-class fallback, must play exact note. Correct behavior.
+- **E4 in lesson, controller only goes to C4**: E4 is outside range → pitch-class match accepted. Correct behavior.
+- **No MIDI notes played yet**: range is null → no smart detection, all notes require exact match. Safe default.
+- **Controller range starts small**: First few notes might not trigger smart detection. Range expands as user plays. Acceptable — the octave bar is the manual fallback.
+- **Enharmonic equivalents**: C# and Db share MIDI number → pitch class comparison handles correctly.
 
 ---
 
 ## 2. Octave Bar (Toggleable)
 
-The octave bar and smart detection work independently. Smart detection is always on — it matches by pitch class regardless of octave. The octave bar shifts which physical keys map to which notes, so the user can align their controller's range with the displayed notes. Both mechanisms can be active simultaneously.
+The octave bar provides manual octave shifting. Works independently of smart detection — the user can shift their controller's range to align with the displayed notes.
 
 ### Behavior
 
@@ -121,17 +175,19 @@ submitAnswer(adjustedMidi)
 interface OctaveBarProps {
   shift: number
   onShiftChange: (shift: number) => void
+  baseStart: number
   minShift?: number
   maxShift?: number
 }
 ```
 
 - Renders the +/- arrows and range label
-- Computes range from `keyboardStart` (base + shift*12) to `keyboardStart + 24` (2 octaves)
+- Computes range from `baseStart + shift*12` to `baseStart + shift*12 + 24` (2 octaves)
 - Uses `clay-inner-panel` styling
 - Arrow buttons use `clay-button-secondary` styling
+- Displays note names: e.g. "C3 – C5"
 
-**`src/components/TopNavBar.tsx` or `src/components/PracticeNavBar.tsx`**
+**`src/components/PracticeNavBar.tsx`**
 
 Add a toggle button (keyboard icon or "OCT" label) that shows/hides the octave bar. Only visible during practice phase.
 
@@ -147,17 +203,25 @@ Add a toggle button (keyboard icon or "OCT" label) that shows/hides the octave b
 
 | File | Action |
 |------|--------|
-| `src/hooks/useGameState.ts` | Add `octaveOffset` state, modify `submitAnswer` for pitch-class matching |
+| `src/hooks/useGameState.ts` | Add `controllerRange` state, modify `submitAnswer` for conditional pitch-class matching |
 | `src/App.tsx` | Add `octaveBarVisible`, `octaveShift` state; modify `keyboardStart` and MIDI input; render `OctaveBar` |
 | `src/components/OctaveBar.tsx` | **Create** — octave range display with +/- controls |
 | `src/components/PracticeNavBar.tsx` | Add octave toggle button |
+| `src/firebase/firestore.ts` | Add `controllerRange?` to `UserDoc` |
+| `src/screens/PerfilScreen.tsx` | Add "Configurar controlador" option for manual range setup |
+| `src/hooks/useConfigSync.ts` | Sync `controllerRange` to Firestore |
 
 ## Testing
 
-- Play a note in the correct octave → should be correct (existing behavior)
-- Play a note in the wrong octave but same pitch class → should be correct (new behavior)
-- Play a completely wrong note → should be wrong with existing error analysis
-- Toggle octave bar on/off → bar appears/disappears
+- Play a note in the correct octave → correct (existing behavior)
+- Target within controller range, wrong octave → wrong (no smart detection)
+- Target outside controller range, same pitch class → correct (smart detection activates)
+- Target outside controller range, wrong pitch class → wrong (error analysis)
+- E4 and E5 in lesson, controller covers both → must play exact note (no ambiguity)
+- E4 in lesson, controller max is C4 → E4 outside range, pitch E accepted
+- Toggle octave bar → bar appears/disappears
 - Shift octave up → keyboard range shifts, MIDI input adjusts
 - Shift octave down → same
 - Shift to limits → buttons disable at min/max
+- Manual controller setup → range saved to Firestore, restored on login
+- Auto-detect range → expands as notes are played

@@ -6,6 +6,7 @@ interface NavUserMenuProps {
   userAvatar?: string
   onProfile: () => void
   onLogout?: () => void
+  onDeleteAccount?: () => void
 }
 
 export default function NavUserMenu({
@@ -14,6 +15,7 @@ export default function NavUserMenu({
   userAvatar,
   onProfile,
   onLogout,
+  onDeleteAccount,
 }: NavUserMenuProps) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -104,6 +106,23 @@ export default function NavUserMenu({
               <span className="material-symbols-outlined text-[20px]" aria-hidden="true">logout</span>
               Cerrar sesión
             </button>
+          )}
+          {onDeleteAccount && (
+            <>
+              <div className="h-px bg-outline-variant/40 my-1.5" role="separator" />
+              <button
+                type="button"
+                role="menuitem"
+                onClick={() => {
+                  setOpen(false)
+                  onDeleteAccount()
+                }}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left font-title-md text-sm text-destructive/70 hover:text-destructive hover:bg-destructive/10 transition-colors"
+              >
+                <span className="material-symbols-outlined text-[20px]" aria-hidden="true">delete</span>
+                Eliminar mis datos
+              </button>
+            </>
           )}
         </div>
       )}

@@ -1,0 +1,1807 @@
+{
+  "check-vercel.js": {
+    "mtime": 1784330824.7134326,
+    "ast_hash": "884772b2b211d1696540234f8d9ff569",
+    "semantic_hash": "884772b2b211d1696540234f8d9ff569"
+  },
+  "check-vercel.mjs": {
+    "mtime": 1784335218.39858,
+    "ast_hash": "da4fdbca39ae08003e0473a1ccf5d247",
+    "semantic_hash": "da4fdbca39ae08003e0473a1ccf5d247"
+  },
+  "components.json": {
+    "mtime": 1783404122.3377845,
+    "ast_hash": "937f94c74db1a6f5e87050fb7051c05e",
+    "semantic_hash": "937f94c74db1a6f5e87050fb7051c05e"
+  },
+  "opencode.json": {
+    "mtime": 1784182690.4579847,
+    "ast_hash": "28edd303e15c0f20a66e0efcd2917e9d",
+    "semantic_hash": "28edd303e15c0f20a66e0efcd2917e9d"
+  },
+  "package.json": {
+    "mtime": 1784575589.455518,
+    "ast_hash": "8d1f57f53bead39e49490a3f2943e3f9",
+    "semantic_hash": "8d1f57f53bead39e49490a3f2943e3f9"
+  },
+  "postcss.config.js": {
+    "mtime": 1783404122.432745,
+    "ast_hash": "ef3ba2a81ba19f8ea5ddf625521e96f0",
+    "semantic_hash": "ef3ba2a81ba19f8ea5ddf625521e96f0"
+  },
+  "public/manifest.json": {
+    "mtime": 1784333844.0862303,
+    "ast_hash": "f573aa8218b4bb814435ffc161f32432",
+    "semantic_hash": "f573aa8218b4bb814435ffc161f32432"
+  },
+  "public/sw.js": {
+    "mtime": 1783566441.979774,
+    "ast_hash": "785e8949f2d3d339ef8e4018182611a9",
+    "semantic_hash": "785e8949f2d3d339ef8e4018182611a9"
+  },
+  "src/App.tsx": {
+    "mtime": 1784580787.8247356,
+    "ast_hash": "46846e4b2d8b9a09ed7d4f9b46729071",
+    "semantic_hash": "46846e4b2d8b9a09ed7d4f9b46729071"
+  },
+  "src/components/Feedback.tsx": {
+    "mtime": 1784333844.0892296,
+    "ast_hash": "263b4e9f91468c3265166a375d632753",
+    "semantic_hash": "263b4e9f91468c3265166a375d632753"
+  },
+  "src/components/LevelComplete.tsx": {
+    "mtime": 1784333844.0902257,
+    "ast_hash": "9b6537ce0b5566caaf640852ea8e733a",
+    "semantic_hash": "9b6537ce0b5566caaf640852ea8e733a"
+  },
+  "src/components/NavUserMenu.tsx": {
+    "mtime": 1784335142.8539107,
+    "ast_hash": "d72170bf0c9072a6d63ae97f8c6a47a1",
+    "semantic_hash": "d72170bf0c9072a6d63ae97f8c6a47a1"
+  },
+  "src/components/PianoKeyboard.tsx": {
+    "mtime": 1784333844.092722,
+    "ast_hash": "cbb49bf99b169f8d1e7a1261f91d10f8",
+    "semantic_hash": "cbb49bf99b169f8d1e7a1261f91d10f8"
+  },
+  "src/components/PracticeNavBar.tsx": {
+    "mtime": 1784333844.0937326,
+    "ast_hash": "7999f2fa09f8f3a905e2949d82f34814",
+    "semantic_hash": "7999f2fa09f8f3a905e2949d82f34814"
+  },
+  "src/components/ProgressBar.tsx": {
+    "mtime": 1783643387.1427286,
+    "ast_hash": "97e0eb5ed4e991f0d6bf31baf5fadab0",
+    "semantic_hash": "97e0eb5ed4e991f0d6bf31baf5fadab0"
+  },
+  "src/components/ProgressChart.tsx": {
+    "mtime": 1783640880.918412,
+    "ast_hash": "a031d78d51a381c4638325bdff796b1e",
+    "semantic_hash": "a031d78d51a381c4638325bdff796b1e"
+  },
+  "src/components/ScoreDisplay.tsx": {
+    "mtime": 1783640855.8667946,
+    "ast_hash": "9a0183e4362adbfdf4087a87729a50c9",
+    "semantic_hash": "9a0183e4362adbfdf4087a87729a50c9"
+  },
+  "src/components/Staff.tsx": {
+    "mtime": 1784333844.0947323,
+    "ast_hash": "abf61b5de6f615b3d73ce9e44357b324",
+    "semantic_hash": "abf61b5de6f615b3d73ce9e44357b324"
+  },
+  "src/components/StreakBadge.tsx": {
+    "mtime": 1783409507.2595568,
+    "ast_hash": "64615981a384056c9927d07ddb5d1f30",
+    "semantic_hash": "64615981a384056c9927d07ddb5d1f30"
+  },
+  "src/components/Toast.tsx": {
+    "mtime": 1784333844.0957317,
+    "ast_hash": "3c6d607ae04b6e173455bfaea422f6b0",
+    "semantic_hash": "3c6d607ae04b6e173455bfaea422f6b0"
+  },
+  "src/components/Toolbar.tsx": {
+    "mtime": 1784002262.5947433,
+    "ast_hash": "80ad4c94ee2f25ec7140fbfc6d3c920a",
+    "semantic_hash": "80ad4c94ee2f25ec7140fbfc6d3c920a"
+  },
+  "src/components/TopNavBar.tsx": {
+    "mtime": 1784333844.0967307,
+    "ast_hash": "6a233c7668eb87526b50a0c30dd25751",
+    "semantic_hash": "6a233c7668eb87526b50a0c30dd25751"
+  },
+  "src/components/UserMenu.tsx": {
+    "mtime": 1784076754.322652,
+    "ast_hash": "0130b969127c663ffdc9388a2612f6a6",
+    "semantic_hash": "0130b969127c663ffdc9388a2612f6a6"
+  },
+  "src/components/ui/checkbox.tsx": {
+    "mtime": 1783404122.5113761,
+    "ast_hash": "3c65d525bdc163efc079c914fb540fb6",
+    "semantic_hash": "3c65d525bdc163efc079c914fb540fb6"
+  },
+  "src/components/ui/select.tsx": {
+    "mtime": 1783404122.532116,
+    "ast_hash": "7ed6bda087bb74653d0e8e5f448eb07f",
+    "semantic_hash": "7ed6bda087bb74653d0e8e5f448eb07f"
+  },
+  "src/data/lessons.ts": {
+    "mtime": 1783411946.8493078,
+    "ast_hash": "48a00a1899b3da4ac245b83fba91f3d0",
+    "semantic_hash": "48a00a1899b3da4ac245b83fba91f3d0"
+  },
+  "src/data/senseiQuotes.ts": {
+    "mtime": 1784333844.0977328,
+    "ast_hash": "6584f925063d0fecc7584c761c02a298",
+    "semantic_hash": "6584f925063d0fecc7584c761c02a298"
+  },
+  "src/firebase/auth.ts": {
+    "mtime": 1784006323.145823,
+    "ast_hash": "01624291962a6d904dbd233a3ad1cd3b",
+    "semantic_hash": "01624291962a6d904dbd233a3ad1cd3b"
+  },
+  "src/firebase/config.ts": {
+    "mtime": 1784006323.1067934,
+    "ast_hash": "7c8c564a147e19ce11b7fc6b9705f09f",
+    "semantic_hash": "7c8c564a147e19ce11b7fc6b9705f09f"
+  },
+  "src/firebase/firestore.ts": {
+    "mtime": 1784333844.0987346,
+    "ast_hash": "443790df7a4c8849557ceb4445ca0a69",
+    "semantic_hash": "443790df7a4c8849557ceb4445ca0a69"
+  },
+  "src/hooks/useAuth.ts": {
+    "mtime": 1784006323.544737,
+    "ast_hash": "8af2895763240193ccec05396d53d392",
+    "semantic_hash": "8af2895763240193ccec05396d53d392"
+  },
+  "src/hooks/useAuthProvider.tsx": {
+    "mtime": 1784006323.5665908,
+    "ast_hash": "5c28b4577e2bacbf2c1dbee21b7b73f6",
+    "semantic_hash": "5c28b4577e2bacbf2c1dbee21b7b73f6"
+  },
+  "src/hooks/useConfigSync.ts": {
+    "mtime": 1784006323.6054795,
+    "ast_hash": "a77ec50add6c6129dfdc889c39e61b92",
+    "semantic_hash": "a77ec50add6c6129dfdc889c39e61b92"
+  },
+  "src/hooks/useDailyStreak.ts": {
+    "mtime": 1783411500.2881403,
+    "ast_hash": "43fc3a84012c0587aa3a6dbea26611b2",
+    "semantic_hash": "43fc3a84012c0587aa3a6dbea26611b2"
+  },
+  "src/hooks/useGameState.ts": {
+    "mtime": 1784577581.6004455,
+    "ast_hash": "957ebd97f436cc3a61d7bb896572dd40",
+    "semantic_hash": "957ebd97f436cc3a61d7bb896572dd40"
+  },
+  "src/hooks/useMidi.ts": {
+    "mtime": 1783404122.5587683,
+    "ast_hash": "1ac2cc3714ca7c03f3e776ba60886428",
+    "semantic_hash": "1ac2cc3714ca7c03f3e776ba60886428"
+  },
+  "src/hooks/useQuoteHistory.ts": {
+    "mtime": 1784333844.099734,
+    "ast_hash": "85c5190bac4a97e7e4bab70d809d9ed7",
+    "semantic_hash": "85c5190bac4a97e7e4bab70d809d9ed7"
+  },
+  "src/hooks/useSessionSync.ts": {
+    "mtime": 1784015096.668023,
+    "ast_hash": "b0bdead60259830ee07c614a0e6b12ed",
+    "semantic_hash": "b0bdead60259830ee07c614a0e6b12ed"
+  },
+  "src/hooks/useSound.ts": {
+    "mtime": 1783404122.5587683,
+    "ast_hash": "b0b045d780dcfc9db7b48c868980893c",
+    "semantic_hash": "b0b045d780dcfc9db7b48c868980893c"
+  },
+  "src/lib/utils.ts": {
+    "mtime": 1783404122.58054,
+    "ast_hash": "bd7f1534696295bfbab094ac93447322",
+    "semantic_hash": "bd7f1534696295bfbab094ac93447322"
+  },
+  "src/main.tsx": {
+    "mtime": 1783404122.58054,
+    "ast_hash": "a3150907ddf2842367caa98e12a33298",
+    "semantic_hash": "a3150907ddf2842367caa98e12a33298"
+  },
+  "src/screens/BibliotecaScreen.tsx": {
+    "mtime": 1784580815.8420086,
+    "ast_hash": "4fc5fbb3c1f0f60af7ae785db46c0fca",
+    "semantic_hash": "4fc5fbb3c1f0f60af7ae785db46c0fca"
+  },
+  "src/screens/DashboardScreen.tsx": {
+    "mtime": 1784335117.780939,
+    "ast_hash": "368f14a25253408ae29d3864a419d046",
+    "semantic_hash": "368f14a25253408ae29d3864a419d046"
+  },
+  "src/screens/InicioScreen.tsx": {
+    "mtime": 1784333844.104254,
+    "ast_hash": "829e73134a1c84c1c4360168737c4455",
+    "semantic_hash": "829e73134a1c84c1c4360168737c4455"
+  },
+  "src/screens/PerfilScreen.tsx": {
+    "mtime": 1784333844.1052527,
+    "ast_hash": "6d79d128ad175fc64c3c50e4c006d2b0",
+    "semantic_hash": "6d79d128ad175fc64c3c50e4c006d2b0"
+  },
+  "src/screens/ResultadosScreen.tsx": {
+    "mtime": 1784584386.9489937,
+    "ast_hash": "05aa84b4cb389da217ec7a83476b6d45",
+    "semantic_hash": "05aa84b4cb389da217ec7a83476b6d45"
+  },
+  "src/types/index.ts": {
+    "mtime": 1784333844.107256,
+    "ast_hash": "33347c28cdf2327efc9a881a4a98d494",
+    "semantic_hash": "33347c28cdf2327efc9a881a4a98d494"
+  },
+  "src/utils/dashboardStats.ts": {
+    "mtime": 1784333844.1082592,
+    "ast_hash": "cd2bee8ece72b1ca1bfe34ce2ed48966",
+    "semantic_hash": "cd2bee8ece72b1ca1bfe34ce2ed48966"
+  },
+  "src/utils/errorAnalysis.ts": {
+    "mtime": 1783572636.3261895,
+    "ast_hash": "3039a24f82c1600586babe03cb443a3e",
+    "semantic_hash": "3039a24f82c1600586babe03cb443a3e"
+  },
+  "src/utils/midiToNote.ts": {
+    "mtime": 1783404122.605688,
+    "ast_hash": "d0272906f6096e951e90520eb82afd32",
+    "semantic_hash": "d0272906f6096e951e90520eb82afd32"
+  },
+  "src/utils/notation.ts": {
+    "mtime": 1783572626.3773453,
+    "ast_hash": "7add4c490e3c0f7f91f5aafed2ca5457",
+    "semantic_hash": "7add4c490e3c0f7f91f5aafed2ca5457"
+  },
+  "src/utils/notePool.ts": {
+    "mtime": 1784574576.3196018,
+    "ast_hash": "97ee84a022b9b82b5d46115cf9ecc1b2",
+    "semantic_hash": "97ee84a022b9b82b5d46115cf9ecc1b2"
+  },
+  "src/utils/noteToPosition.ts": {
+    "mtime": 1783408171.7989156,
+    "ast_hash": "8ee467072d7753b73d3a42d382756a69",
+    "semantic_hash": "8ee467072d7753b73d3a42d382756a69"
+  },
+  "src/utils/sessionHistory.ts": {
+    "mtime": 1784333844.109257,
+    "ast_hash": "f74dec236e2f527bc1e7deca98a20e64",
+    "semantic_hash": "f74dec236e2f527bc1e7deca98a20e64"
+  },
+  "src/utils/weakPool.ts": {
+    "mtime": 1783565792.654352,
+    "ast_hash": "24b79352bc26c25426a6231c89f089c6",
+    "semantic_hash": "24b79352bc26c25426a6231c89f089c6"
+  },
+  "src/vite-env.d.ts": {
+    "mtime": 1783404122.605688,
+    "ast_hash": "0352474ba2918efe13895edbc3780d94",
+    "semantic_hash": "0352474ba2918efe13895edbc3780d94"
+  },
+  "tailwind.config.js": {
+    "mtime": 1784333844.1226792,
+    "ast_hash": "f0e4d88d02bbdd789391fac002c1a56d",
+    "semantic_hash": "f0e4d88d02bbdd789391fac002c1a56d"
+  },
+  "test-results/.last-run.json": {
+    "mtime": 1784330809.0022857,
+    "ast_hash": "ff6d5dab1dfd50cea584142bc288ce9e",
+    "semantic_hash": "ff6d5dab1dfd50cea584142bc288ce9e"
+  },
+  "test-vercel.spec.ts": {
+    "mtime": 1784330760.2997441,
+    "ast_hash": "be17600f67ba4f72fc78ddd564280144",
+    "semantic_hash": "be17600f67ba4f72fc78ddd564280144"
+  },
+  "tsconfig.app.json": {
+    "mtime": 1784334774.2429004,
+    "ast_hash": "8e384af61807577ee392254486a24bcc",
+    "semantic_hash": "8e384af61807577ee392254486a24bcc"
+  },
+  "tsconfig.json": {
+    "mtime": 1783404122.6284418,
+    "ast_hash": "a3d39fa780ebff65444de257f291ce6c",
+    "semantic_hash": "a3d39fa780ebff65444de257f291ce6c"
+  },
+  "tsconfig.node.json": {
+    "mtime": 1783404122.6369498,
+    "ast_hash": "a2a909f9cfe72a92060cb30231ed93da",
+    "semantic_hash": "a2a909f9cfe72a92060cb30231ed93da"
+  },
+  "vite.config.ts": {
+    "mtime": 1783404122.6369498,
+    "ast_hash": "3560e1c541cf9e682852c0dcc89deb56",
+    "semantic_hash": "3560e1c541cf9e682852c0dcc89deb56"
+  },
+  "vite.config.ts.timestamp-1783643520004-8d0842346236e.mjs": {
+    "mtime": 1783643520.007475,
+    "ast_hash": "6ab34cdc9316ee69e909b5ed8d97fd16",
+    "semantic_hash": "6ab34cdc9316ee69e909b5ed8d97fd16"
+  },
+  ".agents/skills/academic-anthropologist/SKILL.md": {
+    "mtime": 1783973425.8657067,
+    "ast_hash": "57cebd169b5c7b24b2a233c501b7c372",
+    "semantic_hash": "57cebd169b5c7b24b2a233c501b7c372"
+  },
+  ".agents/skills/academic-geographer/SKILL.md": {
+    "mtime": 1783973425.8966694,
+    "ast_hash": "a2fef94eb238362fe3f05e90e44dd6cb",
+    "semantic_hash": "a2fef94eb238362fe3f05e90e44dd6cb"
+  },
+  ".agents/skills/academic-historian/SKILL.md": {
+    "mtime": 1783973425.9198153,
+    "ast_hash": "58d87a359cb54504877fca25df62fc9f",
+    "semantic_hash": "58d87a359cb54504877fca25df62fc9f"
+  },
+  ".agents/skills/academic-narratologist/SKILL.md": {
+    "mtime": 1783973425.9414272,
+    "ast_hash": "ea251130727ac7e2221532c02918ac67",
+    "semantic_hash": "ea251130727ac7e2221532c02918ac67"
+  },
+  ".agents/skills/academic-psychologist/SKILL.md": {
+    "mtime": 1783973425.9673698,
+    "ast_hash": "1bc78e3036fcc3d5a8180dd122914e85",
+    "semantic_hash": "1bc78e3036fcc3d5a8180dd122914e85"
+  },
+  ".agents/skills/accounts-payable-agent/SKILL.md": {
+    "mtime": 1783973429.8076503,
+    "ast_hash": "8daf47004401ebe1dc64ad567b83bed3",
+    "semantic_hash": "8daf47004401ebe1dc64ad567b83bed3"
+  },
+  ".agents/skills/agentic-identity-trust/SKILL.md": {
+    "mtime": 1783973429.8262713,
+    "ast_hash": "105ddbeb917d57d6572485667b7b5cb6",
+    "semantic_hash": "105ddbeb917d57d6572485667b7b5cb6"
+  },
+  ".agents/skills/agents-orchestrator/SKILL.md": {
+    "mtime": 1783973429.8475592,
+    "ast_hash": "976198b2e656dd6b5a853e7524842dc4",
+    "semantic_hash": "976198b2e656dd6b5a853e7524842dc4"
+  },
+  ".agents/skills/automation-governance-architect/SKILL.md": {
+    "mtime": 1783973429.8648708,
+    "ast_hash": "45d1683c57bb9afd11e00b60a8b04f36",
+    "semantic_hash": "45d1683c57bb9afd11e00b60a8b04f36"
+  },
+  ".agents/skills/blender-addon-engineer/SKILL.md": {
+    "mtime": 1783973427.1277242,
+    "ast_hash": "6bbc2381049470fecc0fd9b24deb0a4f",
+    "semantic_hash": "6bbc2381049470fecc0fd9b24deb0a4f"
+  },
+  ".agents/skills/business-strategist/SKILL.md": {
+    "mtime": 1783973429.8844156,
+    "ast_hash": "355fedec34d1ec8f6a2548eb75689546",
+    "semantic_hash": "355fedec34d1ec8f6a2548eb75689546"
+  },
+  ".agents/skills/change-management-consultant/SKILL.md": {
+    "mtime": 1783973429.90603,
+    "ast_hash": "0d3398d0895027c2c7323e589df6e0ef",
+    "semantic_hash": "0d3398d0895027c2c7323e589df6e0ef"
+  },
+  ".agents/skills/chief-financial-officer/SKILL.md": {
+    "mtime": 1783973429.926982,
+    "ast_hash": "7112a10cc3e060172a66c831ad60c557",
+    "semantic_hash": "7112a10cc3e060172a66c831ad60c557"
+  },
+  ".agents/skills/corporate-training-designer/SKILL.md": {
+    "mtime": 1783973429.9458737,
+    "ast_hash": "8af55b6df211bc63cb4990508ff57d7d",
+    "semantic_hash": "8af55b6df211bc63cb4990508ff57d7d"
+  },
+  ".agents/skills/customer-service/SKILL.md": {
+    "mtime": 1783973429.965763,
+    "ast_hash": "1ee4c02a5a65c91a41b0a0bea72da50c",
+    "semantic_hash": "1ee4c02a5a65c91a41b0a0bea72da50c"
+  },
+  ".agents/skills/customer-success-manager/SKILL.md": {
+    "mtime": 1783973429.9836555,
+    "ast_hash": "284dbbd61056bda8ab307013f94600e5",
+    "semantic_hash": "284dbbd61056bda8ab307013f94600e5"
+  },
+  ".agents/skills/data-consolidation-agent/SKILL.md": {
+    "mtime": 1783973430.011213,
+    "ast_hash": "8c5deaf4515292e802a8a1f5be653977",
+    "semantic_hash": "8c5deaf4515292e802a8a1f5be653977"
+  },
+  ".agents/skills/data-privacy-officer/SKILL.md": {
+    "mtime": 1783973430.0324955,
+    "ast_hash": "aad18ed4091fa4517725868c3e012da6",
+    "semantic_hash": "aad18ed4091fa4517725868c3e012da6"
+  },
+  ".agents/skills/design-brand-guardian/SKILL.md": {
+    "mtime": 1783973426.008155,
+    "ast_hash": "045df33ebf238381abc50dc6f99d642b",
+    "semantic_hash": "045df33ebf238381abc50dc6f99d642b"
+  },
+  ".agents/skills/design-image-prompt-engineer/SKILL.md": {
+    "mtime": 1783973426.0302162,
+    "ast_hash": "fc89b4220ba5cca6e543bcd962d41951",
+    "semantic_hash": "fc89b4220ba5cca6e543bcd962d41951"
+  },
+  ".agents/skills/design-inclusive-visuals-specialist/SKILL.md": {
+    "mtime": 1783973426.0523129,
+    "ast_hash": "2221a9583032e118d39b77b78fb8c75b",
+    "semantic_hash": "2221a9583032e118d39b77b78fb8c75b"
+  },
+  ".agents/skills/design-persona-walkthrough/SKILL.md": {
+    "mtime": 1783973426.0769124,
+    "ast_hash": "0a912a36572aa0658777ae1dcca1c273",
+    "semantic_hash": "0a912a36572aa0658777ae1dcca1c273"
+  },
+  ".agents/skills/design-ui-designer/SKILL.md": {
+    "mtime": 1783973426.1135526,
+    "ast_hash": "1420462e99d907caa9bbc022c1841318",
+    "semantic_hash": "1420462e99d907caa9bbc022c1841318"
+  },
+  ".agents/skills/design-ux-architect/SKILL.md": {
+    "mtime": 1783973426.1409397,
+    "ast_hash": "2f23330ed5e903710a31912cc652d553",
+    "semantic_hash": "2f23330ed5e903710a31912cc652d553"
+  },
+  ".agents/skills/design-ux-researcher/SKILL.md": {
+    "mtime": 1783973426.1658003,
+    "ast_hash": "22dfbcf41d53ff813d3eea07cb92ebd9",
+    "semantic_hash": "22dfbcf41d53ff813d3eea07cb92ebd9"
+  },
+  ".agents/skills/design-visual-storyteller/SKILL.md": {
+    "mtime": 1783973426.1880355,
+    "ast_hash": "4ae298aeb4efb4d5bf3934c91b718a81",
+    "semantic_hash": "4ae298aeb4efb4d5bf3934c91b718a81"
+  },
+  ".agents/skills/design-whimsy-injector/SKILL.md": {
+    "mtime": 1783973426.2121477,
+    "ast_hash": "3c140306b4ae7c7da78514db2685b3a8",
+    "semantic_hash": "3c140306b4ae7c7da78514db2685b3a8"
+  },
+  ".agents/skills/engineering-ai-data-remediation-engineer/SKILL.md": {
+    "mtime": 1783973426.2519877,
+    "ast_hash": "f68f301f3b3730ac6b08e45d0422527a",
+    "semantic_hash": "f68f301f3b3730ac6b08e45d0422527a"
+  },
+  ".agents/skills/engineering-ai-engineer/SKILL.md": {
+    "mtime": 1783973426.2776365,
+    "ast_hash": "f48a33c8eed6f0297fa59323c1a23e8a",
+    "semantic_hash": "f48a33c8eed6f0297fa59323c1a23e8a"
+  },
+  ".agents/skills/engineering-autonomous-optimization-architect/SKILL.md": {
+    "mtime": 1783973426.299388,
+    "ast_hash": "6101d413db2453604b0f28c1525f0875",
+    "semantic_hash": "6101d413db2453604b0f28c1525f0875"
+  },
+  ".agents/skills/engineering-backend-architect/SKILL.md": {
+    "mtime": 1783973426.318098,
+    "ast_hash": "568b985eb74bd3b8b80b7d3c21562954",
+    "semantic_hash": "568b985eb74bd3b8b80b7d3c21562954"
+  },
+  ".agents/skills/engineering-cms-developer/SKILL.md": {
+    "mtime": 1783973426.339361,
+    "ast_hash": "abad004ccf9b9f546ae7a81b960126fc",
+    "semantic_hash": "abad004ccf9b9f546ae7a81b960126fc"
+  },
+  ".agents/skills/engineering-code-reviewer/SKILL.md": {
+    "mtime": 1783973426.3584237,
+    "ast_hash": "af136d3384fe544db4c9e58e8d537f61",
+    "semantic_hash": "af136d3384fe544db4c9e58e8d537f61"
+  },
+  ".agents/skills/engineering-codebase-onboarding-engineer/SKILL.md": {
+    "mtime": 1783973426.3796053,
+    "ast_hash": "65756b12948f5f0b742b21519e018baf",
+    "semantic_hash": "65756b12948f5f0b742b21519e018baf"
+  },
+  ".agents/skills/engineering-data-engineer/SKILL.md": {
+    "mtime": 1783973426.4023721,
+    "ast_hash": "7787a7a177e567b7d4c5d455f7f7d424",
+    "semantic_hash": "7787a7a177e567b7d4c5d455f7f7d424"
+  },
+  ".agents/skills/engineering-database-optimizer/SKILL.md": {
+    "mtime": 1783973426.4215543,
+    "ast_hash": "c3aaad9c011406d2ef0d7edbcd8a91f2",
+    "semantic_hash": "c3aaad9c011406d2ef0d7edbcd8a91f2"
+  },
+  ".agents/skills/engineering-devops-automator/SKILL.md": {
+    "mtime": 1783973426.4406197,
+    "ast_hash": "add1299cd22d2c6035b01959d2d4f016",
+    "semantic_hash": "add1299cd22d2c6035b01959d2d4f016"
+  },
+  ".agents/skills/engineering-drupal-shopping-cart/SKILL.md": {
+    "mtime": 1783973426.4603531,
+    "ast_hash": "ef707eb49e0c56619a2ca77ba5e18abb",
+    "semantic_hash": "ef707eb49e0c56619a2ca77ba5e18abb"
+  },
+  ".agents/skills/engineering-email-intelligence-engineer/SKILL.md": {
+    "mtime": 1783973426.4777262,
+    "ast_hash": "b57ef2299290effd3d47bdb0b9f45514",
+    "semantic_hash": "b57ef2299290effd3d47bdb0b9f45514"
+  },
+  ".agents/skills/engineering-embedded-firmware-engineer/SKILL.md": {
+    "mtime": 1783973426.5003679,
+    "ast_hash": "5164319447a457238a97d0f6ae66af64",
+    "semantic_hash": "5164319447a457238a97d0f6ae66af64"
+  },
+  ".agents/skills/engineering-feishu-integration-developer/SKILL.md": {
+    "mtime": 1783973426.5241766,
+    "ast_hash": "52919dd1306ff94a8b8b151e260a14ed",
+    "semantic_hash": "52919dd1306ff94a8b8b151e260a14ed"
+  },
+  ".agents/skills/engineering-filament-optimization-specialist/SKILL.md": {
+    "mtime": 1783973426.5440433,
+    "ast_hash": "f1446c6f8c8a3b186689c5b652c5e7e1",
+    "semantic_hash": "f1446c6f8c8a3b186689c5b652c5e7e1"
+  },
+  ".agents/skills/engineering-frontend-developer/SKILL.md": {
+    "mtime": 1783973426.5687318,
+    "ast_hash": "4f84d5b3cbbd399fe3288e603fe4df21",
+    "semantic_hash": "4f84d5b3cbbd399fe3288e603fe4df21"
+  },
+  ".agents/skills/engineering-git-workflow-master/SKILL.md": {
+    "mtime": 1783973426.5900226,
+    "ast_hash": "61e35024e80680e8ff49f7c43152c65a",
+    "semantic_hash": "61e35024e80680e8ff49f7c43152c65a"
+  },
+  ".agents/skills/engineering-incident-response-commander/SKILL.md": {
+    "mtime": 1783973426.6111436,
+    "ast_hash": "e561d52f94123774f1bc115f3cfb7ba9",
+    "semantic_hash": "e561d52f94123774f1bc115f3cfb7ba9"
+  },
+  ".agents/skills/engineering-it-service-manager/SKILL.md": {
+    "mtime": 1783973426.6327512,
+    "ast_hash": "4661d86ffc1a1b186b7f2b576b720a75",
+    "semantic_hash": "4661d86ffc1a1b186b7f2b576b720a75"
+  },
+  ".agents/skills/engineering-minimal-change-engineer/SKILL.md": {
+    "mtime": 1783973426.653867,
+    "ast_hash": "df5e5a5ed31a781e7d88da2859e1a3c1",
+    "semantic_hash": "df5e5a5ed31a781e7d88da2859e1a3c1"
+  },
+  ".agents/skills/engineering-mobile-app-builder/SKILL.md": {
+    "mtime": 1783973426.6744378,
+    "ast_hash": "bf146f9557899175007b53e1cb4cf2dc",
+    "semantic_hash": "bf146f9557899175007b53e1cb4cf2dc"
+  },
+  ".agents/skills/engineering-multi-agent-systems-architect/SKILL.md": {
+    "mtime": 1783973426.695554,
+    "ast_hash": "8158ef9f9794b49865cdd09c74cb96bd",
+    "semantic_hash": "8158ef9f9794b49865cdd09c74cb96bd"
+  },
+  ".agents/skills/engineering-network-engineer/SKILL.md": {
+    "mtime": 1783973426.716654,
+    "ast_hash": "cb0ab337c8bcb0a148f9da1ad4f759e7",
+    "semantic_hash": "cb0ab337c8bcb0a148f9da1ad4f759e7"
+  },
+  ".agents/skills/engineering-orgscript-engineer/SKILL.md": {
+    "mtime": 1783973426.7375536,
+    "ast_hash": "ccdd74ac1badfe0d78427d5fd05dacfa",
+    "semantic_hash": "ccdd74ac1badfe0d78427d5fd05dacfa"
+  },
+  ".agents/skills/engineering-prompt-engineer/SKILL.md": {
+    "mtime": 1783973426.7611105,
+    "ast_hash": "bcca9942a59fec5ecab441bf68970fa9",
+    "semantic_hash": "bcca9942a59fec5ecab441bf68970fa9"
+  },
+  ".agents/skills/engineering-rapid-prototyper/SKILL.md": {
+    "mtime": 1783973426.7835288,
+    "ast_hash": "fc2ac15d3802a15b949485f300fe617f",
+    "semantic_hash": "fc2ac15d3802a15b949485f300fe617f"
+  },
+  ".agents/skills/engineering-senior-developer/SKILL.md": {
+    "mtime": 1783973426.816846,
+    "ast_hash": "3328af75a058534aa72163438068cb10",
+    "semantic_hash": "3328af75a058534aa72163438068cb10"
+  },
+  ".agents/skills/engineering-software-architect/SKILL.md": {
+    "mtime": 1783973426.8389893,
+    "ast_hash": "a4a30361a6316519f3c44f4521ad32ca",
+    "semantic_hash": "a4a30361a6316519f3c44f4521ad32ca"
+  },
+  ".agents/skills/engineering-solidity-smart-contract-engineer/SKILL.md": {
+    "mtime": 1783973426.860105,
+    "ast_hash": "dbc30366eedba8a65a00e531eb59f8c7",
+    "semantic_hash": "dbc30366eedba8a65a00e531eb59f8c7"
+  },
+  ".agents/skills/engineering-sre/SKILL.md": {
+    "mtime": 1783973426.8903093,
+    "ast_hash": "59f0340290c0d9147cddf632fbbfe416",
+    "semantic_hash": "59f0340290c0d9147cddf632fbbfe416"
+  },
+  ".agents/skills/engineering-technical-writer/SKILL.md": {
+    "mtime": 1783973426.9159956,
+    "ast_hash": "5b896d61486a15f1b1017372b4ae7b2e",
+    "semantic_hash": "5b896d61486a15f1b1017372b4ae7b2e"
+  },
+  ".agents/skills/engineering-voice-ai-integration-engineer/SKILL.md": {
+    "mtime": 1783973426.939083,
+    "ast_hash": "5a30189d629a5be873b6ad4b1f8db22e",
+    "semantic_hash": "5a30189d629a5be873b6ad4b1f8db22e"
+  },
+  ".agents/skills/engineering-wechat-mini-program-developer/SKILL.md": {
+    "mtime": 1783973426.9611807,
+    "ast_hash": "d7be9f786b6cd2866cdfa23ae31692f0",
+    "semantic_hash": "d7be9f786b6cd2866cdfa23ae31692f0"
+  },
+  ".agents/skills/engineering-wordpress-shopping-cart/SKILL.md": {
+    "mtime": 1783973426.9848163,
+    "ast_hash": "a8b703c867df0c30afaaccb19e8d4b46",
+    "semantic_hash": "a8b703c867df0c30afaaccb19e8d4b46"
+  },
+  ".agents/skills/esg-sustainability-officer/SKILL.md": {
+    "mtime": 1783973430.0529187,
+    "ast_hash": "1028dc7f72b01e14e6acd0580fa46730",
+    "semantic_hash": "1028dc7f72b01e14e6acd0580fa46730"
+  },
+  ".agents/skills/finance-bookkeeper-controller/SKILL.md": {
+    "mtime": 1783973427.008045,
+    "ast_hash": "3da08ef5497b088a0b04b99f5a0fc338",
+    "semantic_hash": "3da08ef5497b088a0b04b99f5a0fc338"
+  },
+  ".agents/skills/finance-financial-analyst/SKILL.md": {
+    "mtime": 1783973427.0331867,
+    "ast_hash": "d8d03a9b9439e56a7572e1e0dba116d4",
+    "semantic_hash": "d8d03a9b9439e56a7572e1e0dba116d4"
+  },
+  ".agents/skills/finance-fpa-analyst/SKILL.md": {
+    "mtime": 1783973427.0542681,
+    "ast_hash": "13ffdb8ada95bff7fdc1b9f5503165d1",
+    "semantic_hash": "13ffdb8ada95bff7fdc1b9f5503165d1"
+  },
+  ".agents/skills/finance-investment-researcher/SKILL.md": {
+    "mtime": 1783973427.077932,
+    "ast_hash": "caa6795ccf28828a71b1f785ea999e5c",
+    "semantic_hash": "caa6795ccf28828a71b1f785ea999e5c"
+  },
+  ".agents/skills/finance-tax-strategist/SKILL.md": {
+    "mtime": 1783973427.104599,
+    "ast_hash": "f0e5b537dc072ab962922750c20f89a7",
+    "semantic_hash": "f0e5b537dc072ab962922750c20f89a7"
+  },
+  ".agents/skills/game-audio-engineer/SKILL.md": {
+    "mtime": 1783973427.1505218,
+    "ast_hash": "d80ba0a2a6889efc430b0df1d531b642",
+    "semantic_hash": "d80ba0a2a6889efc430b0df1d531b642"
+  },
+  ".agents/skills/game-designer/SKILL.md": {
+    "mtime": 1783973427.1716218,
+    "ast_hash": "07ce4f5879c43605df492c40723501cc",
+    "semantic_hash": "07ce4f5879c43605df492c40723501cc"
+  },
+  ".agents/skills/gis-3d-scene-developer/SKILL.md": {
+    "mtime": 1783973427.5906582,
+    "ast_hash": "268ed363c8b53f0d332540f77b218797",
+    "semantic_hash": "268ed363c8b53f0d332540f77b218797"
+  },
+  ".agents/skills/gis-analyst/SKILL.md": {
+    "mtime": 1783973427.611834,
+    "ast_hash": "1bf9fb7a4c2b8cde063544832282cda9",
+    "semantic_hash": "1bf9fb7a4c2b8cde063544832282cda9"
+  },
+  ".agents/skills/gis-bim-specialist/SKILL.md": {
+    "mtime": 1783973427.6309285,
+    "ast_hash": "318b7bd3ca2e2646560616e18cdcdfc2",
+    "semantic_hash": "318b7bd3ca2e2646560616e18cdcdfc2"
+  },
+  ".agents/skills/gis-cartography-designer/SKILL.md": {
+    "mtime": 1783973427.6508942,
+    "ast_hash": "c4e586d8fd496c30e564e9005039c9ab",
+    "semantic_hash": "c4e586d8fd496c30e564e9005039c9ab"
+  },
+  ".agents/skills/gis-drone-reality-mapping/SKILL.md": {
+    "mtime": 1783973427.6709497,
+    "ast_hash": "a9b2279157a4b0e088dda1bda9738bd7",
+    "semantic_hash": "a9b2279157a4b0e088dda1bda9738bd7"
+  },
+  ".agents/skills/gis-geoai-ml-engineer/SKILL.md": {
+    "mtime": 1783973427.6921535,
+    "ast_hash": "d463620de63cba1307ee705bf86d415b",
+    "semantic_hash": "d463620de63cba1307ee705bf86d415b"
+  },
+  ".agents/skills/gis-geoprocessing-specialist/SKILL.md": {
+    "mtime": 1783973427.7117913,
+    "ast_hash": "969c47a1c873ac13b79e1758052ecc6c",
+    "semantic_hash": "969c47a1c873ac13b79e1758052ecc6c"
+  },
+  ".agents/skills/gis-qa-engineer/SKILL.md": {
+    "mtime": 1783973427.7344294,
+    "ast_hash": "d924a042cd9a8d4b3c8c3735d5d1e122",
+    "semantic_hash": "d924a042cd9a8d4b3c8c3735d5d1e122"
+  },
+  ".agents/skills/gis-solution-engineer/SKILL.md": {
+    "mtime": 1783973427.7570217,
+    "ast_hash": "4a5b919537c4ad7ebc9e90242ff4e637",
+    "semantic_hash": "4a5b919537c4ad7ebc9e90242ff4e637"
+  },
+  ".agents/skills/gis-spatial-data-engineer/SKILL.md": {
+    "mtime": 1783973427.7869165,
+    "ast_hash": "45092eeebd4599dafbfd2101e3471866",
+    "semantic_hash": "45092eeebd4599dafbfd2101e3471866"
+  },
+  ".agents/skills/gis-spatial-data-scientist/SKILL.md": {
+    "mtime": 1783973427.807619,
+    "ast_hash": "ba4de790381d8327d6bf8d5d0e64b06e",
+    "semantic_hash": "ba4de790381d8327d6bf8d5d0e64b06e"
+  },
+  ".agents/skills/gis-technical-consultant/SKILL.md": {
+    "mtime": 1783973427.825511,
+    "ast_hash": "dff9a1c16edb984bdb15b4b269e7fbe4",
+    "semantic_hash": "dff9a1c16edb984bdb15b4b269e7fbe4"
+  },
+  ".agents/skills/gis-web-gis-developer/SKILL.md": {
+    "mtime": 1783973427.84438,
+    "ast_hash": "2ca1935a454eb12b63011e0fa824881f",
+    "semantic_hash": "2ca1935a454eb12b63011e0fa824881f"
+  },
+  ".agents/skills/godot-gameplay-scripter/SKILL.md": {
+    "mtime": 1783973427.192319,
+    "ast_hash": "cfebd5153e2d4ccca9da11dd39061cf6",
+    "semantic_hash": "cfebd5153e2d4ccca9da11dd39061cf6"
+  },
+  ".agents/skills/godot-multiplayer-engineer/SKILL.md": {
+    "mtime": 1783973427.218998,
+    "ast_hash": "aa1d3ca15b7197a33326efc01b0ca2db",
+    "semantic_hash": "aa1d3ca15b7197a33326efc01b0ca2db"
+  },
+  ".agents/skills/godot-shader-developer/SKILL.md": {
+    "mtime": 1783973427.244746,
+    "ast_hash": "55e12e324ff3b3fa3c3e9d8233603038",
+    "semantic_hash": "55e12e324ff3b3fa3c3e9d8233603038"
+  },
+  ".agents/skills/government-digital-presales-consultant/SKILL.md": {
+    "mtime": 1783973430.0745337,
+    "ast_hash": "e216a3d605f2986b77bd4c09b7f007c8",
+    "semantic_hash": "e216a3d605f2986b77bd4c09b7f007c8"
+  },
+  ".agents/skills/grant-writer/SKILL.md": {
+    "mtime": 1783973430.098676,
+    "ast_hash": "0d54bd751203ad6712aa78a0e81fed40",
+    "semantic_hash": "0d54bd751203ad6712aa78a0e81fed40"
+  },
+  ".agents/skills/healthcare-clinical-evidence-agent/SKILL.md": {
+    "mtime": 1783973427.8628235,
+    "ast_hash": "aafdb3299f6113d35afb35cdfdeac040",
+    "semantic_hash": "aafdb3299f6113d35afb35cdfdeac040"
+  },
+  ".agents/skills/healthcare-customer-service/SKILL.md": {
+    "mtime": 1783973430.1192012,
+    "ast_hash": "6806334d1dc9678acd41513840dfde9f",
+    "semantic_hash": "6806334d1dc9678acd41513840dfde9f"
+  },
+  ".agents/skills/healthcare-marketing-compliance/SKILL.md": {
+    "mtime": 1783973430.1499043,
+    "ast_hash": "18683f56b675fc2a901d5e2a23f24b6a",
+    "semantic_hash": "18683f56b675fc2a901d5e2a23f24b6a"
+  },
+  ".agents/skills/healthcare-sovereign-health-systems-agent/SKILL.md": {
+    "mtime": 1783973427.8886452,
+    "ast_hash": "223a389adb98e6828582e3357438ec29",
+    "semantic_hash": "223a389adb98e6828582e3357438ec29"
+  },
+  ".agents/skills/hospitality-guest-services/SKILL.md": {
+    "mtime": 1783973430.1756508,
+    "ast_hash": "482c14f6ffe47c1714211c1f9aaf64c0",
+    "semantic_hash": "482c14f6ffe47c1714211c1f9aaf64c0"
+  },
+  ".agents/skills/hr-onboarding/SKILL.md": {
+    "mtime": 1783973430.2012255,
+    "ast_hash": "93626c3db3b7421b0bd4f85db30fd781",
+    "semantic_hash": "93626c3db3b7421b0bd4f85db30fd781"
+  },
+  ".agents/skills/identity-graph-operator/SKILL.md": {
+    "mtime": 1783973430.2257946,
+    "ast_hash": "c6b7dcb5d1a9654b4a54c0bcd3e2b672",
+    "semantic_hash": "c6b7dcb5d1a9654b4a54c0bcd3e2b672"
+  },
+  ".agents/skills/karpathy-guidelines/SKILL.md": {
+    "mtime": 1784016183.3784697,
+    "ast_hash": "8828ac207f2fcbf5725d10f9ad5f9423",
+    "semantic_hash": "8828ac207f2fcbf5725d10f9ad5f9423"
+  },
+  ".agents/skills/language-translator/SKILL.md": {
+    "mtime": 1783973430.24868,
+    "ast_hash": "22db8d7c5c3bcef0f16e478a96f406ec",
+    "semantic_hash": "22db8d7c5c3bcef0f16e478a96f406ec"
+  },
+  ".agents/skills/legal-billing-time-tracking/SKILL.md": {
+    "mtime": 1783973430.269717,
+    "ast_hash": "6556c7454ba66be1974e197b1931ca1f",
+    "semantic_hash": "6556c7454ba66be1974e197b1931ca1f"
+  },
+  ".agents/skills/legal-client-intake/SKILL.md": {
+    "mtime": 1783973430.288749,
+    "ast_hash": "e7f44e2009ab8edf934db2a3cd9b7473",
+    "semantic_hash": "e7f44e2009ab8edf934db2a3cd9b7473"
+  },
+  ".agents/skills/legal-document-review/SKILL.md": {
+    "mtime": 1783973430.3084526,
+    "ast_hash": "c44c69d0be2957366b171e33cdebc3c6",
+    "semantic_hash": "c44c69d0be2957366b171e33cdebc3c6"
+  },
+  ".agents/skills/level-designer/SKILL.md": {
+    "mtime": 1783973427.2724314,
+    "ast_hash": "8e60302b1780724df8410a4a37313d03",
+    "semantic_hash": "8e60302b1780724df8410a4a37313d03"
+  },
+  ".agents/skills/loan-officer-assistant/SKILL.md": {
+    "mtime": 1783973430.331238,
+    "ast_hash": "24d351c01afb081fa2c8ce012968c5c4",
+    "semantic_hash": "24d351c01afb081fa2c8ce012968c5c4"
+  },
+  ".agents/skills/lsp-index-engineer/SKILL.md": {
+    "mtime": 1783973430.3558607,
+    "ast_hash": "85a4337c6d951b2a5ed5e46b11b1892a",
+    "semantic_hash": "85a4337c6d951b2a5ed5e46b11b1892a"
+  },
+  ".agents/skills/ma-integration-manager/SKILL.md": {
+    "mtime": 1783973430.3778825,
+    "ast_hash": "4b60c8db7c82cd03b9e7346efee46c1a",
+    "semantic_hash": "4b60c8db7c82cd03b9e7346efee46c1a"
+  },
+  ".agents/skills/macos-spatial-metal-engineer/SKILL.md": {
+    "mtime": 1783973429.6216576,
+    "ast_hash": "0cb402c90c0c440b7367a5a6e288ccd5",
+    "semantic_hash": "0cb402c90c0c440b7367a5a6e288ccd5"
+  },
+  ".agents/skills/marketing-aeo-foundations/SKILL.md": {
+    "mtime": 1783973427.9102192,
+    "ast_hash": "794e854b1f45fee6681e9c87ba90c33d",
+    "semantic_hash": "794e854b1f45fee6681e9c87ba90c33d"
+  },
+  ".agents/skills/marketing-agentic-search-optimizer/SKILL.md": {
+    "mtime": 1783973427.9307835,
+    "ast_hash": "0d08ef5591b456d46b9f0647004082d7",
+    "semantic_hash": "0d08ef5591b456d46b9f0647004082d7"
+  },
+  ".agents/skills/marketing-ai-citation-strategist/SKILL.md": {
+    "mtime": 1783973427.9518948,
+    "ast_hash": "468dd70e214d65c6f724cf8baee23817",
+    "semantic_hash": "468dd70e214d65c6f724cf8baee23817"
+  },
+  ".agents/skills/marketing-app-store-optimizer/SKILL.md": {
+    "mtime": 1783973427.9708903,
+    "ast_hash": "99cc8eafac97535d696f83ca71c35a01",
+    "semantic_hash": "99cc8eafac97535d696f83ca71c35a01"
+  },
+  ".agents/skills/marketing-baidu-seo-specialist/SKILL.md": {
+    "mtime": 1783973427.9893463,
+    "ast_hash": "b9b8d323c35f6f68449043c35378a6b1",
+    "semantic_hash": "b9b8d323c35f6f68449043c35378a6b1"
+  },
+  ".agents/skills/marketing-bilibili-content-strategist/SKILL.md": {
+    "mtime": 1783973428.0094755,
+    "ast_hash": "c3f88968b11dca2fcddcb5550d1490e9",
+    "semantic_hash": "c3f88968b11dca2fcddcb5550d1490e9"
+  },
+  ".agents/skills/marketing-book-co-author/SKILL.md": {
+    "mtime": 1783973428.029826,
+    "ast_hash": "b92ce100fe854219a7aa2a5f78ce4540",
+    "semantic_hash": "b92ce100fe854219a7aa2a5f78ce4540"
+  },
+  ".agents/skills/marketing-carousel-growth-engine/SKILL.md": {
+    "mtime": 1783973428.051905,
+    "ast_hash": "53ca2500343db4406a0897475d82a2be",
+    "semantic_hash": "53ca2500343db4406a0897475d82a2be"
+  },
+  ".agents/skills/marketing-china-ecommerce-operator/SKILL.md": {
+    "mtime": 1783973428.0720663,
+    "ast_hash": "177e9de0303e4e4a5c6fc47b7a101892",
+    "semantic_hash": "177e9de0303e4e4a5c6fc47b7a101892"
+  },
+  ".agents/skills/marketing-china-market-localization-strategist/SKILL.md": {
+    "mtime": 1783973428.093282,
+    "ast_hash": "c5b8d9e66058a4621af7fb47529dd72b",
+    "semantic_hash": "c5b8d9e66058a4621af7fb47529dd72b"
+  },
+  ".agents/skills/marketing-content-creator/SKILL.md": {
+    "mtime": 1783973428.1119497,
+    "ast_hash": "8294baba08117a8d911201156c6c8d17",
+    "semantic_hash": "8294baba08117a8d911201156c6c8d17"
+  },
+  ".agents/skills/marketing-cross-border-ecommerce/SKILL.md": {
+    "mtime": 1783973428.1339731,
+    "ast_hash": "26379878369ec8b8e5cbfb84a804929e",
+    "semantic_hash": "26379878369ec8b8e5cbfb84a804929e"
+  },
+  ".agents/skills/marketing-douyin-strategist/SKILL.md": {
+    "mtime": 1783973428.1555443,
+    "ast_hash": "f6c52cd600aa155a4cea22ddd7d9d8dd",
+    "semantic_hash": "f6c52cd600aa155a4cea22ddd7d9d8dd"
+  },
+  ".agents/skills/marketing-email-strategist/SKILL.md": {
+    "mtime": 1783973428.1757715,
+    "ast_hash": "5315579c383b72e3e39b0f3d214c70b8",
+    "semantic_hash": "5315579c383b72e3e39b0f3d214c70b8"
+  },
+  ".agents/skills/marketing-global-podcast-strategist/SKILL.md": {
+    "mtime": 1783973428.1958177,
+    "ast_hash": "c84a793546a4e12ec2e8b7354c36fae4",
+    "semantic_hash": "c84a793546a4e12ec2e8b7354c36fae4"
+  },
+  ".agents/skills/marketing-growth-hacker/SKILL.md": {
+    "mtime": 1783973428.2199073,
+    "ast_hash": "1f2988c347bf664e5364fa32d36d90f6",
+    "semantic_hash": "1f2988c347bf664e5364fa32d36d90f6"
+  },
+  ".agents/skills/marketing-instagram-curator/SKILL.md": {
+    "mtime": 1783973428.2388003,
+    "ast_hash": "e66cf1dfa710cd4442a3f81269230f51",
+    "semantic_hash": "e66cf1dfa710cd4442a3f81269230f51"
+  },
+  ".agents/skills/marketing-kuaishou-strategist/SKILL.md": {
+    "mtime": 1783973428.2613442,
+    "ast_hash": "34328ae3f2451edbb979b5632eb9a835",
+    "semantic_hash": "34328ae3f2451edbb979b5632eb9a835"
+  },
+  ".agents/skills/marketing-linkedin-content-creator/SKILL.md": {
+    "mtime": 1783973428.279565,
+    "ast_hash": "ba86d32069e73c54652b9eff7a8512f2",
+    "semantic_hash": "ba86d32069e73c54652b9eff7a8512f2"
+  },
+  ".agents/skills/marketing-livestream-commerce-coach/SKILL.md": {
+    "mtime": 1783973428.3006897,
+    "ast_hash": "0c714ef313f45fe2415c7602618d03c8",
+    "semantic_hash": "0c714ef313f45fe2415c7602618d03c8"
+  },
+  ".agents/skills/marketing-multi-platform-publisher/SKILL.md": {
+    "mtime": 1783973428.3222103,
+    "ast_hash": "c9a3a12045828ce21b327b8fafd48ba6",
+    "semantic_hash": "c9a3a12045828ce21b327b8fafd48ba6"
+  },
+  ".agents/skills/marketing-podcast-strategist/SKILL.md": {
+    "mtime": 1783973428.3424513,
+    "ast_hash": "89dc32c5fd16b86a726764d8af142c73",
+    "semantic_hash": "89dc32c5fd16b86a726764d8af142c73"
+  },
+  ".agents/skills/marketing-pr-communications-manager/SKILL.md": {
+    "mtime": 1783973428.3639445,
+    "ast_hash": "765afb0cd893c971a0f78574d036b918",
+    "semantic_hash": "765afb0cd893c971a0f78574d036b918"
+  },
+  ".agents/skills/marketing-private-domain-operator/SKILL.md": {
+    "mtime": 1783973428.3825943,
+    "ast_hash": "1f2e7db34a48171dc8f0d04ec2190503",
+    "semantic_hash": "1f2e7db34a48171dc8f0d04ec2190503"
+  },
+  ".agents/skills/marketing-reddit-community-builder/SKILL.md": {
+    "mtime": 1783973428.4055722,
+    "ast_hash": "4c6a4e518c439b8f1520ad655b1b1cd5",
+    "semantic_hash": "4c6a4e518c439b8f1520ad655b1b1cd5"
+  },
+  ".agents/skills/marketing-seo-specialist/SKILL.md": {
+    "mtime": 1783973428.4266515,
+    "ast_hash": "af7d83a10e205b30d3459c434c3cf4af",
+    "semantic_hash": "af7d83a10e205b30d3459c434c3cf4af"
+  },
+  ".agents/skills/marketing-short-video-editing-coach/SKILL.md": {
+    "mtime": 1783973428.4487178,
+    "ast_hash": "c002505df012f9beaea6cf9158c1a0d4",
+    "semantic_hash": "c002505df012f9beaea6cf9158c1a0d4"
+  },
+  ".agents/skills/marketing-social-media-strategist/SKILL.md": {
+    "mtime": 1783973428.470903,
+    "ast_hash": "a3cbdb46c93b2f952a124d34c73229a6",
+    "semantic_hash": "a3cbdb46c93b2f952a124d34c73229a6"
+  },
+  ".agents/skills/marketing-tiktok-strategist/SKILL.md": {
+    "mtime": 1783973428.4910026,
+    "ast_hash": "3663aa7b86d3b84eaec75290ed1c5c09",
+    "semantic_hash": "3663aa7b86d3b84eaec75290ed1c5c09"
+  },
+  ".agents/skills/marketing-twitter-engager/SKILL.md": {
+    "mtime": 1783973428.5120997,
+    "ast_hash": "bb21d398ff0c7cb950beeb238084d423",
+    "semantic_hash": "bb21d398ff0c7cb950beeb238084d423"
+  },
+  ".agents/skills/marketing-video-optimization-specialist/SKILL.md": {
+    "mtime": 1783973428.5321782,
+    "ast_hash": "7529e28debd50c0660c414b9f464baaf",
+    "semantic_hash": "7529e28debd50c0660c414b9f464baaf"
+  },
+  ".agents/skills/marketing-wechat-official-account/SKILL.md": {
+    "mtime": 1783973428.5593538,
+    "ast_hash": "8af90a11772d445a0355ab4d63cf21e3",
+    "semantic_hash": "8af90a11772d445a0355ab4d63cf21e3"
+  },
+  ".agents/skills/marketing-weibo-strategist/SKILL.md": {
+    "mtime": 1783973428.5869732,
+    "ast_hash": "c05bd6f175e195b6a1e835a15068005f",
+    "semantic_hash": "c05bd6f175e195b6a1e835a15068005f"
+  },
+  ".agents/skills/marketing-x-twitter-intelligence-analyst/SKILL.md": {
+    "mtime": 1783973428.6141243,
+    "ast_hash": "c9cf93b1e32f69062ebbad1748b2949c",
+    "semantic_hash": "c9cf93b1e32f69062ebbad1748b2949c"
+  },
+  ".agents/skills/marketing-xiaohongshu-specialist/SKILL.md": {
+    "mtime": 1783973428.639405,
+    "ast_hash": "55032df008c97cf142d645843dba6f68",
+    "semantic_hash": "55032df008c97cf142d645843dba6f68"
+  },
+  ".agents/skills/marketing-zhihu-strategist/SKILL.md": {
+    "mtime": 1783973428.6596076,
+    "ast_hash": "f28426077570135ba7a23b2a0e25cd5f",
+    "semantic_hash": "f28426077570135ba7a23b2a0e25cd5f"
+  },
+  ".agents/skills/medical-billing-coding-specialist/SKILL.md": {
+    "mtime": 1783973430.3980248,
+    "ast_hash": "2edd2a9631f739f3a155a0756d658689",
+    "semantic_hash": "2edd2a9631f739f3a155a0756d658689"
+  },
+  ".agents/skills/narrative-designer/SKILL.md": {
+    "mtime": 1783973427.2928803,
+    "ast_hash": "963ee369afe4dfc4f4d77f2ae90130bd",
+    "semantic_hash": "963ee369afe4dfc4f4d77f2ae90130bd"
+  },
+  ".agents/skills/operations-manager/SKILL.md": {
+    "mtime": 1783973430.4170263,
+    "ast_hash": "79412f74969441e2e956ebdae35c67c0",
+    "semantic_hash": "79412f74969441e2e956ebdae35c67c0"
+  },
+  ".agents/skills/organizational-psychologist/SKILL.md": {
+    "mtime": 1783973430.4383955,
+    "ast_hash": "58a505273db82d6936635d4ed7dbd445",
+    "semantic_hash": "58a505273db82d6936635d4ed7dbd445"
+  },
+  ".agents/skills/paid-media-auditor/SKILL.md": {
+    "mtime": 1783973428.6803234,
+    "ast_hash": "81d807cabaf0bea68bcc00893e98a7b7",
+    "semantic_hash": "81d807cabaf0bea68bcc00893e98a7b7"
+  },
+  ".agents/skills/paid-media-creative-strategist/SKILL.md": {
+    "mtime": 1783973428.705757,
+    "ast_hash": "45f64d717ec818da0e58ea3b6e988da3",
+    "semantic_hash": "45f64d717ec818da0e58ea3b6e988da3"
+  },
+  ".agents/skills/paid-media-paid-social-strategist/SKILL.md": {
+    "mtime": 1783973428.7271988,
+    "ast_hash": "4fbdcf383050b1361df56fa3c95ac03b",
+    "semantic_hash": "4fbdcf383050b1361df56fa3c95ac03b"
+  },
+  ".agents/skills/paid-media-ppc-strategist/SKILL.md": {
+    "mtime": 1783973428.7481005,
+    "ast_hash": "0ace7f0abcdc4ae499c0438b6fff18a1",
+    "semantic_hash": "0ace7f0abcdc4ae499c0438b6fff18a1"
+  },
+  ".agents/skills/paid-media-programmatic-buyer/SKILL.md": {
+    "mtime": 1783973428.7741344,
+    "ast_hash": "f8b331b07df513a3b69733ca72ff05ee",
+    "semantic_hash": "f8b331b07df513a3b69733ca72ff05ee"
+  },
+  ".agents/skills/paid-media-search-query-analyst/SKILL.md": {
+    "mtime": 1783973428.8000102,
+    "ast_hash": "76a732125a9d3cc8196696911af8d13e",
+    "semantic_hash": "76a732125a9d3cc8196696911af8d13e"
+  },
+  ".agents/skills/paid-media-tracking-specialist/SKILL.md": {
+    "mtime": 1783973428.8240716,
+    "ast_hash": "77520031785cdeba30f0f10881d59d46",
+    "semantic_hash": "77520031785cdeba30f0f10881d59d46"
+  },
+  ".agents/skills/personal-growth-mentor/SKILL.md": {
+    "mtime": 1783973430.4594662,
+    "ast_hash": "a70adb0568d5d7b4e7fb452d94d5bb3b",
+    "semantic_hash": "a70adb0568d5d7b4e7fb452d94d5bb3b"
+  },
+  ".agents/skills/product-behavioral-nudge-engine/SKILL.md": {
+    "mtime": 1783973428.851521,
+    "ast_hash": "9be29383e436ea3fdb681a2b94867463",
+    "semantic_hash": "9be29383e436ea3fdb681a2b94867463"
+  },
+  ".agents/skills/product-feedback-synthesizer/SKILL.md": {
+    "mtime": 1783973428.8756783,
+    "ast_hash": "5adbdef884dbe0638a2ce039087b0efb",
+    "semantic_hash": "5adbdef884dbe0638a2ce039087b0efb"
+  },
+  ".agents/skills/product-manager/SKILL.md": {
+    "mtime": 1783973428.8958738,
+    "ast_hash": "763b7bce3d263bf021fa2be4b5dd932a",
+    "semantic_hash": "763b7bce3d263bf021fa2be4b5dd932a"
+  },
+  ".agents/skills/product-sprint-prioritizer/SKILL.md": {
+    "mtime": 1783973428.9211216,
+    "ast_hash": "1eaa8fd329f564d51f7c572813d65759",
+    "semantic_hash": "1eaa8fd329f564d51f7c572813d65759"
+  },
+  ".agents/skills/product-trend-researcher/SKILL.md": {
+    "mtime": 1783973428.944059,
+    "ast_hash": "9316ed09e91a4f32bb12dd86202f4ced",
+    "semantic_hash": "9316ed09e91a4f32bb12dd86202f4ced"
+  },
+  ".agents/skills/project-management-experiment-tracker/SKILL.md": {
+    "mtime": 1783973428.9667826,
+    "ast_hash": "b4fa1f4c0a567d68de7992c8e321c195",
+    "semantic_hash": "b4fa1f4c0a567d68de7992c8e321c195"
+  },
+  ".agents/skills/project-management-jira-workflow-steward/SKILL.md": {
+    "mtime": 1783973428.9899073,
+    "ast_hash": "69bd244c4dd730850a9536e6af4cafb5",
+    "semantic_hash": "69bd244c4dd730850a9536e6af4cafb5"
+  },
+  ".agents/skills/project-management-meeting-notes-specialist/SKILL.md": {
+    "mtime": 1783973429.0190027,
+    "ast_hash": "6f7213f501ba84ef86d16b53f07cb538",
+    "semantic_hash": "6f7213f501ba84ef86d16b53f07cb538"
+  },
+  ".agents/skills/project-management-project-shepherd/SKILL.md": {
+    "mtime": 1783973429.0557084,
+    "ast_hash": "9a1310daf1e19638b434b0af6402966f",
+    "semantic_hash": "9a1310daf1e19638b434b0af6402966f"
+  },
+  ".agents/skills/project-management-studio-operations/SKILL.md": {
+    "mtime": 1783973429.0864813,
+    "ast_hash": "857515ffdaf21c3d7849d72a2107cb63",
+    "semantic_hash": "857515ffdaf21c3d7849d72a2107cb63"
+  },
+  ".agents/skills/project-management-studio-producer/SKILL.md": {
+    "mtime": 1783973429.1141937,
+    "ast_hash": "2ab8d36c52923ab6d06ef8bc4e548493",
+    "semantic_hash": "2ab8d36c52923ab6d06ef8bc4e548493"
+  },
+  ".agents/skills/project-manager-senior/SKILL.md": {
+    "mtime": 1783973429.1418443,
+    "ast_hash": "44e6d4962cba3ec5a1b8b5559f59db2a",
+    "semantic_hash": "44e6d4962cba3ec5a1b8b5559f59db2a"
+  },
+  ".agents/skills/real-estate-buyer-seller/SKILL.md": {
+    "mtime": 1783973430.4803424,
+    "ast_hash": "8fd6dfbc299aaa783a23cb05541db540",
+    "semantic_hash": "8fd6dfbc299aaa783a23cb05541db540"
+  },
+  ".agents/skills/recruitment-specialist/SKILL.md": {
+    "mtime": 1783973430.5018878,
+    "ast_hash": "866c0a68a66951ad94383866d15e1266",
+    "semantic_hash": "866c0a68a66951ad94383866d15e1266"
+  },
+  ".agents/skills/report-distribution-agent/SKILL.md": {
+    "mtime": 1783973430.5206642,
+    "ast_hash": "69dcda4508e72a8b14970b777b42ff19",
+    "semantic_hash": "69dcda4508e72a8b14970b777b42ff19"
+  },
+  ".agents/skills/retail-customer-returns/SKILL.md": {
+    "mtime": 1783973430.5437653,
+    "ast_hash": "90fad2024b69f2cf104ed21963a227e8",
+    "semantic_hash": "90fad2024b69f2cf104ed21963a227e8"
+  },
+  ".agents/skills/roblox-avatar-creator/SKILL.md": {
+    "mtime": 1783973427.3129473,
+    "ast_hash": "3bde694778ca968edacf18df368ea56a",
+    "semantic_hash": "3bde694778ca968edacf18df368ea56a"
+  },
+  ".agents/skills/roblox-experience-designer/SKILL.md": {
+    "mtime": 1783973427.3384652,
+    "ast_hash": "918a6a5ffd09783d183bfaacfd03bd3a",
+    "semantic_hash": "918a6a5ffd09783d183bfaacfd03bd3a"
+  },
+  ".agents/skills/roblox-systems-scripter/SKILL.md": {
+    "mtime": 1783973427.362158,
+    "ast_hash": "83c6d645de78605a9a44c244cc574f91",
+    "semantic_hash": "83c6d645de78605a9a44c244cc574f91"
+  },
+  ".agents/skills/sales-account-strategist/SKILL.md": {
+    "mtime": 1783973429.1682496,
+    "ast_hash": "f87be9e3c3f97796fb3d10d6bb566030",
+    "semantic_hash": "f87be9e3c3f97796fb3d10d6bb566030"
+  },
+  ".agents/skills/sales-coach/SKILL.md": {
+    "mtime": 1783973429.1973455,
+    "ast_hash": "f0a858b49d80cbc8ab1f30e5e68d0bc1",
+    "semantic_hash": "f0a858b49d80cbc8ab1f30e5e68d0bc1"
+  },
+  ".agents/skills/sales-data-extraction-agent/SKILL.md": {
+    "mtime": 1783973430.5660286,
+    "ast_hash": "2bf02a34934912392b7a5800e542cd55",
+    "semantic_hash": "2bf02a34934912392b7a5800e542cd55"
+  },
+  ".agents/skills/sales-deal-strategist/SKILL.md": {
+    "mtime": 1783973429.2223258,
+    "ast_hash": "a6e27cb1363ce564f0e85947453fb7b9",
+    "semantic_hash": "a6e27cb1363ce564f0e85947453fb7b9"
+  },
+  ".agents/skills/sales-discovery-coach/SKILL.md": {
+    "mtime": 1783973429.2479632,
+    "ast_hash": "ce2fbcad8615cb6f77960a648bfc045a",
+    "semantic_hash": "ce2fbcad8615cb6f77960a648bfc045a"
+  },
+  ".agents/skills/sales-engineer/SKILL.md": {
+    "mtime": 1783973429.2741299,
+    "ast_hash": "4c4a70abe5d97aecdfabd201caabb2c5",
+    "semantic_hash": "4c4a70abe5d97aecdfabd201caabb2c5"
+  },
+  ".agents/skills/sales-offer-lead-gen-strategist/SKILL.md": {
+    "mtime": 1783973429.2936099,
+    "ast_hash": "84558ea1a5ca8ebdc0301ab82558c52a",
+    "semantic_hash": "84558ea1a5ca8ebdc0301ab82558c52a"
+  },
+  ".agents/skills/sales-outbound-strategist/SKILL.md": {
+    "mtime": 1783973429.3147242,
+    "ast_hash": "08990f24ef11789543ad79a523f668b0",
+    "semantic_hash": "08990f24ef11789543ad79a523f668b0"
+  },
+  ".agents/skills/sales-outreach/SKILL.md": {
+    "mtime": 1783973430.584115,
+    "ast_hash": "7e4182f043219aed19011595cd1f654e",
+    "semantic_hash": "7e4182f043219aed19011595cd1f654e"
+  },
+  ".agents/skills/sales-pipeline-analyst/SKILL.md": {
+    "mtime": 1783973429.3367648,
+    "ast_hash": "df0e2ce3b25af520f98e3aba61c5d691",
+    "semantic_hash": "df0e2ce3b25af520f98e3aba61c5d691"
+  },
+  ".agents/skills/sales-proposal-strategist/SKILL.md": {
+    "mtime": 1783973429.358519,
+    "ast_hash": "02467a6d785a5e7f248ade4fb511b292",
+    "semantic_hash": "02467a6d785a5e7f248ade4fb511b292"
+  },
+  ".agents/skills/security-appsec-engineer/SKILL.md": {
+    "mtime": 1783973429.38088,
+    "ast_hash": "1ab5db08699e9d19ba91fb193b101b74",
+    "semantic_hash": "1ab5db08699e9d19ba91fb193b101b74"
+  },
+  ".agents/skills/security-architect/SKILL.md": {
+    "mtime": 1783973429.4004061,
+    "ast_hash": "3274e493d4309ba7cd74a7782ba4d9ae",
+    "semantic_hash": "3274e493d4309ba7cd74a7782ba4d9ae"
+  },
+  ".agents/skills/security-blockchain-security-auditor/SKILL.md": {
+    "mtime": 1783973429.4246774,
+    "ast_hash": "831fb06495ca43aa1d3da6a970f85845",
+    "semantic_hash": "831fb06495ca43aa1d3da6a970f85845"
+  },
+  ".agents/skills/security-cloud-security-architect/SKILL.md": {
+    "mtime": 1783973429.449378,
+    "ast_hash": "98fdd514e924811b76fb199ace7af61a",
+    "semantic_hash": "98fdd514e924811b76fb199ace7af61a"
+  },
+  ".agents/skills/security-compliance-auditor/SKILL.md": {
+    "mtime": 1783973429.480899,
+    "ast_hash": "59f94622d69899341e375bbceed47634",
+    "semantic_hash": "59f94622d69899341e375bbceed47634"
+  },
+  ".agents/skills/security-incident-responder/SKILL.md": {
+    "mtime": 1783973429.5056615,
+    "ast_hash": "1524d8ab07c72c51e8757789233c3241",
+    "semantic_hash": "1524d8ab07c72c51e8757789233c3241"
+  },
+  ".agents/skills/security-penetration-tester/SKILL.md": {
+    "mtime": 1783973429.5265472,
+    "ast_hash": "5f3ed5b22fae57d414da455cc51d61db",
+    "semantic_hash": "5f3ed5b22fae57d414da455cc51d61db"
+  },
+  ".agents/skills/security-senior-secops/SKILL.md": {
+    "mtime": 1783973429.547931,
+    "ast_hash": "6e4d603af8ce2080f88e88d0781b2231",
+    "semantic_hash": "6e4d603af8ce2080f88e88d0781b2231"
+  },
+  ".agents/skills/security-threat-detection-engineer/SKILL.md": {
+    "mtime": 1783973429.573817,
+    "ast_hash": "de0d98c228267e471a21a5d88820b057",
+    "semantic_hash": "de0d98c228267e471a21a5d88820b057"
+  },
+  ".agents/skills/security-threat-intelligence-analyst/SKILL.md": {
+    "mtime": 1783973429.5985436,
+    "ast_hash": "7e76b23f2bb5723315bade8d790d291e",
+    "semantic_hash": "7e76b23f2bb5723315bade8d790d291e"
+  },
+  ".agents/skills/specialized-chief-of-staff/SKILL.md": {
+    "mtime": 1783973430.6087155,
+    "ast_hash": "7c31277d6cbc428a61a08025704ae578",
+    "semantic_hash": "7c31277d6cbc428a61a08025704ae578"
+  },
+  ".agents/skills/specialized-civil-engineer/SKILL.md": {
+    "mtime": 1783973430.6293552,
+    "ast_hash": "19f4c002349ee1a8f3327fd681682c4e",
+    "semantic_hash": "19f4c002349ee1a8f3327fd681682c4e"
+  },
+  ".agents/skills/specialized-korean-business-navigator/SKILL.md": {
+    "mtime": 1783973430.741995,
+    "ast_hash": "0919dff46748fdf5cb1d0ba04280ca81",
+    "semantic_hash": "0919dff46748fdf5cb1d0ba04280ca81"
+  },
+  ".agents/skills/specialized-mcp-builder/SKILL.md": {
+    "mtime": 1783973430.767652,
+    "ast_hash": "eadefab9f08f311e4f68b749ee562048",
+    "semantic_hash": "eadefab9f08f311e4f68b749ee562048"
+  },
+  ".agents/skills/specialized-model-qa/SKILL.md": {
+    "mtime": 1783973430.7899673,
+    "ast_hash": "36d6fd1eb4613f42f68bda5f582f1da9",
+    "semantic_hash": "36d6fd1eb4613f42f68bda5f582f1da9"
+  },
+  ".agents/skills/specialized-pricing-analyst/SKILL.md": {
+    "mtime": 1783973430.810063,
+    "ast_hash": "416da3225dd4a471d847e5aa17ff4e9c",
+    "semantic_hash": "416da3225dd4a471d847e5aa17ff4e9c"
+  },
+  ".agents/skills/specialized-salesforce-architect/SKILL.md": {
+    "mtime": 1783973430.831169,
+    "ast_hash": "1a3d450f118a91b417e3102a4a3a84bc",
+    "semantic_hash": "1a3d450f118a91b417e3102a4a3a84bc"
+  },
+  ".agents/skills/specialized-strategy-duel-agent/SKILL.md": {
+    "mtime": 1783973430.8528385,
+    "ast_hash": "e3a38b9e19d1a3f8e86a8e20cf9e1f61",
+    "semantic_hash": "e3a38b9e19d1a3f8e86a8e20cf9e1f61"
+  },
+  ".agents/skills/specialized-workflow-architect/SKILL.md": {
+    "mtime": 1783973430.8738084,
+    "ast_hash": "eb69989e832e762758733233e42c9836",
+    "semantic_hash": "eb69989e832e762758733233e42c9836"
+  },
+  ".agents/skills/study-abroad-advisor/SKILL.md": {
+    "mtime": 1783973430.8957276,
+    "ast_hash": "c948fa0d173e50fba27a3e3dfa2a86db",
+    "semantic_hash": "c948fa0d173e50fba27a3e3dfa2a86db"
+  },
+  ".agents/skills/supply-chain-strategist/SKILL.md": {
+    "mtime": 1783973430.914146,
+    "ast_hash": "32f3ed484bfff7c5dabd922ce056f993",
+    "semantic_hash": "32f3ed484bfff7c5dabd922ce056f993"
+  },
+  ".agents/skills/support-analytics-reporter/SKILL.md": {
+    "mtime": 1783973430.9609573,
+    "ast_hash": "9bc378d1cf6636ff927c29adbff04c90",
+    "semantic_hash": "9bc378d1cf6636ff927c29adbff04c90"
+  },
+  ".agents/skills/support-executive-summary-generator/SKILL.md": {
+    "mtime": 1783973430.9827595,
+    "ast_hash": "52c8982d5e82f7242e00e0434203877b",
+    "semantic_hash": "52c8982d5e82f7242e00e0434203877b"
+  },
+  ".agents/skills/support-finance-tracker/SKILL.md": {
+    "mtime": 1783973431.0049047,
+    "ast_hash": "50b18a65b470401cfa9b7ba37132a272",
+    "semantic_hash": "50b18a65b470401cfa9b7ba37132a272"
+  },
+  ".agents/skills/support-infrastructure-maintainer/SKILL.md": {
+    "mtime": 1783973431.0335493,
+    "ast_hash": "13d8a0ab12fcc1488d0d7f75927a4761",
+    "semantic_hash": "13d8a0ab12fcc1488d0d7f75927a4761"
+  },
+  ".agents/skills/support-legal-compliance-checker/SKILL.md": {
+    "mtime": 1783973431.0648177,
+    "ast_hash": "32abbfa1e9f608612a44d76c519b5535",
+    "semantic_hash": "32abbfa1e9f608612a44d76c519b5535"
+  },
+  ".agents/skills/support-support-responder/SKILL.md": {
+    "mtime": 1783973431.088609,
+    "ast_hash": "b7930696d4107717cebd501598eed88d",
+    "semantic_hash": "b7930696d4107717cebd501598eed88d"
+  },
+  ".agents/skills/technical-artist/SKILL.md": {
+    "mtime": 1783973427.3843205,
+    "ast_hash": "035410b58d57acd2644a6a387d5210af",
+    "semantic_hash": "035410b58d57acd2644a6a387d5210af"
+  },
+  ".agents/skills/terminal-integration-specialist/SKILL.md": {
+    "mtime": 1783973429.6682405,
+    "ast_hash": "76d5826b12271778ccc327a7185b4122",
+    "semantic_hash": "76d5826b12271778ccc327a7185b4122"
+  },
+  ".agents/skills/testing-accessibility-auditor/SKILL.md": {
+    "mtime": 1783973431.1117027,
+    "ast_hash": "b0e8edf577d979007499fdfc458ca7ed",
+    "semantic_hash": "b0e8edf577d979007499fdfc458ca7ed"
+  },
+  ".agents/skills/testing-api-tester/SKILL.md": {
+    "mtime": 1783973431.1344311,
+    "ast_hash": "450748b6c3b59a219dd8758a1fa9434b",
+    "semantic_hash": "450748b6c3b59a219dd8758a1fa9434b"
+  },
+  ".agents/skills/testing-evidence-collector/SKILL.md": {
+    "mtime": 1783973431.1555135,
+    "ast_hash": "44c39eab4a28132bb8f5f34e0064974f",
+    "semantic_hash": "44c39eab4a28132bb8f5f34e0064974f"
+  },
+  ".agents/skills/testing-performance-benchmarker/SKILL.md": {
+    "mtime": 1783973431.1877725,
+    "ast_hash": "7416331e33b11bc5764f3638da4bd740",
+    "semantic_hash": "7416331e33b11bc5764f3638da4bd740"
+  },
+  ".agents/skills/testing-reality-checker/SKILL.md": {
+    "mtime": 1783973431.2128475,
+    "ast_hash": "250272132a313ec6c674b2bfb540e8a1",
+    "semantic_hash": "250272132a313ec6c674b2bfb540e8a1"
+  },
+  ".agents/skills/testing-test-results-analyzer/SKILL.md": {
+    "mtime": 1783973431.2328994,
+    "ast_hash": "6b701623f7ba45cf80de1c374a820bc4",
+    "semantic_hash": "6b701623f7ba45cf80de1c374a820bc4"
+  },
+  ".agents/skills/testing-tool-evaluator/SKILL.md": {
+    "mtime": 1783973431.2529511,
+    "ast_hash": "b65016a388bad8e82b535137bb6b6daa",
+    "semantic_hash": "b65016a388bad8e82b535137bb6b6daa"
+  },
+  ".agents/skills/testing-workflow-optimizer/SKILL.md": {
+    "mtime": 1783973431.278133,
+    "ast_hash": "b13310c06423f23be05e4a374c4022e4",
+    "semantic_hash": "b13310c06423f23be05e4a374c4022e4"
+  },
+  ".agents/skills/unity-architect/SKILL.md": {
+    "mtime": 1783973427.4075074,
+    "ast_hash": "37c41d563c3e103b13bf4d86f2483287",
+    "semantic_hash": "37c41d563c3e103b13bf4d86f2483287"
+  },
+  ".agents/skills/unity-editor-tool-developer/SKILL.md": {
+    "mtime": 1783973427.431606,
+    "ast_hash": "ac6a30b208161a27cb866eefa4869a8c",
+    "semantic_hash": "ac6a30b208161a27cb866eefa4869a8c"
+  },
+  ".agents/skills/unity-multiplayer-engineer/SKILL.md": {
+    "mtime": 1783973427.4543793,
+    "ast_hash": "8c8b5dd38a0e81424d32108f850091db",
+    "semantic_hash": "8c8b5dd38a0e81424d32108f850091db"
+  },
+  ".agents/skills/unity-shader-graph-artist/SKILL.md": {
+    "mtime": 1783973427.4783514,
+    "ast_hash": "ac4c8204aa26ac317814fc1d4143256e",
+    "semantic_hash": "ac4c8204aa26ac317814fc1d4143256e"
+  },
+  ".agents/skills/unreal-multiplayer-architect/SKILL.md": {
+    "mtime": 1783973427.5028427,
+    "ast_hash": "aeb13a948fd862a5bb37946e75a40370",
+    "semantic_hash": "aeb13a948fd862a5bb37946e75a40370"
+  },
+  ".agents/skills/unreal-systems-engineer/SKILL.md": {
+    "mtime": 1783973427.524036,
+    "ast_hash": "cb803367d87015b4957aecca5f61ed1f",
+    "semantic_hash": "cb803367d87015b4957aecca5f61ed1f"
+  },
+  ".agents/skills/unreal-technical-artist/SKILL.md": {
+    "mtime": 1783973427.5456235,
+    "ast_hash": "8a2b6f40328e264ae47bdb4b025d8fa1",
+    "semantic_hash": "8a2b6f40328e264ae47bdb4b025d8fa1"
+  },
+  ".agents/skills/unreal-world-builder/SKILL.md": {
+    "mtime": 1783973427.5680666,
+    "ast_hash": "3ee37fbc617cf9f6cd954a352d87c8b7",
+    "semantic_hash": "3ee37fbc617cf9f6cd954a352d87c8b7"
+  },
+  ".agents/skills/visionos-spatial-engineer/SKILL.md": {
+    "mtime": 1783973429.6994755,
+    "ast_hash": "05881294f7dcac793365c6d3864278b2",
+    "semantic_hash": "05881294f7dcac793365c6d3864278b2"
+  },
+  ".agents/skills/xr-cockpit-interaction-specialist/SKILL.md": {
+    "mtime": 1783973429.725562,
+    "ast_hash": "bf61b57132101bd7b865ff318b71edc0",
+    "semantic_hash": "bf61b57132101bd7b865ff318b71edc0"
+  },
+  ".agents/skills/xr-immersive-developer/SKILL.md": {
+    "mtime": 1783973429.7593484,
+    "ast_hash": "79d6f00b754c101320d900441d2affbe",
+    "semantic_hash": "79d6f00b754c101320d900441d2affbe"
+  },
+  ".agents/skills/xr-interface-architect/SKILL.md": {
+    "mtime": 1783973429.7829883,
+    "ast_hash": "aab20c7597ec13c71e26ee1bcc7c858a",
+    "semantic_hash": "aab20c7597ec13c71e26ee1bcc7c858a"
+  },
+  ".agents/skills/zk-steward/SKILL.md": {
+    "mtime": 1783973430.9377427,
+    "ast_hash": "6ba90a2d2d8334e9eee7da719eab17e6",
+    "semantic_hash": "6ba90a2d2d8334e9eee7da719eab17e6"
+  },
+  ".playwright-cli/page-2026-07-16T22-11-53-344Z.yml": {
+    "mtime": 1784333844.037823,
+    "ast_hash": "3e2297927f45041ee7921c88aaf62bff",
+    "semantic_hash": "3e2297927f45041ee7921c88aaf62bff"
+  },
+  ".playwright-cli/page-2026-07-17T02-55-17-277Z.yml": {
+    "mtime": 1784333844.037823,
+    "ast_hash": "3e2297927f45041ee7921c88aaf62bff",
+    "semantic_hash": "3e2297927f45041ee7921c88aaf62bff"
+  },
+  ".playwright-cli/page-2026-07-17T02-55-47-008Z.yml": {
+    "mtime": 1784333844.0388243,
+    "ast_hash": "6a50e5e6c4a51e6931bb395c21db2cd0",
+    "semantic_hash": "6a50e5e6c4a51e6931bb395c21db2cd0"
+  },
+  ".playwright-cli/page-2026-07-17T03-51-50-028Z.yml": {
+    "mtime": 1784333844.0398233,
+    "ast_hash": "3e2297927f45041ee7921c88aaf62bff",
+    "semantic_hash": "3e2297927f45041ee7921c88aaf62bff"
+  },
+  ".playwright-cli/page-2026-07-17T03-52-01-823Z.yml": {
+    "mtime": 1784333844.0398233,
+    "ast_hash": "6a50e5e6c4a51e6931bb395c21db2cd0",
+    "semantic_hash": "6a50e5e6c4a51e6931bb395c21db2cd0"
+  },
+  ".playwright-cli/page-2026-07-17T04-24-52-716Z.yml": {
+    "mtime": 1784333844.0408225,
+    "ast_hash": "3e2297927f45041ee7921c88aaf62bff",
+    "semantic_hash": "3e2297927f45041ee7921c88aaf62bff"
+  },
+  ".playwright-cli/page-2026-07-17T04-25-22-903Z.yml": {
+    "mtime": 1784333844.0408225,
+    "ast_hash": "6a50e5e6c4a51e6931bb395c21db2cd0",
+    "semantic_hash": "6a50e5e6c4a51e6931bb395c21db2cd0"
+  },
+  ".playwright-cli/page-2026-07-17T04-26-30-114Z.yml": {
+    "mtime": 1784333844.0420005,
+    "ast_hash": "b608a10ce993068a4812e864cc0af652",
+    "semantic_hash": "b608a10ce993068a4812e864cc0af652"
+  },
+  ".playwright-cli/page-2026-07-17T04-30-19-343Z.yml": {
+    "mtime": 1784333844.0428257,
+    "ast_hash": "3e2297927f45041ee7921c88aaf62bff",
+    "semantic_hash": "3e2297927f45041ee7921c88aaf62bff"
+  },
+  ".playwright-cli/page-2026-07-17T04-30-47-834Z.yml": {
+    "mtime": 1784333844.04362,
+    "ast_hash": "6a50e5e6c4a51e6931bb395c21db2cd0",
+    "semantic_hash": "6a50e5e6c4a51e6931bb395c21db2cd0"
+  },
+  ".playwright-cli/page-2026-07-17T04-31-18-845Z.yml": {
+    "mtime": 1784333844.044416,
+    "ast_hash": "f4a3e3bcafe30381bae28a9666060693",
+    "semantic_hash": "f4a3e3bcafe30381bae28a9666060693"
+  },
+  ".playwright-cli/page-2026-07-17T04-32-05-923Z.yml": {
+    "mtime": 1784333844.0454252,
+    "ast_hash": "c47fa7af13d62b3632be61ebf71232b8",
+    "semantic_hash": "c47fa7af13d62b3632be61ebf71232b8"
+  },
+  ".playwright-cli/page-2026-07-17T04-37-26-564Z.yml": {
+    "mtime": 1784333844.0464284,
+    "ast_hash": "3e2297927f45041ee7921c88aaf62bff",
+    "semantic_hash": "3e2297927f45041ee7921c88aaf62bff"
+  },
+  ".playwright-cli/page-2026-07-17T04-37-47-825Z.yml": {
+    "mtime": 1784333844.0464284,
+    "ast_hash": "6a50e5e6c4a51e6931bb395c21db2cd0",
+    "semantic_hash": "6a50e5e6c4a51e6931bb395c21db2cd0"
+  },
+  ".playwright-cli/page-2026-07-17T04-38-01-990Z.yml": {
+    "mtime": 1784333844.0474305,
+    "ast_hash": "216080d21f3252c50244f55416521857",
+    "semantic_hash": "216080d21f3252c50244f55416521857"
+  },
+  ".playwright-cli/page-2026-07-17T04-38-46-633Z.yml": {
+    "mtime": 1784333844.0484269,
+    "ast_hash": "f0b8bbafc847d566fd7a8081ec7304c7",
+    "semantic_hash": "f0b8bbafc847d566fd7a8081ec7304c7"
+  },
+  ".playwright-cli/page-2026-07-17T04-39-00-902Z.yml": {
+    "mtime": 1784333844.0494258,
+    "ast_hash": "98da917cbeb7ce1368d38d591dcd0fd1",
+    "semantic_hash": "98da917cbeb7ce1368d38d591dcd0fd1"
+  },
+  "AGENTS.md": {
+    "mtime": 1784016183.3332965,
+    "ast_hash": "f9accef62190f3d872d6c7bd54306dcf",
+    "semantic_hash": "f9accef62190f3d872d6c7bd54306dcf"
+  },
+  "DESIGN.md": {
+    "mtime": 1784016816.922068,
+    "ast_hash": "8b0677e20ec6d796e0ba5a9eb6af3ddd",
+    "semantic_hash": "8b0677e20ec6d796e0ba5a9eb6af3ddd"
+  },
+  "README.md": {
+    "mtime": 1784182690.4143646,
+    "ast_hash": "002e80c569bd101220b73c1d23914530",
+    "semantic_hash": "002e80c569bd101220b73c1d23914530"
+  },
+  "design-system/piano-sight-reading/MASTER.md": {
+    "mtime": 1783404122.3500445,
+    "ast_hash": "b735db35cdaf53bb797160bc5637b02d",
+    "semantic_hash": "b735db35cdaf53bb797160bc5637b02d"
+  },
+  "design-system/piano-sight-reading/pages/game.md": {
+    "mtime": 1783404122.3535538,
+    "ast_hash": "7cf30e211a520a1b53ebbc8e3db7c1f0",
+    "semantic_hash": "7cf30e211a520a1b53ebbc8e3db7c1f0"
+  },
+  "docs/superpowers/plans/2026-07-06-game-ui-improvements-plan.md": {
+    "mtime": 1784182792.2569928,
+    "ast_hash": "14b5abafa7e8a88127fa024138645f70",
+    "semantic_hash": "14b5abafa7e8a88127fa024138645f70"
+  },
+  "docs/superpowers/plans/2026-07-06-piano-progressive-lessons-plan.md": {
+    "mtime": 1784182792.273761,
+    "ast_hash": "cf96390fccc08a51ff2b27f2b12568d2",
+    "semantic_hash": "cf96390fccc08a51ff2b27f2b12568d2"
+  },
+  "docs/superpowers/plans/2026-07-06-piano-sight-reading-game-plan.md": {
+    "mtime": 1784182792.284801,
+    "ast_hash": "13370baf3bf2bdbb2555d4e52145c6f9",
+    "semantic_hash": "13370baf3bf2bdbb2555d4e52145c6f9"
+  },
+  "docs/superpowers/plans/2026-07-06-piano-sound-playback-plan.md": {
+    "mtime": 1784182792.2923453,
+    "ast_hash": "34ee2a5fcaea6c8713af398a7c231d6c",
+    "semantic_hash": "34ee2a5fcaea6c8713af398a7c231d6c"
+  },
+  "docs/superpowers/plans/2026-07-08-agent-team-analysis-plan.md": {
+    "mtime": 1784182792.3008797,
+    "ast_hash": "8b563d09fec3596d7c23dd1ccf1eb5bf",
+    "semantic_hash": "8b563d09fec3596d7c23dd1ccf1eb5bf"
+  },
+  "docs/superpowers/plans/2026-07-17-lesson-system-redesign.md": {
+    "mtime": 1784317373.306791,
+    "ast_hash": "584f98a17c27ed23f8b2a36ab9ef44ca",
+    "semantic_hash": "584f98a17c27ed23f8b2a36ab9ef44ca"
+  },
+  "docs/superpowers/plans/2026-07-17-quote-history.md": {
+    "mtime": 1784272943.9361522,
+    "ast_hash": "510279f08535f20478ea5f3bed6f75f6",
+    "semantic_hash": "510279f08535f20478ea5f3bed6f75f6"
+  },
+  "docs/superpowers/plans/2026-07-17-sensei-quotes.md": {
+    "mtime": 1784333844.0671673,
+    "ast_hash": "03b9d30e31d490ac36567484877db220",
+    "semantic_hash": "03b9d30e31d490ac36567484877db220"
+  },
+  "docs/superpowers/plans/reports/game-designer-report.md": {
+    "mtime": 1784182792.3140154,
+    "ast_hash": "e33a36754075f2d1e61f3a6440083010",
+    "semantic_hash": "e33a36754075f2d1e61f3a6440083010"
+  },
+  "docs/superpowers/plans/reports/senior-dev-report.md": {
+    "mtime": 1784182792.3256872,
+    "ast_hash": "e5d6879225b1513f06de4afce96ca8be",
+    "semantic_hash": "e5d6879225b1513f06de4afce96ca8be"
+  },
+  "docs/superpowers/plans/reports/ui-designer-report.md": {
+    "mtime": 1784182792.3362257,
+    "ast_hash": "fb60c8a3a5e354a80d84f41c9f5a2ffe",
+    "semantic_hash": "fb60c8a3a5e354a80d84f41c9f5a2ffe"
+  },
+  "docs/superpowers/plans/reports/ux-architect-report.md": {
+    "mtime": 1784182792.351781,
+    "ast_hash": "88f8d5a86b1f34b08258eff32669734a",
+    "semantic_hash": "88f8d5a86b1f34b08258eff32669734a"
+  },
+  "docs/superpowers/plans/reports/whimsy-injector-report.md": {
+    "mtime": 1784182792.3654554,
+    "ast_hash": "633a0542454e7f1647888a9462d56f3b",
+    "semantic_hash": "633a0542454e7f1647888a9462d56f3b"
+  },
+  "docs/superpowers/specs/2026-07-06-game-ui-improvements-design.md": {
+    "mtime": 1784182792.3840013,
+    "ast_hash": "3fb9c42363fdb69f8fb53f93658d9c70",
+    "semantic_hash": "3fb9c42363fdb69f8fb53f93658d9c70"
+  },
+  "docs/superpowers/specs/2026-07-06-piano-sight-reading-game-design.md": {
+    "mtime": 1784182792.398991,
+    "ast_hash": "f93b28268a4dd7bb1ad8b5c6a4394b84",
+    "semantic_hash": "f93b28268a4dd7bb1ad8b5c6a4394b84"
+  },
+  "docs/superpowers/specs/2026-07-06-ux-improvements-design.md": {
+    "mtime": 1784182792.404748,
+    "ast_hash": "092692ca16b75f25ac02bcea2ade2872",
+    "semantic_hash": "092692ca16b75f25ac02bcea2ade2872"
+  },
+  "docs/superpowers/specs/2026-07-08-agent-team-design.md": {
+    "mtime": 1784182792.4148831,
+    "ast_hash": "bd6602dcdcf5ab0b8e86a410e2007b4d",
+    "semantic_hash": "bd6602dcdcf5ab0b8e86a410e2007b4d"
+  },
+  "docs/superpowers/specs/2026-07-08-notation-selector-design.md": {
+    "mtime": 1784182792.4219978,
+    "ast_hash": "6c9bdb0a66ad3e333560d3f9a53a247a",
+    "semantic_hash": "6c9bdb0a66ad3e333560d3f9a53a247a"
+  },
+  "docs/superpowers/specs/2026-07-13-noterush-naming-design.md": {
+    "mtime": 1784182792.4353514,
+    "ast_hash": "cd175c019d6a4c736a57b7c590920a10",
+    "semantic_hash": "cd175c019d6a4c736a57b7c590920a10"
+  },
+  "docs/superpowers/specs/2026-07-17-lesson-system-redesign.md": {
+    "mtime": 1784333844.068163,
+    "ast_hash": "ebcc18779b7c62355199c2a259ba3997",
+    "semantic_hash": "ebcc18779b7c62355199c2a259ba3997"
+  },
+  "docs/superpowers/specs/2026-07-17-quote-history-design.md": {
+    "mtime": 1784333844.0691614,
+    "ast_hash": "a4c94feddc06446d3d18aaba14d56d11",
+    "semantic_hash": "a4c94feddc06446d3d18aaba14d56d11"
+  },
+  "docs/superpowers/specs/2026-07-17-sensei-quotes-design.md": {
+    "mtime": 1784333844.0711658,
+    "ast_hash": "fcc03c120176adc109477e6323ccaeec",
+    "semantic_hash": "fcc03c120176adc109477e6323ccaeec"
+  },
+  "index.html": {
+    "mtime": 1784333844.0721648,
+    "ast_hash": "bd49fa253bd4640781d30d8adc29be76",
+    "semantic_hash": "bd49fa253bd4640781d30d8adc29be76"
+  },
+  "stitch-dashboard.html": {
+    "mtime": 1784333844.1099873,
+    "ast_hash": "e1275f3cb9ffd9bdd88bc10b132c6be3",
+    "semantic_hash": "e1275f3cb9ffd9bdd88bc10b132c6be3"
+  },
+  "stitch-practice.html": {
+    "mtime": 1784333844.1111479,
+    "ast_hash": "0eb7a6fef1c176fb98bf0c82902c6f3e",
+    "semantic_hash": "0eb7a6fef1c176fb98bf0c82902c6f3e"
+  },
+  "stitch-screens/01-practice-aciert.html": {
+    "mtime": 1784333844.1131623,
+    "ast_hash": "e69aa32456875d68f8227b9b1beeb012",
+    "semantic_hash": "e69aa32456875d68f8227b9b1beeb012"
+  },
+  "stitch-screens/02-biblioteca.html": {
+    "mtime": 1784333844.114414,
+    "ast_hash": "28284b28b557ed8a1d413432413c8d27",
+    "semantic_hash": "28284b28b557ed8a1d413432413c8d27"
+  },
+  "stitch-screens/03-perfil.html": {
+    "mtime": 1784333844.11543,
+    "ast_hash": "d709893887220bc7f34c12d609837b07",
+    "semantic_hash": "d709893887220bc7f34c12d609837b07"
+  },
+  "stitch-screens/04-practice.html": {
+    "mtime": 1784333844.1164398,
+    "ast_hash": "26dd4b93ba5514cf72d2f12417afc12c",
+    "semantic_hash": "26dd4b93ba5514cf72d2f12417afc12c"
+  },
+  "stitch-screens/05-resultados.html": {
+    "mtime": 1784333844.1174388,
+    "ast_hash": "09389718d20d1da39125692ef7d36837",
+    "semantic_hash": "09389718d20d1da39125692ef7d36837"
+  },
+  "stitch-screens/06-inicio.html": {
+    "mtime": 1784333844.118438,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "stitch-screens/07-practice-fallo.html": {
+    "mtime": 1784333844.1194377,
+    "ast_hash": "116203510db6aadbb2e9753dfcb104dc",
+    "semantic_hash": "116203510db6aadbb2e9753dfcb104dc"
+  },
+  "stitch-screens/10-dashboard.html": {
+    "mtime": 1784333844.1204371,
+    "ast_hash": "1e1961989cec396978f8a96db6c3edee",
+    "semantic_hash": "1e1961989cec396978f8a96db6c3edee"
+  },
+  "stitch-welcome.html": {
+    "mtime": 1784333844.1216686,
+    "ast_hash": "a11cbf750d47daa71c5e690648e73993",
+    "semantic_hash": "a11cbf750d47daa71c5e690648e73993"
+  },
+  "vercel-build-output.txt": {
+    "mtime": 1784335070.8094954,
+    "ast_hash": "44abcaad0a0317ec0b39bed94e7c01dc",
+    "semantic_hash": "44abcaad0a0317ec0b39bed94e7c01dc"
+  },
+  "biblioteca-navbar.png": {
+    "mtime": 1784333844.0515609,
+    "ast_hash": "8a6645854477cd7ee92dafae3842dcaf",
+    "semantic_hash": "8a6645854477cd7ee92dafae3842dcaf"
+  },
+  "dashboard-fixed.png": {
+    "mtime": 1784333844.0546129,
+    "ast_hash": "9eb348646197ce3e73732eb4facc1a31",
+    "semantic_hash": "9eb348646197ce3e73732eb4facc1a31"
+  },
+  "dashboard-navbar.png": {
+    "mtime": 1784333844.0566146,
+    "ast_hash": "9eb348646197ce3e73732eb4facc1a31",
+    "semantic_hash": "9eb348646197ce3e73732eb4facc1a31"
+  },
+  "dashboard.png": {
+    "mtime": 1784333844.065162,
+    "ast_hash": "18bf25272d3edc3c18f594c424017f2c",
+    "semantic_hash": "18bf25272d3edc3c18f594c424017f2c"
+  },
+  "perfil-biblioteca-fixed.png": {
+    "mtime": 1784333844.0786948,
+    "ast_hash": "4404971e94a4e05ce53b07855ec6e789",
+    "semantic_hash": "4404971e94a4e05ce53b07855ec6e789"
+  },
+  "perfil-fixed.png": {
+    "mtime": 1784333844.081887,
+    "ast_hash": "098f707faa16053d87ad8028b4e26510",
+    "semantic_hash": "098f707faa16053d87ad8028b4e26510"
+  },
+  "perfil-navbar.png": {
+    "mtime": 1784333844.0842266,
+    "ast_hash": "2a0757973704af3168633bf7d09a4dfe",
+    "semantic_hash": "2a0757973704af3168633bf7d09a4dfe"
+  },
+  "public/pwa-icon.svg": {
+    "mtime": 1783566433.9522045,
+    "ast_hash": "8a86d17c00d8a89765db58286f406de7",
+    "semantic_hash": "8a86d17c00d8a89765db58286f406de7"
+  }
+}

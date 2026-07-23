@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import NavUserMenu from './NavUserMenu';
+import logoUrl from '../assets/logo.svg';
 
 interface TopNavBarProps {
   activeScreen: 'dashboard' | 'biblioteca' | 'perfil';
@@ -54,9 +55,10 @@ export default function TopNavBar({
         <button
           type="button"
           onClick={() => onNavigate('dashboard')}
-          className="font-headline-lg text-headline-lg font-bold text-primary hover:text-velvet-red transition-colors"
+          className="flex items-center gap-2 font-headline-lg text-headline-lg font-bold text-primary hover:text-velvet-red transition-colors"
           aria-label="Ir al inicio"
         >
+          <img src={logoUrl} alt="" className="w-8 h-8 rounded-md" aria-hidden="true" />
           Clavis
         </button>
       </div>

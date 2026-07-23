@@ -160,20 +160,13 @@ export default function BibliotecaScreen({
       </nav>
 
       {/* Footer */}
-      <footer className="bg-primary text-on-primary font-body-sm text-body-sm w-full bottom-0 shadow-[0_-10px_20px_rgba(0,0,0,0.2),inset_0_2px_4px_rgba(255,255,255,0.1)] mt-auto z-10 relative">
-        <div className="w-full py-stack-md px-container-padding flex flex-col md:flex-row justify-between items-center gap-4 max-w-7xl mx-auto">
-          <div className="font-display-lg text-display-lg text-on-primary">Clavis</div>
-          <div className="text-center md:text-left opacity-90">
-            © 1724 Clavis Conservatory of Music. All rights reserved.
-          </div>
-          <nav className="flex flex-wrap justify-center gap-6">
-            {['Honor Code', 'Terms of Service', 'Support'].map((link) => (
-              <a key={link} href="#" className="text-on-primary/80 hover:text-brass-highlight transition-colors duration-200 opacity-90 hover:opacity-100" aria-disabled="true" tabIndex={-1}>
-                {link}
-              </a>
-            ))}
-          </nav>
+      <footer className="w-full py-stack-lg px-container-padding flex flex-col md:flex-row justify-between items-center gap-4 bg-mahogany-dark shadow-[inset_0_10px_20px_rgba(0,0,0,0.2)] mt-auto">
+        <div className="flex items-center gap-4 mb-4 md:mb-0">
+          <span className="font-headline-lg text-headline-lg text-surface-bright">Clavis</span>
         </div>
+        <p className="font-body-sm text-body-sm text-outline-variant text-center md:text-left text-xs md:text-sm">
+          © 2025 <a href="https://linktr.ee/vruizdiaz" target="_blank" rel="noopener noreferrer" className="hover:text-surface-bright transition-colors">Víctor Enrique Ruiz Díaz Music</a>
+        </p>
       </footer>
     </div>
   );

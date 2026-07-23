@@ -14,11 +14,12 @@ const BASS_POSITIONS: Record<string, number> = {
   'C4': 10, 'D4': 11, 'E4': 12, 'F4': 13, 'G4': 14,
 }
 
-export function noteToPosition(note: Note, clef: Clef = 'treble'): number {
+export function noteToPosition(note: Note | null | undefined, clef: Clef = 'treble'): number {
+  if (!note) return 0
   const name = note.name.replace('#', '')
   const key = `${name}${note.octave}`
   const map = clef === 'bass' ? BASS_POSITIONS : TREBLE_POSITIONS
   const pos = map[key]
-  if (pos === undefined) throw new Error(`Note ${key} not in ${clef} clef range`)
+  if (pos === undefined) return 0
   return pos
 }

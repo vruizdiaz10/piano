@@ -78,7 +78,7 @@ function bestAccuracyForLesson(lessonId: string, sessions: SessionRecord[]): num
   return Math.max(...list.map(s => s.accuracy))
 }
 
-function rankFromLevel(level: number): RankInfo {
+export function rankFromLevel(level: number): RankInfo {
   // Each tier spans 5 levels; progress within tier is 0–100.
   if (level <= 5) return { name: 'Bronce', progress: Math.round(((level - 1) / 5) * 100) }
   if (level <= 10) return { name: 'Plata', progress: Math.round(((level - 6) / 5) * 100) }

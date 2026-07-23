@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { QuickLessonConfig } from '../types'
 import type { RankInfo, RoadmapStep } from '../utils/dashboardStats';
 import type { Quote } from '../data/senseiQuotes';
@@ -27,13 +27,7 @@ interface DashboardProps {
   userLevel?: number;
   userAvatar?: string;
   onQuickLesson?: (config: QuickLessonConfig) => void;
-  // TopNavBar dashboard props
-  onToggleHelp?: () => void;
-  onToggleTimer?: () => void;
-  onToggleMute?: () => void;
-  isMuted?: boolean;
-  isHelpVisible?: boolean;
-  isTimerActive?: boolean;
+  savedQuickLessonConfig?: QuickLessonConfig;
 }
 
 const WEEKDAY_LABELS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
@@ -50,27 +44,29 @@ export default function DashboardScreen({
   userLevel = 1,
   userAvatar,
   onQuickLesson,
-  onToggleHelp,
-  onToggleTimer,
-  onToggleMute,
-  isMuted = false,
-  isHelpVisible = false,
-  isTimerActive = false,
+  savedQuickLessonConfig,
 }: DashboardProps) {
   // State for the new generator UI and onboarding banner
-  const [config, setConfig] = useState<QuickLessonConfig>({
-    clef: 'treble',
-    lines: true,
-    spaces: true,
-    ledgerAbove: 0,
-    ledgerBelow: 0,
-    sharps: false,
-    timed: true,
-    noteCount: 20,
-  });
+  const [config, setConfig] = useState<QuickLessonConfig>(
+    savedQuickLessonConfig ?? {
+      clef: 'treble',
+      lines: true,
+      spaces: true,
+      ledgerAbove: 0,
+      ledgerBelow: 0,
+      sharps: false,
+      timed: true,
+      noteCount: 20,
+    }
+  );
   const [showOnboarding, setShowOnboarding] = useState(() => {
     return !localStorage.getItem('piano-onboarding-seen');
   });
+
+  // Reset config when saved settings change (login/logout)
+  useEffect(() => {
+    if (savedQuickLessonConfig) setConfig(savedQuickLessonConfig)
+  }, [savedQuickLessonConfig])
 
   const chartPath = weeklyAccuracyPath(stats.weeklyAccuracies)
   const todayIdx = (() => {
@@ -87,12 +83,6 @@ export default function DashboardScreen({
         userName={userName}
         userLevel={userLevel}
         userAvatar={userAvatar}
-        onToggleHelp={onToggleHelp}
-        onToggleTimer={onToggleTimer}
-        onToggleMute={onToggleMute}
-        isMuted={isMuted}
-        isHelpVisible={isHelpVisible}
-        isTimerActive={isTimerActive}
       />
 
       {/* Main Content */}
@@ -575,7 +565,7 @@ export default function DashboardScreen({
           <span className="font-headline-lg text-headline-lg text-surface-bright">Clavis</span>
         </div>
         <p className="font-body-sm text-body-sm text-outline-variant text-center md:text-left text-xs md:text-sm">
-          © 18th Century Conservatory - Clavis Academy of Musical Excellence.
+          © 2025 <a href="https://linktr.ee/vruizdiaz" target="_blank" rel="noopener noreferrer" className="hover:text-surface-bright transition-colors">Víctor Enrique Ruiz Díaz Music</a>
         </p>
       </footer>
     </div>

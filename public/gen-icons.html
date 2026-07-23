@@ -1,0 +1,14 @@
+<!DOCTYPE html><html><head><style>*{margin:0;padding:0}body{display:flex;align-items:center;justify-content:center;background:#6B1A1A;overflow:hidden}</style></head><body id="b"></body><script>
+const sizes = [192, 180, 32, 16];
+const names = ['pwa-icon-192','apple-touch-icon','favicon-32','favicon-16'];
+sizes.forEach((s,i) => {
+  const div = document.createElement('div');
+  div.id = 'c'+s;
+  div.style.cssText = `width:${s}px;height:${s}px;background:#6B1A1A;border-radius:${Math.round(s*0.125)}px;overflow:hidden;display:flex;align-items:center;justify-content:center;position:absolute;top:0;left:0`;
+  const img = document.createElement('img');
+  img.src = 'logo-source.png';
+  img.style.cssText = 'width:72%;height:auto';
+  div.appendChild(img);
+  document.body.appendChild(div);
+});
+</script></html>

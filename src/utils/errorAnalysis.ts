@@ -7,7 +7,7 @@ export function analyzeError(correct: Note, answerMidi: number): ErrorType {
   const answer = midiToNote(answerMidi)
   const diff = Math.abs(correct.midi - answerMidi)
 
-  const isSameName = correct.name.replace('#', '') === answer.name.replace('#', '')
+  const isSameName = (correct.name || '').replace('#', '') === (answer.name || '').replace('#', '')
   if (isSameName && correct.midi !== answerMidi) return 'octave'
 
   if (diff === 1) {

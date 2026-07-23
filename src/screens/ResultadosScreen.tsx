@@ -27,7 +27,7 @@ export default function ResultadosScreen({ stats, onDashboard, onRetry, onNext }
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-8 overflow-y-auto"
+      className="fixed inset-0 z-[60] flex items-center justify-center p-3 md:p-6"
       role="dialog"
       aria-modal="true"
       aria-label="Sesión completada"
@@ -38,74 +38,69 @@ export default function ResultadosScreen({ stats, onDashboard, onRetry, onNext }
         aria-hidden="true"
       />
 
-      <main className="relative z-10 w-full max-w-[800px] my-auto min-h-0 max-h-full flex flex-col">
-        <div className="clay-card p-6 md:p-10 flex flex-col items-center text-center space-y-stack-md shadow-2xl overflow-y-auto max-h-full">
+      <main className="relative z-10 w-full max-w-[700px] flex flex-col">
+        <div className="clay-card p-4 md:p-6 flex flex-col items-center text-center shadow-2xl">
           {/* Header */}
-          <div className="space-y-stack-sm">
+          <div className="mb-3">
             <span
               className="material-symbols-outlined text-secondary-container"
-              style={{ fontSize: 48, fontVariationSettings: "'FILL' 1" }}
+              style={{ fontSize: 40, fontVariationSettings: "'FILL' 1" }}
             >
               workspace_premium
             </span>
-            <h1 className="font-display-lg text-display-lg text-primary">
+            <h1 className="font-headline-lg text-headline-lg text-primary mt-1">
               ¡Sesión Completada!
             </h1>
-            <p className="font-body-lg text-body-lg text-on-surface-variant">
+            <p className="font-body-sm text-body-sm text-on-surface-variant">
               Práctica de lección
             </p>
           </div>
 
           {/* Score Display */}
-          <div className="clay-score-pill px-8 py-6 w-full max-w-[300px] flex flex-col items-center justify-center">
-            <span className="font-label-caps text-label-caps text-on-surface-variant uppercase mb-2">
+          <div className="clay-score-pill px-6 py-3 w-full max-w-[260px] flex flex-col items-center justify-center mb-3">
+            <span className="font-label-caps text-label-caps text-on-surface-variant uppercase mb-1">
               Puntuación Total
             </span>
             <div className="flex items-baseline space-x-1">
-              <span className="font-display-lg text-display-lg text-mahogany-dark">
+              <span className="font-headline-lg text-headline-lg text-mahogany-dark">
                 {stats.score.toLocaleString()}
               </span>
-              <span className="font-title-md text-title-md text-mahogany-dark">pts</span>
+              <span className="font-body-md text-body-md text-mahogany-dark">pts</span>
             </div>
           </div>
 
           {/* Metrics Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full pt-4">
-            <MetricCard icon="music_note" value={String(stats.notesPlayed)} label="Notas Tocadas" />
+          <div className="grid grid-cols-4 gap-2 w-full mb-3">
+            <MetricCard icon="music_note" value={String(stats.notesPlayed)} label="Notas" />
             <MetricCard icon="analytics" value={`${stats.accuracy}%`} label="Precisión" />
-            <MetricCard icon="local_fire_department" value={String(stats.maxStreak)} label="Racha Máxima" />
-            <MetricCard icon="timer" value={stats.totalTime} label="Tiempo Total" />
+            <MetricCard icon="local_fire_department" value={String(stats.maxStreak)} label="Racha" />
+            <MetricCard icon="timer" value={stats.totalTime} label="Tiempo" />
           </div>
 
           {/* Detailed Feedback & Rewards */}
-          <div className="flex flex-col md:flex-row w-full gap-6 pt-4">
+          <div className="flex flex-row w-full gap-3 mb-3">
             {/* Challenging Notes */}
-            <div className="flex-1 clay-metric-card p-5 text-left flex flex-col justify-between">
-              <div>
-                <h3 className="font-title-md text-title-md text-primary mb-3 flex items-center">
-                  <span className="material-symbols-outlined mr-2" style={{ fontSize: 20 }}>
-                    warning
-                  </span>
-                  Áreas de Mejora
-                </h3>
-                <p className="font-body-sm text-body-sm text-on-surface-variant mb-4">
-                  Notas que requirieron más atención:
-                </p>
-              </div>
-              <div className="flex space-x-3">
+            <div className="flex-1 clay-metric-card p-3 text-left flex flex-col">
+              <h3 className="font-body-sm text-body-sm text-primary mb-2 flex items-center">
+                <span className="material-symbols-outlined mr-1" style={{ fontSize: 16 }}>
+                  warning
+                </span>
+                Áreas de Mejora
+              </h3>
+              <div className="flex gap-2">
                 {stats.challengingNotes.map((n, i) => (
                   <div
                     key={i}
-                    className="flex-1 clay-inner-panel rounded-xl p-3 flex flex-col items-center justify-center border border-outline-variant/30"
+                    className="flex-1 clay-inner-panel rounded-lg p-2 flex flex-col items-center justify-center border border-outline-variant/30"
                   >
-                    <span className="font-headline-lg text-headline-lg text-mahogany-dark">{n.note}</span>
-                    <span className="font-label-caps text-label-caps text-on-surface-variant mt-1">
-                      Octava {n.octave}
+                    <span className="font-title-sm text-title-sm text-mahogany-dark">{n.note}</span>
+                    <span className="font-label-xs text-label-xs text-on-surface-variant">
+                      Oct {n.octave}
                     </span>
                   </div>
                 ))}
                 {stats.challengingNotes.length === 0 && (
-                  <p className="font-body-sm text-body-sm text-on-surface-variant">
+                  <p className="font-body-xs text-body-xs text-on-surface-variant">
                     ¡Sin áreas problemáticas!
                   </p>
                 )}
@@ -113,46 +108,46 @@ export default function ResultadosScreen({ stats, onDashboard, onRetry, onNext }
             </div>
 
             {/* Rewards */}
-            <div className="flex-1 clay-metric-card p-5 flex flex-col items-center justify-center text-center">
+            <div className="flex-1 clay-metric-card p-3 flex flex-col items-center justify-center text-center">
               <span
-                className="material-symbols-outlined text-secondary-container mb-3"
-                style={{ fontSize: 40, fontVariationSettings: "'FILL' 1" }}
+                className="material-symbols-outlined text-secondary-container mb-1"
+                style={{ fontSize: 28, fontVariationSettings: "'FILL' 1" }}
               >
                 stars
               </span>
-              <h3 className="font-title-md text-title-md text-primary mb-1">Nuevos Sellos</h3>
-              <p className="font-body-sm text-body-sm text-on-surface-variant mb-3">
-                Has ganado nuevas insignias por tu consistencia.
+              <h3 className="font-body-sm text-body-sm text-primary mb-1">Nuevos Sellos</h3>
+              <p className="font-body-xs text-body-xs text-on-surface-variant mb-1">
+                Insignias por consistencia.
               </p>
-              <div className="font-headline-lg-mobile text-headline-lg-mobile text-mahogany-dark font-bold">
+              <div className="font-headline-sm text-headline-sm text-mahogany-dark font-bold">
                 +{stats.newBadges}
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row w-full gap-4 pt-6">
+          <div className="flex flex-col sm:flex-row w-full gap-3">
             <button
               onClick={onDashboard}
-              className="clay-button-secondary flex-1 py-5 px-8 rounded-2xl font-title-md text-title-md flex items-center justify-center z-10"
+              className="clay-button-secondary flex-1 py-3 px-4 rounded-xl font-body-md text-body-md flex items-center justify-center z-10"
             >
-              <span className="material-symbols-outlined mr-2">grid_view</span>
-              Volver al Dashboard
+              <span className="material-symbols-outlined mr-2" style={{ fontSize: 20 }}>grid_view</span>
+              Dashboard
             </button>
             <button
               onClick={onRetry}
-              className="clay-button-secondary flex-1 py-5 px-8 rounded-2xl font-title-md text-title-md flex items-center justify-center z-10"
+              className="clay-button-secondary flex-1 py-3 px-4 rounded-xl font-body-md text-body-md flex items-center justify-center z-10"
             >
-              <span className="material-symbols-outlined mr-2">replay</span>
-              Reintentar Lección
+              <span className="material-symbols-outlined mr-2" style={{ fontSize: 20 }}>replay</span>
+              Reintentar
             </button>
             {onNext && (
               <button
                 onClick={onNext}
-                className="clay-button-primary flex-1 py-5 px-8 rounded-2xl font-title-md text-title-md flex items-center justify-center z-10"
+                className="clay-button-primary flex-1 py-3 px-4 rounded-xl font-body-md text-body-md flex items-center justify-center z-10"
               >
-                <span className="material-symbols-outlined mr-2">arrow_forward</span>
-                Siguiente Lección
+                <span className="material-symbols-outlined mr-2" style={{ fontSize: 20 }}>arrow_forward</span>
+                Siguiente
               </button>
             )}
           </div>
@@ -164,15 +159,15 @@ export default function ResultadosScreen({ stats, onDashboard, onRetry, onNext }
 
 function MetricCard({ icon, value, label }: { icon: string; value: string; label: string }) {
   return (
-    <div className="clay-metric-card p-4 flex flex-col items-center">
+    <div className="clay-metric-card p-2 flex flex-col items-center">
       <span
-        className="material-symbols-outlined text-primary-container mb-2"
-        style={{ fontVariationSettings: "'FILL' 0" }}
+        className="material-symbols-outlined text-primary-container mb-1"
+        style={{ fontSize: 18, fontVariationSettings: "'FILL' 0" }}
       >
         {icon}
       </span>
-      <span className="font-title-md text-title-md text-primary">{value}</span>
-      <span className="font-label-caps text-label-caps text-on-surface-variant mt-1 text-center">{label}</span>
+      <span className="font-body-sm text-body-sm text-primary font-bold">{value}</span>
+      <span className="font-label-xs text-label-xs text-on-surface-variant text-center">{label}</span>
     </div>
   );
 }
