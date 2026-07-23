@@ -63,4 +63,6 @@ export interface GameState {
   customPool?: number[]
   /** Display-only: used for staff rendering and clef switching. Note selection uses customPool. */
   clef: Clef
+  /** Auto-detected MIDI range from controller input. null = no data yet. */
+  controllerRange: { min: number; max: number } | null
 }

@@ -34,6 +34,7 @@ const INITIAL_STATE: GameState = {
   lastCorrectNote: null,
   isTimed: false,
   clef: 'treble',
+  controllerRange: null,
 }
 
 function selectNote(state: GameState, excludeMidi?: number): Note {
@@ -76,7 +77,7 @@ export function useGameState() {
         const newBestStreak = Math.max(prev.bestStreak, newStreak)
         const sessionDone = newTotal >= prev.sessionTarget
 
-        const errorType: ErrorType | null = isCorrect ? null : analyzeError(prev.currentNote, midi)
+        const errorType: ErrorType | null = (isCorrect || midi === -1) ? null : analyzeError(prev.currentNote, midi)
         const responseTime = Date.now() - prev.noteShownAt
 
         return {
