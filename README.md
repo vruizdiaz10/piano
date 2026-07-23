@@ -1,92 +1,92 @@
 # Clavis
 
-> Piano sight-reading practice app. A note appears on the staff -- identify it and press the correct key on a MIDI keyboard or the on-screen piano.
+> Aplicacion de practica de lectura musical. Aparece una nota en el pentagrama -- identificala y presiona la tecla correcta en un teclado MIDI o en el piano en pantalla.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
-## Features
+## Funcionalidades
 
-### Screens & Navigation
-- **Inicio** -- Welcome screen with Google sign-in and guest entry
-- **Dashboard** -- Main hub with quick lesson generator, progressive roadmap, weekly stats, and rotating Sensei quotes
-- **Biblioteca** -- Lesson library showing all 18 lessons with mastery status and session history
-- **Perfil** -- Profile with settings, stats, account management, and MIDI controller calibration
-- **Practica** -- Practice screen with staff, keyboard, progress bar, and controls
-- **Resultados** -- Session results with score, accuracy, streak, and next-lesson options
+### Pantallas y navegacion
+- **Inicio** -- Pantalla de bienvenida con inicio de sesion con Google y acceso como invitado
+- **Dashboard** -- Centro principal con generador de lecciones rapidas, hoja de ruta progresiva, estadisticas semanales y frases rotativas del Sensei
+- **Biblioteca** -- Biblioteca de lecciones con las 18 lecciones, estado de dominio e historial de sesiones
+- **Perfil** -- Perfil con configuracion, estadisticas, gestion de cuenta y calibracion del controlador MIDI
+- **Practica** -- Pantalla de practica con pentagrama, teclado, barra de progreso y controles
+- **Resultados** -- Resultados de la sesion con puntaje, precision, racha y opciones para la siguiente leccion
 
-### Gameplay
-- **18 progressive lessons** -- 9 treble clef + 9 bass clef, from simple line notes to the full chromatic range
-- **Quick Lesson Generator** -- Custom practice sessions: choose clef, lines/spaces, ledger lines, sharps, timed mode, and note count (5/10/20). Config saves to Firestore and restores on login
-- **Streak system** -- consecutive correct answers build a streak; milestone sound at every 5
-- **Daily streak** -- consecutive practice days tracked via Firestore (guest) or cloud sync
-- **Recovery window** -- after a wrong answer, hit the correct key for partial credit before auto-advance
-- **Timed mode** -- countdown per note (5s or 8s depending on session length)
-- **Ghost notes** -- trail of recent notes shown as translucent ghosts; last correct note shown faded after an error
-- **Roadmap** -- Progressive lesson roadmap with locked/current/done states per clef, driven by mastery criteria
-- **Sensei quotes** -- Rotating wisdom quotes from curated composers and musicians (Beethoven, Mozart, Bach, Chopin, etc.), synced via Firestore
+### Jugabilidad
+- **18 lecciones progresivas** -- 9 en clave de sol + 9 en clave de fa, desde notas simples en lineas hasta el rango cromatico completo
+- **Generador de lecciones rapidas** -- Sesiones de practica personalizadas: elige clave, lineas/espacios, lineas adicionales, sostenidos, modo cronometrado y cantidad de notas (5/10/20). La configuracion se guarda en Firestore y se restaura al iniciar sesion
+- **Sistema de rachas** -- Las respuestas correctas consecutivas acumulan una racha; sonido de hito cada 5
+- **Racha diaria** -- Dias de practica consecutivos rastreados via Firestore (invitado) o sincronizacion en la nube
+- **Ventana de recuperacion** -- Despues de una respuesta incorrecta, presiona la tecla correcta para obtener credito parcial antes del avance automatico
+- **Modo cronometrado** -- Cuenta regresiva por nota (5s o 8s dependiendo de la duracion de la sesion)
+- **Notas fantasma** -- Estela de notas recientes mostradas como fantasmas translucidos; la ultima nota correcta aparece atenuada despues de un error
+- **Hoja de ruta** -- Hoja de ruta progresiva de lecciones con estados bloqueado/en curso/terminado por clave, segun criterios de dominio
+- **Frases del Sensei** -- Frases de sabiduria rotativas de compositores y musicos seleccionados (Beethoven, Mozart, Bach, Chopin, etc.), sincronizadas via Firestore
 
-### Input & Sound
-- **MIDI input** -- connect any USB/MIDI keyboard via Web MIDI API; auto-detected
-- **MIDI Calibration Modal** -- Hold-to-calibrate FSM (5 states: waiting-low, holding-low, waiting-high, holding-high, complete). Auto-triggers on first MIDI connect when no range is saved. User holds lowest note 2s, then highest note 2s. Range saved to Firestore
-- **On-screen piano** -- 3D-styled interactive keyboard (ivory/ebony keys); reduced to C3--C5 on mobile
-- **Octave bar** -- Toggleable manual octave shift for keyboards with limited range
-- **Web Audio synthesis** -- each note played with layered oscillators (triangular + sinusoidal harmonics)
-- **Sound effects** -- major arpeggio on correct, minor on wrong, fanfare on level complete
+### Entrada y sonido
+- **Entrada MIDI** -- Conecta cualquier teclado USB/MIDI via Web MIDI API; deteccion automatica
+- **Modal de calibracion MIDI** -- Maquina de estados de calibracion por mantener presionado (5 estados: esperando-bajo, manteniendo-bajo, esperando-alto, manteniendo-alto, completado). Se activa automaticamente en la primera conexion MIDI cuando no hay rango guardado. El usuario mantiene presionada la nota mas baja 2 segundos, luego la mas alta 2 segundos. El rango se guarda en Firestore
+- **Piano en pantalla** -- Teclado interactivo con estilo 3D (teclas de marfil/negro); reducido a C3--C5 en movil
+- **Barra de octavas** -- Cambio manual de octava activable para teclados con rango limitado
+- **Sintesis Web Audio** -- Cada nota reproducida con osciladores en capas (armonicos triangulares + sinusoidales)
+- **Efectos de sonido** -- Arpegio mayor en correcta, menor en incorrecta, fanfarria al completar nivel
 
-### Visuals
-- **Claymorphism design system** -- warm clay-toned UI with neumorphic cards, buttons, progress bars, and icon bubbles (`clay-card`, `clay-btn-primary`, `clay-icon-raised`, `clay-progress-bar`, etc.)
-- **Material Symbols Outlined** -- Google Material Symbols for all icons
-- **Spanish UI** -- all interface text in Spanish (Lecciones, Practicar, Perfil, Biblioteca, etc.)
-- **SVG staff** -- treble and bass clefs via Noto Music font, ghost notes, interval range dots, conductor's stand with wood texture
-- **Note expressions** -- green/red indicator dot on notes after answer
-- **Progress chart** -- weekly accuracy sparkline (Mon--Sun) on dashboard
-- **Dark/light mode** -- respects `prefers-color-scheme`, toggle in toolbar
-- **Mute mode** -- sleep emoji indicators on staff, sound off
+### Visuales
+- **Sistema de diseno Claymorphism** -- Interfaz con tonos de arcilla calida, tarjetas neumaticas, botones, barras de progreso y burbujas de iconos (`clay-card`, `clay-btn-primary`, `clay-icon-raised`, `clay-progress-bar`, etc.)
+- **Material Symbols Outlined** -- Google Material Symbols para todos los iconos
+- **Interfaz en espanol** -- Todo el texto de la interfaz en espanol (Lecciones, Practicar, Perfil, Biblioteca, etc.)
+- **Pentagrama SVG** -- Claves de sol y fa con fuente Noto Music, notas fantasma, puntos de rango de intervalos, atril con textura de madera
+- **Expresiones de nota** -- Punto indicador verde/rojo en las notas despues de responder
+- **Grafico de progreso** -- Grafico semanal de precision (lun--dom) en el dashboard
+- **Modo oscuro/claro** -- Respeta `prefers-color-scheme`, interruptor en la barra de herramientas
+- **Modo silencioso** -- Indicadores de emoji de dormido en el pentagrama, sonido desactivado
 
-### Notation
-- **American/Latin toggle** -- C D E F G A B <-> Do Re Mi Fa Sol La Si
-- **Note names on staff** -- configurable display on note heads
+### Notacion
+- **Alternancia americano/latino** -- C D E F G A B <-> Do Re Mi Fa Sol La Si
+- **Nombres de notas en el pentagrama** -- Visualizacion configurable en las cabezas de nota
 
-### PWA & Sync
-- **Installable** -- manifest.json + service worker for offline support (PWA name: "Clavis")
-- **Firebase Auth** -- Google sign-in for cloud sync
-- **Cloud sync** -- session history and settings sync to Firestore when logged in
-- **Quote history** -- daily quote indices synced to Firestore to avoid repeats across devices
-- **localStorage fallback** -- all core features work without Firebase
+### PWA y sincronizacion
+- **Instalable** -- manifest.json + service worker para soporte offline (nombre de la PWA: "Clavis")
+- **Firebase Auth** -- Inicio de sesion con Google para sincronizacion en la nube
+- **Sincronizacion en la nube** -- Historial de sesiones y configuracion se sincronizan a Firestore al iniciar sesion
+- **Historial de frases** -- Indices diarios de frases sincronizados a Firestore para evitar repeticiones entre dispositivos
+- **Respaldo en localStorage** -- Todas las funciones principales funcionan sin Firebase
 
 ---
 
-## Tech Stack
+## Stack tecnologico
 
-| Technology | Purpose |
+| Tecnologia | Proposito |
 |---|---|
-| [React 18](https://react.dev) | UI framework |
-| [TypeScript](https://www.typescriptlang.org) | Type safety |
-| [Vite](https://vitejs.dev) | Build tool & dev server |
-| [Tailwind CSS](https://tailwindcss.com) | Utility-first styling |
-| [Radix UI](https://www.radix-ui.com) | Accessible primitives (Select, Checkbox, Dialog, Dropdown) |
-| [shadcn/ui](https://ui.shadcn.com) | Component patterns |
-| [Firebase](https://firebase.google.com) | Auth + Firestore cloud sync |
-| [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) | Sound synthesis |
-| [Web MIDI API](https://developer.mozilla.org/en-US/docs/Web/API/Web_MIDI_API) | MIDI keyboard input |
-| [Noto Music](https://fonts.google.com/noto/specimen/Noto+Music) | Musical symbols |
-| [Material Symbols](https://fonts.google.com/icons) | UI icons |
-| [Hanken Grotesk](https://fonts.google.com/specimen/Hanken+Grotesk) | Body font |
-| [EB Garamond](https://fonts.google.com/specimen/EB+Garamond) | Headline font |
-| [Ponytail](https://www.npmjs.com/package/@dietrichgebert/ponytail) | Additional font |
+| [React 18](https://react.dev) | Framework de interfaz |
+| [TypeScript](https://www.typescriptlang.org) | Seguridad de tipos |
+| [Vite](https://vitejs.dev) | Herramienta de construccion y servidor de desarrollo |
+| [Tailwind CSS](https://tailwindcss.com) | Estilos utility-first |
+| [Radix UI](https://www.radix-ui.com) | Primitivas accesibles (Select, Checkbox, Dialog, Dropdown) |
+| [shadcn/ui](https://ui.shadcn.com) | Patrones de componentes |
+| [Firebase](https://firebase.google.com) | Auth + sincronizacion en la nube con Firestore |
+| [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) | Sintesis de sonido |
+| [Web MIDI API](https://developer.mozilla.org/en-US/docs/Web/API/Web_MIDI_API) | Entrada de teclado MIDI |
+| [Noto Music](https://fonts.google.com/noto/specimen/Noto+Music) | Simbolos musicales |
+| [Material Symbols](https://fonts.google.com/icons) | Iconos de interfaz |
+| [Hanken Grotesk](https://fonts.google.com/specimen/Hanken+Grotesk) | Fuente de cuerpo de texto |
+| [EB Garamond](https://fonts.google.com/specimen/EB+Garamond) | Fuente de titulos |
+| [Ponytail](https://www.npmjs.com/package/@dietrichgebert/ponytail) | Fuente adicional |
 
 ---
 
-## Getting Started
+## Primeros pasos
 
-### Prerequisites
+### Requisitos previos
 
 - Node.js 18+
-- npm 9+ (or yarn/pnpm)
+- npm 9+ (o yarn/pnpm)
 
-### Install
+### Instalacion
 
 ```bash
 git clone https://github.com/vruizdiaz10/piano.git
@@ -94,9 +94,9 @@ cd piano
 npm install
 ```
 
-### Environment Variables
+### Variables de entorno
 
-Create a `.env` file with your Firebase config:
+Crea un archivo `.env` con tu configuracion de Firebase:
 
 ```env
 VITE_FIREBASE_API_KEY=your_api_key
@@ -107,168 +107,168 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 ```
 
-> The app works without Firebase -- cloud sync and auth are optional. All core features use localStorage.
+> La aplicacion funciona sin Firebase -- la sincronizacion en la nube y la autenticacion son opcionales. Todas las funciones principales usan localStorage.
 
-### Development
+### Desarrollo
 
 ```bash
 npm run dev
 ```
 
-Opens at `http://localhost:5173`. Hot module replacement enabled.
+Se abre en `http://localhost:5173`. Reemplazo de modulos en caliente habilitado.
 
-### Build
+### Construccion
 
 ```bash
 npm run build
 npm run preview
 ```
 
-Output goes to `dist/`. Serve with any static file server.
+La salida se genera en `dist/`. Sirvela con cualquier servidor de archivos estaticos.
 
 ---
 
-## Project Structure
+## Estructura del proyecto
 
 ```
 src/
-├── main.tsx                  # React entry point
-├── App.tsx                   # Root component: screen routing, game orchestration, state
-├── index.css                 # Tailwind directives, claymorphism CSS, keyframes, wood texture
+├── main.tsx                  # Punto de entrada de React
+├── App.tsx                   # Componente raiz: enrutamiento de pantallas, orquestacion del juego, estado
+├── index.css                 # Directivas de Tailwind, CSS claymorphism, keyframes, textura de madera
 ├── firebase/
-│   ├── config.ts             # Firebase init (reads VITE_FIREBASE_* env vars)
-│   ├── auth.ts               # Google sign-in helper
-│   └── firestore.ts          # Firestore read/write helpers, UserDoc type, quote history
+│   ├── config.ts             # Inicializacion de Firebase (lee variables de entorno VITE_FIREBASE_*)
+│   ├── auth.ts               # Ayudante de inicio de sesion con Google
+│   └── firestore.ts          # Ayudantes de lectura/escritura en Firestore, tipo UserDoc, historial de frases
 ├── hooks/
-│   ├── useGameState.ts       # Game state reducer (phase, score, streak, notation, timer, controllerRange)
-│   ├── useMidi.ts            # Web MIDI API connection & event handling (dual callback: onNoteOn + optional onNoteOff)
-│   ├── useSound.ts           # Web Audio oscillator synthesis & effects
-│   ├── useDailyStreak.ts     # Persistent daily streak (localStorage)
-│   ├── useAuthProvider.tsx   # Firebase Auth provider
-│   ├── useAuth.ts            # Auth context hook
-│   ├── useSessionSync.ts     # Cloud session sync with retry + merge
-│   ├── useConfigSync.ts      # Cloud config sync (debounced write, notation/timed/quickLessonConfig/controllerRange)
-│   └── useQuoteHistory.ts    # Daily quote rotation with Firestore sync
+│   ├── useGameState.ts       # Reductor de estado del juego (fase, puntaje, racha, notacion, cronometro, rango del controlador)
+│   ├── useMidi.ts            # Conexion y manejo de eventos Web MIDI API (doble callback: onNoteOn + onNoteOff opcional)
+│   ├── useSound.ts           # Sintesis de osciladores Web Audio y efectos
+│   ├── useDailyStreak.ts     # Racha diaria persistente (localStorage)
+│   ├── useAuthProvider.tsx   # Proveedor de Firebase Auth
+│   ├── useAuth.ts            # Hook de contexto de autenticacion
+│   ├── useSessionSync.ts     # Sincronizacion de sesiones en la nube con reintentos + fusion
+│   ├── useConfigSync.ts      # Sincronizacion de configuracion en la nube (escritura con debounce, notacion/cronometrado/quickLessonConfig/rango del controlador)
+│   └── useQuoteHistory.ts    # Rotacion diaria de frases con sincronizacion a Firestore
 ├── types/
-│   └── index.ts              # Note, GameState, QuickLessonConfig, ErrorType, MasteryCriteria types
+│   └── index.ts              # Tipos Note, GameState, QuickLessonConfig, ErrorType, MasteryCriteria
 ├── data/
-│   ├── lessons.ts            # 18 lesson definitions (9 treble + 9 bass) with MIDI note pools
-│   └── senseiQuotes.ts       # Curated wisdom quotes from composers and musicians
+│   ├── lessons.ts            # 18 definiciones de lecciones (9 clave de sol + 9 clave de fa) con conjuntos de notas MIDI
+│   └── senseiQuotes.ts       # Frases de sabiduria seleccionadas de compositores y musicos
 ├── screens/
-│   ├── InicioScreen.tsx      # Welcome/sign-in screen
-│   ├── DashboardScreen.tsx   # Main hub: quick lesson generator, roadmap, stats, sensei quote
-│   ├── BibliotecaScreen.tsx  # Lesson library with mastery status and session history
-│   ├── PerfilScreen.tsx      # Profile: settings, stats, calibration, account management
-│   └── ResultadosScreen.tsx  # Session results: score, accuracy, streak, next lesson
+│   ├── InicioScreen.tsx      # Pantalla de bienvenida/inicio de sesion
+│   ├── DashboardScreen.tsx   # Centro principal: generador de lecciones rapidas, hoja de ruta, estadisticas, frase del sensei
+│   ├── BibliotecaScreen.tsx  # Biblioteca de lecciones con estado de dominio e historial de sesiones
+│   ├── PerfilScreen.tsx      # Perfil: configuracion, estadisticas, calibracion, gestion de cuenta
+│   └── ResultadosScreen.tsx  # Resultados de la sesion: puntaje, precision, racha, siguiente leccion
 ├── utils/
-│   ├── midiToNote.ts         # MIDI number -> Note object
-│   ├── noteToPosition.ts     # Note -> Y position on SVG staff (treble + bass maps)
-│   ├── notation.ts           # American <-> Latin note name mapping
-│   ├── errorAnalysis.ts      # Error classification (line-space, step, skip, octave, accidental, ledger-line, random) + tips
-│   ├── sessionHistory.ts     # Session history (localStorage)
-│   ├── notePool.ts           # Custom pool builder for quick lessons (lines/spaces/ledger/sharps filters)
-│   ├── dashboardStats.ts     # Session aggregation, roadmap builder, weekly stats, rank system
-│   └── weakPool.ts           # Weak note pool for focused practice
+│   ├── midiToNote.ts         # Numero MIDI -> objeto Note
+│   ├── noteToPosition.ts     # Nota -> posicion Y en pentagrama SVG (mapas de clave de sol + fa)
+│   ├── notation.ts           # Mapeo de nombres de notas americano <-> latino
+│   ├── errorAnalysis.ts      # Clasificacion de errores (linea-espacio, paso, salto, octava, accidental, linea adicional, aleatorio) + consejos
+│   ├── sessionHistory.ts     # Historial de sesiones (localStorage)
+│   ├── notePool.ts           # Constructor de conjuntos personalizado para lecciones rapidas (filtros de lineas/espacios/adicionales/sostenidos)
+│   ├── dashboardStats.ts     # Agregacion de sesiones, constructor de hoja de ruta, estadisticas semanales, sistema de rangos
+│   └── weakPool.ts           # Conjunto de notas debiles para practica enfocada
 ├── lib/
-│   └── utils.ts              # cn() utility (clsx + tailwind-merge)
+│   └── utils.ts              # Utilidad cn() (clsx + tailwind-merge)
 └── components/
-    ├── Staff.tsx             # SVG staff with clefs, notes, ghosts, trail, note expressions
-    ├── PianoKeyboard.tsx     # Interactive 3D piano keyboard
-    ├── Feedback.tsx          # Correct/wrong banner + error tips
-    ├── CalibrationModal.tsx  # MIDI controller calibration (5-state FSM, hold-to-calibrate)
-    ├── OctaveBar.tsx         # Toggleable manual octave shift control
-    ├── TopNavBar.tsx         # Dashboard/Biblioteca top navigation bar
-    ├── PracticeNavBar.tsx    # Practice screen top bar (back, profile, streak, accuracy)
-    ├── NavUserMenu.tsx       # User avatar dropdown menu
-    ├── Toolbar.tsx           # Lesson selector, note name toggle, timer toggle
-    ├── ProgressBar.tsx       # Progress bar with current/total display
-    ├── StreakBadge.tsx       # Fire streak counter
-    ├── ScoreDisplay.tsx      # Accuracy + timer display
-    ├── ProgressChart.tsx     # Mini SVG weekly accuracy graph
-    ├── LevelComplete.tsx     # Legacy score modal (replaced by ResultadosScreen)
-    ├── Toast.tsx             # Toast notification component
-    └── ui/                   # Radix-based primitives (select, checkbox, dialog, dropdown)
+    ├── Staff.tsx             # Pentagrama SVG con claves, notas, fantasmas, estela, expresiones de nota
+    ├── PianoKeyboard.tsx     # Teclado de piano interactivo 3D
+    ├── Feedback.tsx          # Banner de correcto/incorrecto + consejos de error
+    ├── CalibrationModal.tsx  # Calibracion del controlador MIDI (maquina de estados de 5 estados, calibracion por mantener presionado)
+    ├── OctaveBar.tsx         # Control de cambio manual de octava activable
+    ├── TopNavBar.tsx         # Barra de navegacion superior Dashboard/Biblioteca
+    ├── PracticeNavBar.tsx    # Barra superior de la pantalla de Practica (volver, perfil, racha, precision)
+    ├── NavUserMenu.tsx       # Menu desplegable del avatar de usuario
+    ├── Toolbar.tsx           # Selector de leccion, interruptor de nombre de notas, interruptor de cronometro
+    ├── ProgressBar.tsx       # Barra de progreso con indicador actual/total
+    ├── StreakBadge.tsx       # Contador de racha con fuego
+    ├── ScoreDisplay.tsx      # Indicador de precision + cronometro
+    ├── ProgressChart.tsx     # Grafico semanal de precision en SVG miniatura
+    ├── LevelComplete.tsx     # Modal de puntaje heredado (reemplazado por ResultadosScreen)
+    ├── Toast.tsx             # Componente de notificacion toast
+    └── ui/                   # Primitivas basadas en Radix (select, checkbox, dialog, dropdown)
 ```
 
 ---
 
-## Keyboard Shortcuts
+## Atajos de teclado
 
-| Key | Action |
-|-----|--------|
-| `R` | Restart current game |
-| `P` | Pause / unpause |
-| `Space` | Skip to next note (during feedback) |
-| `Escape` | Dismiss pause overlay / calibration modal |
+| Tecla | Accion |
+|-------|--------|
+| `R` | Reiniciar el juego actual |
+| `P` | Pausar / reanudar |
+| `Space` | Saltar a la siguiente nota (durante la retroalimentacion) |
+| `Escape` | Cerrar la superposicion de pausa / modal de calibracion |
 
-Shortcuts are disabled when focus is on an input or select element.
-
----
-
-## How to Play
-
-1. Open the app and sign in with Google, or tap **Entrar como invitado** (guest mode).
-2. From the **Dashboard**, choose a sequential lesson from the **Roadmap**, or tap **Leccion rapida** to configure a custom practice session (clef, lines/spaces, ledger lines, sharps, timed mode, note count).
-3. A note appears on the staff and plays audibly.
-4. Press the matching key on your MIDI keyboard or click the on-screen piano.
-5. **Correct**: staff flashes green, major arpeggio plays.
-6. **Incorrect**: staff flashes red, shows the correct answer + contextual error tip, 2.5s recovery window starts.
-7. After completing the session target, the **Resultados** screen shows your score, accuracy, best streak, and star rating.
-8. Choose **Reintentar** (same lesson), **Siguiente** (advance if mastery criteria met), or **Dashboard** to return.
-
-### MIDI Calibration
-
-On first MIDI connect (when no controller range is saved), the **Calibration Modal** opens automatically:
-1. Hold your lowest note for 2 seconds.
-2. Hold your highest note for 2 seconds.
-3. Range is saved to Firestore. Notes outside the calibrated range are accepted by pitch class.
-
-You can also re-calibrate from **Perfil > Calibrar controlador**.
+Los atajos se desactivan cuando el foco esta en un elemento de entrada o seleccion.
 
 ---
 
-## Lessons
+## Como jugar
 
-### Treble Clef (Sol)
+1. Abre la aplicacion e inicia sesion con Google, o toca **Entrar como invitado** (modo invitado).
+2. Desde el **Dashboard**, elige una leccion secuencial de la **Hoja de ruta**, o toca **Leccion rapida** para configurar una sesion de practica personalizada (clave, lineas/espacios, lineas adicionales, sostenidos, modo cronometrado, cantidad de notas).
+3. Aparece una nota en el pentagrama y suena de forma audible.
+4. Presiona la tecla correspondiente en tu teclado MIDI o haz clic en el piano en pantalla.
+5. **Correcta**: El pentagrama parpadea en verde, suena un arpegio mayor.
+6. **Incorrecta**: El pentagrama parpadea en rojo, muestra la respuesta correcta + consejo contextual de error, inicia ventana de recuperacion de 2.5 segundos.
+7. Al completar el objetivo de la sesion, la pantalla de **Resultados** muestra tu puntaje, precision, mejor racha y calificacion por estrellas.
+8. Elige **Reintentar** (misma leccion), **Siguiente** (avanzar si se cumplen los criterios de dominio) o **Dashboard** para volver.
 
-| # | Name | Notes | Description |
-|---|------|-------|-------------|
-| 1 | Lineas (Sol) | E4, G4, B4, D5, F5 | Notes on staff lines |
-| 2 | Espacios (Sol) | F4, A4, C5, E5 | Notes in staff spaces |
-| 3 | Lineas+Espacios (Sol) | E4--A5 | Combined lines and spaces |
-| 4 | Rango pentagrama (Sol) | C4--E5 | Full staff range |
-| 5 | Debajo pentagrama (Sol) | C4, D4 | Ledger lines below |
-| 6 | Encima pentagrama (Sol) | G5, A5, B5, C6 | Ledger lines above |
-| 7 | Naturales (Sol) | C4--C6 (naturals) | All natural notes in full range |
-| 8 | Sostenidos (Sol) | C4--C6 (all) | Introduces sharps |
-| 9 | Todas las notas (Sol) | C4--C6 (all) | Full chromatic range, treble clef |
+### Calibracion MIDI
 
-### Bass Clef (Fa)
+En la primera conexion MIDI (cuando no hay rango del controlador guardado), el **Modal de calibracion** se abre automaticamente:
+1. Manten presionada tu nota mas baja durante 2 segundos.
+2. Manten presionada tu nota mas alta durante 2 segundos.
+3. El rango se guarda en Firestore. Las notas fuera del rango calibrado se aceptan por clase de tono.
 
-| # | Name | Notes | Description |
-|---|------|-------|-------------|
-| 10 | Lineas (Fa) | G2, B2, D3, F3, A3 | Notes on bass staff lines |
-| 11 | Espacios (Fa) | A2, C3, E3, G3 | Notes in bass staff spaces |
-| 12 | Lineas+Espacios (Fa) | G2--B3 | Combined lines and spaces |
-| 13 | Rango pentagrama (Fa) | G2--D4 | Full bass staff range |
-| 14 | Debajo pentagrama (Fa) | C2--F2 | Ledger lines below |
-| 15 | Encima pentagrama (Fa) | C4--E4 | Ledger lines above |
-| 16 | Naturales (Fa) | C2--D4 (naturals) | All natural notes in full range |
-| 17 | Sostenidos (Fa) | C2--E4 (all) | Introduces sharps |
-| 18 | Todas las notas (Fa) | C2--E4 (all) | Full chromatic range, bass clef |
+También puedes recalibrar desde **Perfil > Calibrar controlador**.
 
 ---
 
-## Contributing
+## Lecciones
 
-1. Open an issue to discuss proposed changes before sending a PR.
-2. Keep existing style (strict TypeScript, functional components, hooks).
-3. If adding a feature, update or add the relevant component. Ensure state transitions in `useGameState` stay consistent.
-4. Test MIDI input if modifying `useMidi` or the answer submission flow.
-5. Run `npm run build` to verify TypeScript and production build.
+### Clave de Sol
+
+| # | Nombre | Notas | Descripcion |
+|---|--------|-------|-------------|
+| 1 | Lineas (Sol) | E4, G4, B4, D5, F5 | Notas en las lineas del pentagrama |
+| 2 | Espacios (Sol) | F4, A4, C5, E5 | Notas en los espacios del pentagrama |
+| 3 | Lineas+Espacios (Sol) | E4--A5 | Lineas y espacios combinados |
+| 4 | Rango pentagrama (Sol) | C4--E5 | Rango completo del pentagrama |
+| 5 | Debajo pentagrama (Sol) | C4, D4 | Lineas adicionales debajo |
+| 6 | Encima pentagrama (Sol) | G5, A5, B5, C6 | Lineas adicionales encima |
+| 7 | Naturales (Sol) | C4--C6 (naturales) | Todas las notas naturales en el rango completo |
+| 8 | Sostenidos (Sol) | C4--C6 (todas) | Introduce sostenidos |
+| 9 | Todas las notas (Sol) | C4--C6 (todas) | Rango cromatico completo, clave de sol |
+
+### Clave de Fa
+
+| # | Nombre | Notas | Descripcion |
+|---|--------|-------|-------------|
+| 10 | Lineas (Fa) | G2, B2, D3, F3, A3 | Notas en las lineas del bajo |
+| 11 | Espacios (Fa) | A2, C3, E3, G3 | Notas en los espacios del bajo |
+| 12 | Lineas+Espacios (Fa) | G2--B3 | Lineas y espacios combinados |
+| 13 | Rango pentagrama (Fa) | G2--D4 | Rango completo del pentagrama de bajo |
+| 14 | Debajo pentagrama (Fa) | C2--F2 | Lineas adicionales debajo |
+| 15 | Encima pentagrama (Fa) | C4--E4 | Lineas adicionales encima |
+| 16 | Naturales (Fa) | C2--D4 (naturales) | Todas las notas naturales en el rango completo |
+| 17 | Sostenidos (Fa) | C2--E4 (todas) | Introduce sostenidos |
+| 18 | Todas las notas (Fa) | C2--E4 (todas) | Rango cromatico completo, clave de fa |
 
 ---
 
-## License
+## Contribuir
+
+1. Abre un issue para discutir los cambios propuestos antes de enviar un PR.
+2. Manten el estilo existente (TypeScript estricto, componentes funcionales, hooks).
+3. Si agregas una funcionalidad, actualiza o agrega el componente correspondiente. Asegurate de que las transiciones de estado en `useGameState` se mantengan consistentes.
+4. Prueba la entrada MIDI si modificas `useMidi` o el flujo de envio de respuestas.
+5. Ejecuta `npm run build` para verificar TypeScript y la construccion de produccion.
+
+---
+
+## Licencia
 
 MIT (c) 2026
