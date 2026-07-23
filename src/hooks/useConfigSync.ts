@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import type { User } from 'firebase/auth'
 import { loadUserDoc, saveUserDoc, type UserDoc } from '../firebase/firestore'
 
-type ConfigField = 'notation' | 'theme' | 'timed' | 'showNoteName' | 'sessionTarget' | 'dailyStreak' | 'lastPlayDate' | 'level'
+type ConfigField = 'notation' | 'theme' | 'timed' | 'showNoteName' | 'sessionTarget' | 'dailyStreak' | 'lastPlayDate' | 'level' | 'quickLessonConfig' | 'controllerRange'
 
 interface UseConfigSyncReturn {
   config: Pick<UserDoc, ConfigField> | null
@@ -39,6 +39,8 @@ export function useConfigSync(user: User | null): UseConfigSyncReturn {
             sessionTarget: doc.sessionTarget,
             dailyStreak: doc.dailyStreak,
             lastPlayDate: doc.lastPlayDate,
+            quickLessonConfig: doc.quickLessonConfig,
+            controllerRange: doc.controllerRange,
           })
         }
       } catch {}

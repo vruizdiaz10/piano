@@ -26,6 +26,17 @@ export interface UserDoc {
     date: string
     elapsedMs?: number
   }>
+  quickLessonConfig?: {
+    clef: 'treble' | 'bass' | 'both'
+    lines: boolean
+    spaces: boolean
+    ledgerAbove: number
+    ledgerBelow: number
+    sharps: boolean
+    timed: boolean
+    noteCount: 5 | 10 | 20
+  }
+  controllerRange?: { min: number; max: number }
 }
 
 export async function loadUserDoc(uid: string): Promise<UserDoc | null> {
