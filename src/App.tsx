@@ -6,6 +6,7 @@ import { computeDashboardStats, rankFromLevel } from './utils/dashboardStats'
 import { useMidi } from './hooks/useMidi'
 import { useSound } from './hooks/useSound'
 import { buildCustomPool } from './utils/notePool'
+import { midiToNote } from './utils/midiToNote'
 import type { QuickLessonConfig } from './types'
 import { LESSONS } from './data/lessons'
 import Staff from './components/Staff'
@@ -215,12 +216,12 @@ function AppContent() {
 
   // Show calibration toast on first MIDI connect when no range exists
   useEffect(() => {
-    if (midiConnected && !config?.controllerRange) {
+    if (midiConnected && !config?.isLoading && !config?.controllerRange) {
       setCalibToastVisible(true)
     } else {
       setCalibToastVisible(false)
     }
-  }, [midiConnected, config?.controllerRange])
+  }, [midiConnected, config?.controllerRange, config?.isLoading])
 
   // Highlight correct key on correct answer
   useEffect(() => {
@@ -636,11 +637,22 @@ function AppContent() {
 
         {/* Lesson Controls */}
         <div className="w-full max-w-3xl flex items-center justify-center gap-6 mt-2 shrink-0">
-          <div className="flex items-center gap-2 clay-inner-panel px-3 py-2 rounded-full" aria-label={midiConnected ? 'MIDI: Conectado' : 'MIDI: Sin conexión'}>
-            <span className={`w-2.5 h-2.5 rounded-full ${midiConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`} />
-            <span className="material-symbols-outlined text-sm text-primary">piano</span>
-            <span className="font-label-caps text-[9px] uppercase tracking-widest text-primary">{midiConnected ? 'MIDI' : 'Sin MIDI'}</span>
-          </div>
+          {(() => {
+            const ctrlRange = config?.controllerRange ?? state.controllerRange
+            return (
+              <div className="flex items-center gap-2 clay-inner-panel px-3 py-2 rounded-full" aria-label={midiConnected ? 'MIDI: Conectado' : 'MIDI: Sin conexión'}>
+                <span className={`w-2.5 h-2.5 rounded-full ${midiConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`} />
+                <span className="material-symbols-outlined text-sm text-primary">piano</span>
+                <span className="font-label-caps text-[9px] uppercase tracking-widest text-primary">
+                  {midiConnected
+                    ? ctrlRange
+                      ? `${midiToNote(ctrlRange.min).name}${midiToNote(ctrlRange.min).octave}–${midiToNote(ctrlRange.max).name}${midiToNote(ctrlRange.max).octave}`
+                      : 'MIDI'
+                    : 'Sin MIDI'}
+                </span>
+              </div>
+            )
+          })()}
           <ControlButton
             icon={state.isMuted ? 'volume_off' : 'volume_up'}
             label={state.isMuted ? 'Sonido' : 'Silenciar'}
