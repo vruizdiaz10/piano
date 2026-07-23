@@ -54,7 +54,7 @@ function AppContent() {
 
   const { user, loading, signOut } = useAuth()
   const { saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
-  const { config, updateConfig } = useConfigSync(user)
+  const { config, updateConfig, isLoading: configLoading } = useConfigSync(user)
   const { quote: currentQuote, nextQuote } = useQuoteHistory(user)
 
   const handleQuickLesson = useCallback((config: QuickLessonConfig) => {
@@ -216,12 +216,12 @@ function AppContent() {
 
   // Show calibration toast on first MIDI connect when no range exists
   useEffect(() => {
-    if (midiConnected && !config?.isLoading && !config?.controllerRange) {
+    if (midiConnected && !configLoading && !config?.controllerRange) {
       setCalibToastVisible(true)
     } else {
       setCalibToastVisible(false)
     }
-  }, [midiConnected, config?.controllerRange, config?.isLoading])
+  }, [midiConnected, config?.controllerRange, configLoading])
 
   // Highlight correct key on correct answer
   useEffect(() => {
