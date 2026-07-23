@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import TopNavBar from '../components/TopNavBar';
+import CalibrationModal from '../components/CalibrationModal';
 
 const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'] as const;
 
@@ -27,6 +28,7 @@ interface PerfilScreenProps {
   };
   onSettingsChange: (settings: PerfilScreenProps['settings']) => void;
   controllerRange?: { min: number; max: number } | null;
+  onCalibrate: (range: { min: number; max: number }) => void;
   onDeleteAccount: () => void;
   onLogout?: () => void;
 }
@@ -45,8 +47,10 @@ export default function PerfilScreen({
   onDeleteAccount,
   onLogout,
   controllerRange,
+  onCalibrate,
 }: PerfilScreenProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [calibModalOpen, setCalibModalOpen] = useState(false);
 
   const updateSetting = <K extends keyof typeof settings>(key: K, value: (typeof settings)[K]) => {
     onSettingsChange({ ...settings, [key]: value });
@@ -152,22 +156,26 @@ export default function PerfilScreen({
             <span className="font-title-md text-title-md text-primary block mb-3">Controlador MIDI</span>
             {controllerRange ? (
               <div className="clay-inner-panel rounded-xl p-4">
-                <div className="flex justify-between items-center">
-                  <span className="font-body-lg text-body-lg text-on-surface-variant">Rango detectado:</span>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-body-lg text-body-lg text-on-surface-variant">Rango:</span>
                   <span className="font-body-lg text-body-lg text-on-surface font-medium">
                     {formatMidiNote(controllerRange.min)} – {formatMidiNote(controllerRange.max)}
                   </span>
                 </div>
-                <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
-                  Las notas fuera de este rango se aceptan por nombre (pitch class).
-                </p>
+                <button
+                  onClick={() => setCalibModalOpen(true)}
+                  className="clay-button-secondary w-full py-2 rounded-xl font-title-sm text-title-sm"
+                >
+                  Recalibrar
+                </button>
               </div>
             ) : (
-              <div className="clay-inner-panel rounded-xl p-4">
-                <p className="font-body-sm text-body-sm text-on-surface-variant">
-                  Conecta un teclado MIDI y toca algunas notas para detectar el rango.
-                </p>
-              </div>
+              <button
+                onClick={() => setCalibModalOpen(true)}
+                className="clay-btn-primary w-full py-3 rounded-xl font-title-md text-title-md"
+              >
+                Calibrar controlador
+              </button>
             )}
           </div>
         </div>
@@ -247,6 +255,15 @@ export default function PerfilScreen({
           © 2025 <a href="https://linktr.ee/vruizdiaz" target="_blank" rel="noopener noreferrer" className="hover:text-surface-bright transition-colors">Víctor Enrique Ruiz Díaz Music</a>
         </p>
       </footer>
+
+      <CalibrationModal
+        isOpen={calibModalOpen}
+        onClose={() => setCalibModalOpen(false)}
+        onCalibrate={(range) => {
+          onCalibrate(range);
+          setCalibModalOpen(false);
+        }}
+      />
     </div>
   );
 }
