@@ -61,6 +61,7 @@ export function useGameState() {
         startTime: Date.now(), recovering: false,
         sessionTarget: target ?? SESSION_TARGET,
         noteShownAt: Date.now(), responseTimes: [], lastCorrectNote: null,
+        controllerRange: null,
       }
     })
   }, [])
@@ -68,8 +69,30 @@ export function useGameState() {
   const submitAnswer = useCallback((midi: number) => {
     setState(prev => {
       if (prev.phase === 'waiting' && prev.currentNote) {
-        const isCorrect = midi === prev.currentNote.midi
-        // Track the target note that was missed (not the wrong key pressed)
+        // Update controller range (skip timer-expired -1 values)
+        let controllerRange = prev.controllerRange
+        if (midi > 0) {
+          if (!controllerRange) {
+            controllerRange = { min: midi, max: midi }
+          } else {
+            controllerRange = {
+              min: Math.min(controllerRange.min, midi),
+              max: Math.max(controllerRange.max, midi),
+            }
+          }
+        }
+
+        // Conditional smart detection: pitch-class match when target outside range
+        const target = prev.currentNote
+        const exactMatch = midi === target.midi
+        let isCorrect = exactMatch
+        if (!exactMatch && midi > 0 && controllerRange) {
+          const targetOutsideRange = target.midi < controllerRange.min || target.midi > controllerRange.max
+          if (targetOutsideRange) {
+            isCorrect = (target.midi % 12) === (midi % 12)
+          }
+        }
+
         if (!isCorrect) addWeakNote(prev.currentNote.midi)
         const newStreak = isCorrect ? prev.streak + 1 : 0
         const newTotal = prev.totalAttempts + 1
@@ -82,6 +105,7 @@ export function useGameState() {
 
         return {
           ...prev,
+          controllerRange,
           phase: sessionDone ? 'levelComplete' : 'feedback',
           lastAnswerCorrect: isCorrect,
           lastAnswerMidi: midi,
@@ -96,10 +120,35 @@ export function useGameState() {
         }
       }
       if (prev.phase === 'feedback' && prev.recovering && !prev.lastAnswerCorrect && prev.currentNote) {
-        if (midi !== prev.currentNote.midi) return prev
+        // Update range during recovery too
+        let controllerRange = prev.controllerRange
+        if (midi > 0) {
+          if (!controllerRange) {
+            controllerRange = { min: midi, max: midi }
+          } else {
+            controllerRange = {
+              min: Math.min(controllerRange.min, midi),
+              max: Math.max(controllerRange.max, midi),
+            }
+          }
+        }
+
+        // Same conditional smart detection for recovery
+        const target = prev.currentNote
+        const exactMatch = midi === target.midi
+        let isCorrect = exactMatch
+        if (!exactMatch && midi > 0 && controllerRange) {
+          const targetOutsideRange = target.midi < controllerRange.min || target.midi > controllerRange.max
+          if (targetOutsideRange) {
+            isCorrect = (target.midi % 12) === (midi % 12)
+          }
+        }
+
+        if (!isCorrect) return prev
         const responseTime = Date.now() - prev.noteShownAt
         return {
           ...prev,
+          controllerRange,
           lastAnswerCorrect: true,
           lastAnswerMidi: midi,
           lastErrorType: null,
@@ -153,6 +202,7 @@ export function useGameState() {
         lastAnswerCorrect: null, lastAnswerMidi: null, lastErrorType: null,
         startTime: Date.now(), recovering: false,
         noteShownAt: Date.now(), responseTimes: [], lastCorrectNote: null,
+        controllerRange: null,
       }
     })
   }, [])
