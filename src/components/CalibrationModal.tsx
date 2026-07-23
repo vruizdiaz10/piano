@@ -16,10 +16,9 @@ interface CalibrationModalProps {
   isOpen: boolean
   onClose: () => void
   onCalibrate: (range: { min: number; max: number }) => void
-  currentRange?: { min: number; max: number } | null
 }
 
-export default function CalibrationModal({ isOpen, onClose, onCalibrate, currentRange }: CalibrationModalProps) {
+export default function CalibrationModal({ isOpen, onClose, onCalibrate }: CalibrationModalProps) {
   const [calibState, setCalibState] = useState<CalibState>('waiting-low')
   const [holdProgress, setHoldProgress] = useState(0)
   const [minNote, setMinNote] = useState<number | null>(null)
@@ -52,6 +51,16 @@ export default function CalibrationModal({ isOpen, onClose, onCalibrate, current
       if (progressRef.current) clearInterval(progressRef.current)
     }
   }, [])
+
+  // Escape key dismiss
+  useEffect(() => {
+    if (!isOpen) return
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [isOpen, onClose])
 
   const startHold = useCallback((midi: number) => {
     if (calibStateRef.current === 'complete') return
