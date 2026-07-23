@@ -1,4 +1,4 @@
-# Note Dojo
+# Clavis
 
 > Piano sight-reading practice app. A note appears on the staff -- identify it and press the correct key on a MIDI keyboard or the on-screen piano.
 
