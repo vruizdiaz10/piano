@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import TopNavBar from '../components/TopNavBar';
 
+const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'] as const;
+
+function formatMidiNote(midi: number): string {
+  const name = NOTE_NAMES[midi % 12];
+  const octave = Math.floor(midi / 12) - 1;
+  return `${name}${octave}`;
+}
+
 interface PerfilScreenProps {
   onNavigate: (target: string) => void;
   userName?: string;
@@ -18,6 +26,7 @@ interface PerfilScreenProps {
     difficulty: 'facil' | 'normal' | 'dificil';
   };
   onSettingsChange: (settings: PerfilScreenProps['settings']) => void;
+  controllerRange?: { min: number; max: number } | null;
   onDeleteAccount: () => void;
   onLogout?: () => void;
 }
@@ -35,6 +44,7 @@ export default function PerfilScreen({
   onSettingsChange,
   onDeleteAccount,
   onLogout,
+  controllerRange,
 }: PerfilScreenProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
@@ -43,7 +53,7 @@ export default function PerfilScreen({
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <TopNavBar
         activeScreen="perfil"
         onNavigate={onNavigate}
@@ -136,6 +146,30 @@ export default function PerfilScreen({
               ))}
             </div>
           </div>
+
+          {/* Controller Range */}
+          <div>
+            <span className="font-title-md text-title-md text-primary block mb-3">Controlador MIDI</span>
+            {controllerRange ? (
+              <div className="clay-inner-panel rounded-xl p-4">
+                <div className="flex justify-between items-center">
+                  <span className="font-body-lg text-body-lg text-on-surface-variant">Rango detectado:</span>
+                  <span className="font-body-lg text-body-lg text-on-surface font-medium">
+                    {formatMidiNote(controllerRange.min)} – {formatMidiNote(controllerRange.max)}
+                  </span>
+                </div>
+                <p className="font-body-sm text-body-sm text-on-surface-variant mt-2">
+                  Las notas fuera de este rango se aceptan por nombre (pitch class).
+                </p>
+              </div>
+            ) : (
+              <div className="clay-inner-panel rounded-xl p-4">
+                <p className="font-body-sm text-body-sm text-on-surface-variant">
+                  Conecta un teclado MIDI y toca algunas notas para detectar el rango.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Mi Perfil */}
@@ -203,6 +237,16 @@ export default function PerfilScreen({
           ))}
         </div>
       </nav>
+
+      {/* Footer */}
+      <footer className="w-full py-stack-lg px-container-padding flex flex-col md:flex-row justify-between items-center gap-4 bg-mahogany-dark shadow-[inset_0_10px_20px_rgba(0,0,0,0.2)] mt-auto">
+        <div className="flex items-center gap-4 mb-4 md:mb-0">
+          <span className="font-headline-lg text-headline-lg text-surface-bright">Clavis</span>
+        </div>
+        <p className="font-body-sm text-body-sm text-outline-variant text-center md:text-left text-xs md:text-sm">
+          © 2025 <a href="https://linktr.ee/vruizdiaz" target="_blank" rel="noopener noreferrer" className="hover:text-surface-bright transition-colors">Víctor Enrique Ruiz Díaz Music</a>
+        </p>
+      </footer>
     </div>
   );
 }

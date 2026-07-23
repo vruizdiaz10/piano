@@ -487,6 +487,7 @@ function AppContent() {
           }}
           onDeleteAccount={handleDeleteAccount}
           onLogout={handleLogout}
+          controllerRange={state.controllerRange}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
       </div>
