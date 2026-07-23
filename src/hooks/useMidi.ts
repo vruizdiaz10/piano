@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 
-export function useMidi(onNoteOn: (midi: number) => void) {
+export function useMidi(onNoteOn: (midi: number) => void, onNoteOff?: (midi: number) => void) {
   const [midiConnected, setMidiConnected] = useState(false)
   const handlerRef = useRef(onNoteOn)
   handlerRef.current = onNoteOn
+  const noteOffRef = useRef(onNoteOff)
+  noteOffRef.current = onNoteOff
 
   useEffect(() => {
     let midiAccess: MIDIAccess | null = null
@@ -14,6 +16,8 @@ export function useMidi(onNoteOn: (midi: number) => void) {
       const [status, note, velocity] = event.data
       if ((status & 0xf0) === 0x90 && velocity > 0) {
         handlerRef.current?.(note)
+      } else if ((status & 0xf0) === 0x80 || ((status & 0xf0) === 0x90 && velocity === 0)) {
+        noteOffRef.current?.(note)
       }
     }
 
