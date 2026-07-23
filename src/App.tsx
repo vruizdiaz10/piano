@@ -2,14 +2,15 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useGameState } from './hooks/useGameState'
 import { useDailyStreak } from './hooks/useDailyStreak'
 import { saveSession, getSessions } from './utils/sessionHistory'
-import { computeDashboardStats } from './utils/dashboardStats'
+import { computeDashboardStats, rankFromLevel } from './utils/dashboardStats'
 import { useMidi } from './hooks/useMidi'
 import { useSound } from './hooks/useSound'
 import { buildCustomPool } from './utils/notePool'
 import type { QuickLessonConfig } from './types'
-import { getLessonPool, LESSONS } from './data/lessons'
+import { LESSONS } from './data/lessons'
 import Staff from './components/Staff'
 import PianoKeyboard from './components/PianoKeyboard'
+import OctaveBar from './components/OctaveBar'
 import Feedback from './components/Feedback'
 import PracticeNavBar from './components/PracticeNavBar'
 import AuthProvider from './hooks/useAuthProvider'
@@ -40,6 +41,8 @@ function AppContent() {
   const [trail, setTrail] = useState<Array<{ note: import('./types').Note; id: number }>>([])
   const trailIdRef = useRef(0)
   const [noteExpression, setNoteExpression] = useState<'happy' | 'sad' | null>(null)
+  const [octaveBarVisible, setOctaveBarVisible] = useState(false)
+  const [octaveShift, setOctaveShift] = useState(0)
   const { playNote, playCorrect, playWrong, playStreakMilestone, playLevelComplete } = useSound()
   const { dailyStreak, markToday } = useDailyStreak()
   const liveRegionRef = useRef<HTMLDivElement>(null)
@@ -47,36 +50,27 @@ function AppContent() {
   // Save/restore user prefs around quick lessons (prevent Firestore overwrite)
   const [savedSettings, setSavedSettings] = useState<{ target: number; timed: boolean } | null>(null)
 
+  const { user, loading, signOut } = useAuth()
+  const { saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
+  const { config, updateConfig } = useConfigSync(user)
+  const { quote: currentQuote, nextQuote } = useQuoteHistory(user)
+
   const handleQuickLesson = useCallback((config: QuickLessonConfig) => {
     setSavedSettings({ target: state.sessionTarget, timed: state.isTimed })
+    updateConfig({ quickLessonConfig: config })
     setLesson('custom')
     setClef(config.clef)
     setTimed(config.timed)
     const pool = buildCustomPool(config)
     startGame(config.noteCount, pool)
     setScreen('practica')
-  }, [state.sessionTarget, state.isTimed, setLesson, setClef, setTimed, startGame])
-
-  const { user, loading, signOut } = useAuth()
-  const { syncState, saveSession: saveSessionCloud, migrateIfNeeded } = useSessionSync(user)
-  const { config, updateConfig } = useConfigSync(user)
-  const { quote: currentQuote, nextQuote } = useQuoteHistory(user)
+  }, [state.sessionTarget, state.isTimed, setLesson, setClef, setTimed, startGame, updateConfig])
   const [isPaused, setIsPaused] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'warning' | 'error' } | null>(null)
 
   // Screen routing
   const [screen, setScreen] = useState<Screen>('inicio')
   const [isStarting, setIsStarting] = useState(false)
-
-  // Dashboard helper state for TopNavBar buttons
-  const [isTimerActive, setIsTimerActive] = useState(false)
-  const [isHelpVisible, setIsHelpVisible] = useState(false)
-  const [isMuted, setIsMuted] = useState(false)
-
-  // Toggle handlers for TopNavBar buttons
-  const toggleHelp = () => setIsHelpVisible(prev => !prev);
-  const toggleTimer = () => setIsTimerActive(prev => !prev);
-  const toggleMute = () => setIsMuted(prev => !prev);
 
   // Skip welcome screen if user is already logged in
   useEffect(() => {
@@ -185,7 +179,8 @@ function AppContent() {
     state.clef === 'both'
       ? (state.currentNote && state.currentNote.midi <= 60 ? 'bass' : 'treble')
       : (currentLesson?.clef ?? state.clef ?? 'treble')
-  const keyboardStart = state.clef === 'both' ? 36 : (currentLesson?.clef === 'bass' ? 36 : 48)
+  const baseKeyboardStart = state.clef === 'both' ? 36 : (currentLesson?.clef === 'bass' ? 36 : 48)
+  const keyboardStart = baseKeyboardStart + octaveShift * 12
 
   const accuracy = state.totalAttempts > 0 ? (state.correctAttempts / state.totalAttempts) * 100 : 0
 
@@ -193,16 +188,16 @@ function AppContent() {
     useCallback((midi: number) => {
       if (isPaused) return
       if (state.phase === 'waiting' || (state.phase === 'feedback' && state.recovering)) {
-        submitAnswer(midi)
+        submitAnswer(midi - octaveShift * 12)
       }
-    }, [state.phase, state.recovering, submitAnswer, isPaused])
+    }, [state.phase, state.recovering, submitAnswer, isPaused, octaveShift])
   )
 
   useEffect(() => {
-    if (state.currentNote && (state.phase === 'waiting' || state.phase === 'feedback')) {
+    if (state.currentNote && (state.phase === 'waiting' || state.phase === 'feedback') && !state.isMuted) {
       playNote(state.currentNote.midi)
     }
-  }, [state.currentNote, state.phase, playNote])
+  }, [state.currentNote, state.phase, playNote, state.isMuted])
 
   // Highlight correct key on correct answer
   useEffect(() => {
@@ -292,7 +287,7 @@ function AppContent() {
       if (e.key === 'r' || e.key === 'R') restartGame()
       if (e.key === ' ' && state.phase === 'feedback') {
         e.preventDefault()
-        if (state.lastAnswerCorrect === false && state.currentNote) playNote(state.currentNote.midi)
+        if (state.lastAnswerCorrect === false && state.currentNote && !state.isMuted) playNote(state.currentNote.midi)
         nextNote()
       }
     }
@@ -329,8 +324,10 @@ function AppContent() {
     const interval = setInterval(() => {
       if (isPaused || phaseRef.current !== 'waiting') return
       tickRef.current += 1
+      console.log('Timer tick: ', tickRef.current, ' duration: ', duration);
       setTimerDisplay(duration - tickRef.current)
       if (tickRef.current >= duration) {
+        console.log('Timer expired, submitting -1');
         clearInterval(interval)
         submitAnswer(-1)
       }
@@ -401,12 +398,7 @@ function AppContent() {
           onLogout={handleLogout}
           onStartGame={handleStartGame}
           onQuickLesson={handleQuickLesson}
-          onToggleHelp={toggleHelp}
-          onToggleTimer={toggleTimer}
-          onToggleMute={toggleMute}
-          isMuted={isMuted}
-          isHelpVisible={isHelpVisible}
-          isTimerActive={isTimerActive}
+          savedQuickLessonConfig={config?.quickLessonConfig}
           stats={{
             streak: dailyStreak,
             score: dash.score,
@@ -419,10 +411,10 @@ function AppContent() {
             challengingNotes: dash.challengingNotes,
           }}
           roadmap={dash.roadmap}
-          rank={dash.rank}
+          rank={rankFromLevel(Math.floor(state.bestStreak / 10) + 1)}
           senseiQuote={currentQuote}
           userName={user?.displayName || user?.email?.split('@')[0] || 'Pianista'}
-          userLevel={dash.userLevel}
+          userLevel={Math.floor(state.bestStreak / 10) + 1}
           userAvatar={user?.photoURL || undefined}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
@@ -489,7 +481,9 @@ function AppContent() {
             difficulty: state.sessionTarget <= 5 ? 'facil' : state.sessionTarget <= 10 ? 'normal' : 'dificil',
           }}
           onSettingsChange={(s) => {
-            setSessionTarget(s.difficulty === 'facil' ? 5 : s.difficulty === 'normal' ? 10 : 20)
+            const target = s.difficulty === 'facil' ? 5 : s.difficulty === 'normal' ? 10 : 20
+            setSessionTarget(target)
+            updateConfig({ sessionTarget: target })
           }}
           onDeleteAccount={handleDeleteAccount}
           onLogout={handleLogout}
@@ -520,50 +514,51 @@ function AppContent() {
 
       <PracticeNavBar
         onBack={() => setScreen('dashboard')}
-        isMuted={state.isMuted}
-        onToggleMute={() => setMuted(!state.isMuted)}
-        onRestart={() => restartGame()}
-        timerDisplay={timerDisplay}
-        isTimed={state.isTimed}
+        onProfile={() => setScreen('perfil')}
         streak={state.streak}
         accuracy={accuracy}
         totalAttempts={state.totalAttempts}
         sessionTarget={state.sessionTarget}
-        syncState={syncState}
-        onDeleteAccount={handleDeleteAccount}
-        midiConnected={midiConnected}
+        userLevel={Math.floor(state.bestStreak / 10) + 1}
       />
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-[1200px] mx-auto px-6 pt-24 pb-32 flex flex-col items-center">
+      <main className="h-screen w-full max-w-[1200px] mx-auto px-6 pt-20 pb-4 flex flex-col items-center overflow-hidden">
         <h1 className="sr-only">Practicar: {selectedLesson}</h1>
 
         {/* Conductor's Stand */}
-        <div className="perspective-stage w-full max-w-3xl mb-8">
-          <div className="tilted-stand wood-texture rounded-t-3xl rounded-b-xl p-6 md:p-10 border-t-8 border-r-4 border-l-4 border-b-8 border-mahogany-dark/80 relative">
+        <div className="perspective-stage w-full max-w-3xl mb-2 shrink-0">
+          <div className="tilted-stand wood-texture rounded-t-3xl rounded-b-xl p-4 md:p-6 border-t-8 border-r-4 border-l-4 border-b-8 border-mahogany-dark/80 relative">
             <div className={`absolute inset-0 rounded-3xl transition-opacity duration-300 pointer-events-none mix-blend-overlay ${staffFlash === 'correct' ? 'opacity-100' : staffFlash === 'wrong' ? 'opacity-100' : 'opacity-0'}`} style={{ background: staffFlash === 'correct' ? 'radial-gradient(circle, rgba(34,197,94,0.2) 0%, transparent 70%)' : 'radial-gradient(circle, rgba(168,32,36,0.2) 0%, transparent 70%)' }} />
-            <div className={`clay-surface rounded-xl p-4 sm:p-6 relative mx-auto w-full max-w-xl flex flex-col items-center justify-center min-h-[180px] transition-colors duration-300 ${staffClass}`}>
-              <div className="mt-2 w-full">
-                <Staff note={state.currentNote} showNoteName={state.showNoteName} lessonPool={state.customPool ?? getLessonPool(state.lessonId)} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} lastCorrectNote={state.lastCorrectNote} notation={state.notation} />
+            <div className={`clay-surface rounded-xl p-3 sm:p-4 relative mx-auto w-full max-w-xl flex flex-col items-center justify-center min-h-[140px] transition-colors duration-300 ${staffClass}`}>
+              <div className="w-full">
+                <Staff note={state.currentNote} showNoteName={state.showNoteName} trail={trail} noteExpression={noteExpression} isMuted={state.isMuted} clef={clef} lastCorrectNote={state.lastCorrectNote} notation={state.notation} />
               </div>
             </div>
-            <div className="absolute bottom-0 left-0 w-full h-6 bg-mahogany-dark/90 rounded-b-xl border-t border-brass-highlight/20 shadow-[0_-5px_15px_rgba(0,0,0,0.5)]" />
+            <div className="absolute bottom-0 left-0 w-full h-4 bg-mahogany-dark/90 rounded-b-xl border-t border-brass-highlight/20 shadow-[0_-5px_15px_rgba(0,0,0,0.5)]" />
           </div>
         </div>
 
-        {/* Feedback */}
-        <div className="w-full max-w-3xl px-4">
+        {/* Feedback — fixed height to prevent keyboard layout shift */}
+        <div className="w-full max-w-3xl px-4 h-16 overflow-hidden flex items-start justify-center shrink-0">
           <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} errorType={state.lastErrorType} notation={state.notation} />
         </div>
 
+        {/* Octave Bar — toggleable manual octave shift */}
+        {octaveBarVisible && (
+          <div className="w-full max-w-3xl shrink-0">
+            <OctaveBar shift={octaveShift} onShiftChange={setOctaveShift} baseStart={baseKeyboardStart} />
+          </div>
+        )}
+
         {/* Progress bar */}
-        <div className="w-full max-w-3xl mt-6">
-          <div className="flex justify-between items-center mb-2 px-2">
+        <div className="w-full max-w-3xl mt-2 shrink-0">
+          <div className="flex justify-between items-center mb-1 px-2">
             <span className="font-label-caps text-[10px] uppercase tracking-widest text-outline font-bold">Progreso</span>
             <span className="font-label-caps text-[10px] text-outline">{state.totalAttempts}/{state.sessionTarget}</span>
           </div>
           <div
-            className="h-3 rounded-full clay-progress-bar overflow-hidden"
+            className="h-2 rounded-full clay-progress-bar overflow-hidden"
             role="progressbar"
             aria-valuenow={Math.round((state.totalAttempts / state.sessionTarget) * 100)}
             aria-valuemin={0}
@@ -575,9 +570,47 @@ function AppContent() {
         </div>
 
         {/* Virtual Keyboard */}
-        <div className="w-full max-w-3xl bg-surface-variant/50 p-4 rounded-3xl shadow-inner border border-outline-variant/40 mt-8">
-          <div className="font-label-caps text-[10px] text-center text-outline uppercase tracking-widest font-bold mb-4">Select the matching key</div>
+        <div className="w-full max-w-3xl bg-surface-variant/50 p-3 rounded-3xl shadow-inner border border-outline-variant/40 mt-3">
+          <div className="font-label-caps text-[10px] text-center text-outline uppercase tracking-widest font-bold mb-2">Selecciona la tecla correcta</div>
           <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} startMidi={keyboardStart} />
+        </div>
+
+        {/* Lesson Controls */}
+        <div className="w-full max-w-3xl flex items-center justify-center gap-6 mt-2 shrink-0">
+          <div className="flex items-center gap-2 clay-inner-panel px-3 py-2 rounded-full" aria-label={midiConnected ? 'MIDI: Conectado' : 'MIDI: Sin conexión'}>
+            <span className={`w-2.5 h-2.5 rounded-full ${midiConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`} />
+            <span className="material-symbols-outlined text-sm text-primary">piano</span>
+            <span className="font-label-caps text-[9px] uppercase tracking-widest text-primary">{midiConnected ? 'MIDI' : 'Sin MIDI'}</span>
+          </div>
+          <ControlButton
+            icon={state.isMuted ? 'volume_off' : 'volume_up'}
+            label={state.isMuted ? 'Sonido' : 'Silenciar'}
+            onClick={() => setMuted(!state.isMuted)}
+            active={state.isMuted}
+          />
+          <ControlButton
+            icon="history"
+            label="Reiniciar"
+            onClick={() => restartGame()}
+          />
+          <ControlButton
+            icon="text_fields"
+            label={state.showNoteName ? 'Ocultar nota' : 'Mostrar nota'}
+            onClick={() => setShowNoteName(!state.showNoteName)}
+            active={state.showNoteName}
+          />
+          <ControlButton
+            icon="graphic_eq"
+            label={octaveBarVisible ? 'Ocultar octava' : 'Octava'}
+            onClick={() => setOctaveBarVisible(!octaveBarVisible)}
+            active={octaveBarVisible}
+          />
+          {state.isTimed && (
+            <div className="flex items-center gap-2 clay-inner-panel px-3 py-2 rounded-full">
+              <span className="material-symbols-outlined text-sm text-primary">timer</span>
+              <span className="font-title-sm text-primary">{timerDisplay}s</span>
+            </div>
+          )}
         </div>
       </main>
 
@@ -614,6 +647,21 @@ function AppContent() {
 
       {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
     </div>
+  )
+}
+
+function ControlButton({ icon, label, onClick, active }: { icon: string; label: string; onClick: () => void; active?: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex flex-col items-center gap-1 transition-colors ${active ? 'text-primary' : 'text-on-surface-variant hover:text-primary'}`}
+      aria-label={label}
+    >
+      <span className="clay-inner-panel w-10 h-10 rounded-full flex items-center justify-center">
+        <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: 20 }}>{icon}</span>
+      </span>
+      <span className="font-label-caps text-[9px] uppercase tracking-widest">{label}</span>
+    </button>
   )
 }
 
