@@ -199,6 +199,13 @@ function AppContent() {
     }
   }, [state.currentNote, state.phase, playNote, state.isMuted])
 
+  // Persist detected controller range to Firestore
+  useEffect(() => {
+    if (state.controllerRange) {
+      updateConfig({ controllerRange: state.controllerRange })
+    }
+  }, [state.controllerRange, updateConfig])
+
   // Highlight correct key on correct answer
   useEffect(() => {
     if (state.phase === 'feedback' && state.lastAnswerCorrect && state.currentNote) {
@@ -487,7 +494,7 @@ function AppContent() {
           }}
           onDeleteAccount={handleDeleteAccount}
           onLogout={handleLogout}
-          controllerRange={state.controllerRange}
+          controllerRange={config?.controllerRange ?? state.controllerRange}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
       </div>
