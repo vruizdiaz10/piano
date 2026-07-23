@@ -66,6 +66,7 @@ function AppContent() {
     setScreen('practica')
   }, [state.sessionTarget, state.isTimed, setLesson, setClef, setTimed, startGame, updateConfig])
   const [isPaused, setIsPaused] = useState(false)
+  const [calibModalOpen, setCalibModalOpen] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'warning' | 'error' } | null>(null)
 
   // Screen routing
@@ -205,6 +206,13 @@ function AppContent() {
       updateConfig({ controllerRange: state.controllerRange })
     }
   }, [state.controllerRange, updateConfig])
+
+  // Auto-open calibration on first MIDI connect when no range exists
+  useEffect(() => {
+    if (midiConnected && !config?.controllerRange) {
+      setCalibModalOpen(true)
+    }
+  }, [midiConnected, config?.controllerRange])
 
   // Highlight correct key on correct answer
   useEffect(() => {
@@ -496,6 +504,8 @@ function AppContent() {
           onLogout={handleLogout}
           onCalibrate={(range) => updateConfig({ controllerRange: range })}
           controllerRange={config?.controllerRange ?? state.controllerRange}
+          calibModalOpen={calibModalOpen}
+          onCalibModalOpenChange={setCalibModalOpen}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
       </div>

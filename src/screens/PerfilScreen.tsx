@@ -29,6 +29,8 @@ interface PerfilScreenProps {
   onSettingsChange: (settings: PerfilScreenProps['settings']) => void;
   controllerRange?: { min: number; max: number } | null;
   onCalibrate: (range: { min: number; max: number }) => void;
+  calibModalOpen?: boolean;
+  onCalibModalOpenChange?: (open: boolean) => void;
   onDeleteAccount: () => void;
   onLogout?: () => void;
 }
@@ -48,9 +50,16 @@ export default function PerfilScreen({
   onLogout,
   controllerRange,
   onCalibrate,
+  calibModalOpen: calibModalOpenProp,
+  onCalibModalOpenChange,
 }: PerfilScreenProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [calibModalOpen, setCalibModalOpen] = useState(false);
+  const [calibModalOpenLocal, setCalibModalOpenLocal] = useState(false);
+  const calibModalOpen = calibModalOpenProp ?? calibModalOpenLocal;
+  const setCalibModalOpen = (open: boolean) => {
+    if (onCalibModalOpenChange) onCalibModalOpenChange(open);
+    setCalibModalOpenLocal(open);
+  };
 
   const updateSetting = <K extends keyof typeof settings>(key: K, value: (typeof settings)[K]) => {
     onSettingsChange({ ...settings, [key]: value });
