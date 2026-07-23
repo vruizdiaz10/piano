@@ -33,6 +33,8 @@ interface PerfilScreenProps {
   onCalibModalOpenChange?: (open: boolean) => void;
   onDeleteAccount: () => void;
   onLogout?: () => void;
+  midiConnected?: boolean;
+  onOpenCalibration?: () => void;
 }
 
 export default function PerfilScreen({
@@ -52,6 +54,8 @@ export default function PerfilScreen({
   onCalibrate,
   calibModalOpen: calibModalOpenProp,
   onCalibModalOpenChange,
+  midiConnected,
+  onOpenCalibration,
 }: PerfilScreenProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [calibModalOpenLocal, setCalibModalOpenLocal] = useState(false);
@@ -74,6 +78,9 @@ export default function PerfilScreen({
         userName={userName}
         userLevel={userLevel}
         userAvatar={userAvatar}
+        midiConnected={midiConnected}
+        controllerRange={controllerRange}
+        onOpenCalibration={onOpenCalibration}
       />
 
       <div className="max-w-[800px] mx-auto px-4 md:px-8 pt-28 pb-stack-md md:pb-stack-lg space-y-6">

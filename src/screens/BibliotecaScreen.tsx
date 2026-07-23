@@ -21,6 +21,9 @@ interface BibliotecaScreenProps {
   userLevel?: number;
   userAvatar?: string;
   sessions?: SessionRecord[];
+  midiConnected?: boolean;
+  controllerRange?: { min: number; max: number } | null;
+  onOpenCalibration?: () => void;
 }
 
 export default function BibliotecaScreen({
@@ -31,6 +34,9 @@ export default function BibliotecaScreen({
   userLevel = 1,
   userAvatar,
   sessions = [],
+  midiConnected,
+  controllerRange,
+  onOpenCalibration,
 }: BibliotecaScreenProps) {
   const trebleLessons = LESSONS.filter(l => l.clef === 'treble')
   const bassLessons = LESSONS.filter(l => l.clef === 'bass')
@@ -60,6 +66,9 @@ export default function BibliotecaScreen({
         userName={userName}
         userLevel={userLevel}
         userAvatar={userAvatar}
+        midiConnected={midiConnected}
+        controllerRange={controllerRange}
+        onOpenCalibration={onOpenCalibration}
       />
 
       {/* Main Content */}

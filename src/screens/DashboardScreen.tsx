@@ -28,6 +28,9 @@ interface DashboardProps {
   userAvatar?: string;
   onQuickLesson?: (config: QuickLessonConfig) => void;
   savedQuickLessonConfig?: QuickLessonConfig;
+  midiConnected?: boolean;
+  controllerRange?: { min: number; max: number } | null;
+  onOpenCalibration?: () => void;
 }
 
 const WEEKDAY_LABELS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
@@ -45,6 +48,9 @@ export default function DashboardScreen({
   userAvatar,
   onQuickLesson,
   savedQuickLessonConfig,
+  midiConnected,
+  controllerRange,
+  onOpenCalibration,
 }: DashboardProps) {
   // State for the new generator UI and onboarding banner
   const [config, setConfig] = useState<QuickLessonConfig>(
@@ -83,6 +89,9 @@ export default function DashboardScreen({
         userName={userName}
         userLevel={userLevel}
         userAvatar={userAvatar}
+        midiConnected={midiConnected}
+        controllerRange={controllerRange}
+        onOpenCalibration={onOpenCalibration}
       />
 
       {/* Main Content */}
@@ -485,12 +494,6 @@ export default function DashboardScreen({
                 )
               })}
             </div>
-            <p className="text-center font-body-sm text-[13px] text-outline italic">
-              &ldquo;{senseiQuote.text}&rdquo;
-            </p>
-            <p className="text-center font-label-caps text-[10px] text-outline mt-2">
-              — {senseiQuote.author}
-            </p>
           </div>
 
           {/* Sabiduría Musical */}

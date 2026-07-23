@@ -21,6 +21,7 @@ import { useQuoteHistory } from './hooks/useQuoteHistory'
 
 
 import Toast from './components/Toast'
+import { CalibrationToast } from './components/CalibrationToast'
 import InicioScreen from './screens/InicioScreen'
 import DashboardScreen from './screens/DashboardScreen'
 import BibliotecaScreen from './screens/BibliotecaScreen'
@@ -67,6 +68,7 @@ function AppContent() {
   }, [state.sessionTarget, state.isTimed, setLesson, setClef, setTimed, startGame, updateConfig])
   const [isPaused, setIsPaused] = useState(false)
   const [calibModalOpen, setCalibModalOpen] = useState(false)
+  const [calibToastVisible, setCalibToastVisible] = useState(false)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'warning' | 'error' } | null>(null)
 
   // Screen routing
@@ -129,6 +131,10 @@ function AppContent() {
       setScreen('inicio')
     } catch { /* noop */ }
   }
+
+  const handleOpenCalibration = useCallback(() => {
+    setCalibModalOpen(true)
+  }, [])
 
   useEffect(() => {
     if (screen === 'dashboard' && savedSettings) {
@@ -207,10 +213,12 @@ function AppContent() {
     }
   }, [state.controllerRange, updateConfig])
 
-  // Auto-open calibration on first MIDI connect when no range exists
+  // Show calibration toast on first MIDI connect when no range exists
   useEffect(() => {
     if (midiConnected && !config?.controllerRange) {
-      setCalibModalOpen(true)
+      setCalibToastVisible(true)
+    } else {
+      setCalibToastVisible(false)
     }
   }, [midiConnected, config?.controllerRange])
 
@@ -431,8 +439,19 @@ function AppContent() {
           userName={user?.displayName || user?.email?.split('@')[0] || 'Pianista'}
           userLevel={Math.floor(state.bestStreak / 10) + 1}
           userAvatar={user?.photoURL || undefined}
+          midiConnected={midiConnected}
+          controllerRange={config?.controllerRange ?? state.controllerRange}
+          onOpenCalibration={handleOpenCalibration}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
+        <CalibrationToast
+          isVisible={calibToastVisible}
+          onCalibrate={() => {
+            setCalibToastVisible(false)
+            setCalibModalOpen(true)
+          }}
+          onDismiss={() => setCalibToastVisible(false)}
+        />
       </div>
     )
   }
@@ -448,8 +467,19 @@ function AppContent() {
           userLevel={Math.floor(state.bestStreak / 10) + 1}
           userAvatar={user?.photoURL || undefined}
           sessions={sessions}
+          midiConnected={midiConnected}
+          controllerRange={config?.controllerRange ?? state.controllerRange}
+          onOpenCalibration={handleOpenCalibration}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
+        <CalibrationToast
+          isVisible={calibToastVisible}
+          onCalibrate={() => {
+            setCalibToastVisible(false)
+            setCalibModalOpen(true)
+          }}
+          onDismiss={() => setCalibToastVisible(false)}
+        />
       </div>
     )
   }
@@ -506,8 +536,18 @@ function AppContent() {
           controllerRange={config?.controllerRange ?? state.controllerRange}
           calibModalOpen={calibModalOpen}
           onCalibModalOpenChange={setCalibModalOpen}
+          midiConnected={midiConnected}
+          onOpenCalibration={handleOpenCalibration}
         />
         {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
+        <CalibrationToast
+          isVisible={calibToastVisible}
+          onCalibrate={() => {
+            setCalibToastVisible(false)
+            setCalibModalOpen(true)
+          }}
+          onDismiss={() => setCalibToastVisible(false)}
+        />
       </div>
     )
   }
