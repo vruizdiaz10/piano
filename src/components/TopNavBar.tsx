@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import NavUserMenu from './NavUserMenu';
 import logoUrl from '../assets/logo.svg';
+import { midiToNote } from '../utils/midiToNote';
 
 interface TopNavBarProps {
   activeScreen: 'dashboard' | 'biblioteca' | 'perfil';
@@ -17,6 +18,9 @@ interface TopNavBarProps {
   isMuted?: boolean;
   isHelpVisible?: boolean;
   isTimerActive?: boolean;
+  midiConnected?: boolean;
+  controllerRange?: { min: number; max: number } | null;
+  onOpenCalibration?: () => void;
 }
 
 const NAV_LINKS = [
@@ -38,6 +42,9 @@ export default function TopNavBar({
   isMuted = false,
   isHelpVisible = false,
   isTimerActive = false,
+  midiConnected,
+  controllerRange,
+  onOpenCalibration,
 }: TopNavBarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -129,6 +136,40 @@ export default function TopNavBar({
             aria-haspopup="true"
           >
             <span className="material-symbols-outlined" style={{ fontSize: 24 }}>more_vert</span>
+          </button>
+        )}
+        {/* MIDI Status Chip */}
+        {midiConnected !== undefined && (
+          <button
+            onClick={onOpenCalibration}
+            disabled={!midiConnected}
+            aria-label={
+              !midiConnected
+                ? 'Sin controlador MIDI'
+                : controllerRange
+                  ? `MIDI calibrado: ${midiToNote(controllerRange.min).name}${midiToNote(controllerRange.min).octave} - ${midiToNote(controllerRange.max).name}${midiToNote(controllerRange.max).octave}. Tocá para recalibrar`
+                  : 'MIDI conectado sin calibrar. Tocá para calibrar'
+            }
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-label
+              transition-all duration-200 border
+              ${!midiConnected
+                ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-default'
+                : controllerRange
+                  ? 'bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100 cursor-pointer'
+                  : 'bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100 cursor-pointer animate-pulse'
+              }`}
+          >
+            <span className="material-symbols-outlined text-[16px]">
+              {!midiConnected ? 'settings_input_hdmi' : 'piano'}
+            </span>
+            <span>
+              {!midiConnected
+                ? 'Sin MIDI'
+                : controllerRange
+                  ? `${midiToNote(controllerRange.min).name}${midiToNote(controllerRange.min).octave}–${midiToNote(controllerRange.max).name}${midiToNote(controllerRange.max).octave}`
+                  : 'Sin calibrar'
+              }
+            </span>
           </button>
         )}
         <NavUserMenu
