@@ -56,6 +56,15 @@ export function useConfigSync(user: User | null): UseConfigSyncReturn {
 
     if (!user) return
 
+    // controllerRange: save immediately (bypass debounce — calibration is rare, must persist reliably)
+    if (patch.controllerRange) {
+      const range = patch.controllerRange
+      loadUserDoc(user.uid).then(doc => {
+        if (doc) saveUserDoc(user.uid, { ...doc, controllerRange: range })
+      }).catch(() => {})
+      return
+    }
+
     pendingRef.current = { ...pendingRef.current, ...patch }
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(async () => {
