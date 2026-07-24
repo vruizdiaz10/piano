@@ -23,6 +23,7 @@ import { useQuoteHistory } from './hooks/useQuoteHistory'
 
 import Toast from './components/Toast'
 import { CalibrationToast } from './components/CalibrationToast'
+import CalibrationModal from './components/CalibrationModal'
 import InicioScreen from './screens/InicioScreen'
 import DashboardScreen from './screens/DashboardScreen'
 import BibliotecaScreen from './screens/BibliotecaScreen'
@@ -453,6 +454,14 @@ function AppContent() {
           }}
           onDismiss={() => setCalibToastVisible(false)}
         />
+        <CalibrationModal
+          isOpen={calibModalOpen}
+          onClose={() => setCalibModalOpen(false)}
+          onCalibrate={(range) => {
+            updateConfig({ controllerRange: range })
+            setCalibModalOpen(false)
+          }}
+        />
       </div>
     )
   }
@@ -480,6 +489,14 @@ function AppContent() {
             setCalibModalOpen(true)
           }}
           onDismiss={() => setCalibToastVisible(false)}
+        />
+        <CalibrationModal
+          isOpen={calibModalOpen}
+          onClose={() => setCalibModalOpen(false)}
+          onCalibrate={(range) => {
+            updateConfig({ controllerRange: range })
+            setCalibModalOpen(false)
+          }}
         />
       </div>
     )
@@ -535,8 +552,6 @@ function AppContent() {
           onLogout={handleLogout}
           onCalibrate={(range) => updateConfig({ controllerRange: range })}
           controllerRange={config?.controllerRange ?? state.controllerRange}
-          calibModalOpen={calibModalOpen}
-          onCalibModalOpenChange={setCalibModalOpen}
           midiConnected={midiConnected}
           onOpenCalibration={handleOpenCalibration}
         />
@@ -548,6 +563,14 @@ function AppContent() {
             setCalibModalOpen(true)
           }}
           onDismiss={() => setCalibToastVisible(false)}
+        />
+        <CalibrationModal
+          isOpen={calibModalOpen}
+          onClose={() => setCalibModalOpen(false)}
+          onCalibrate={(range) => {
+            updateConfig({ controllerRange: range })
+            setCalibModalOpen(false)
+          }}
         />
       </div>
     )
@@ -720,6 +743,14 @@ function AppContent() {
       )}
 
       {toast && <Toast message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />}
+      <CalibrationModal
+        isOpen={calibModalOpen}
+        onClose={() => setCalibModalOpen(false)}
+        onCalibrate={(range) => {
+          updateConfig({ controllerRange: range })
+          setCalibModalOpen(false)
+        }}
+      />
     </div>
   )
 }

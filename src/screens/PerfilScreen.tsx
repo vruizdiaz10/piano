@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import TopNavBar from '../components/TopNavBar';
-import CalibrationModal from '../components/CalibrationModal';
 
 const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'] as const;
 
@@ -29,8 +28,6 @@ interface PerfilScreenProps {
   onSettingsChange: (settings: PerfilScreenProps['settings']) => void;
   controllerRange?: { min: number; max: number } | null;
   onCalibrate: (range: { min: number; max: number }) => void;
-  calibModalOpen?: boolean;
-  onCalibModalOpenChange?: (open: boolean) => void;
   onDeleteAccount: () => void;
   onLogout?: () => void;
   midiConnected?: boolean;
@@ -52,18 +49,10 @@ export default function PerfilScreen({
   onLogout,
   controllerRange,
   onCalibrate,
-  calibModalOpen: calibModalOpenProp,
-  onCalibModalOpenChange,
   midiConnected,
   onOpenCalibration,
 }: PerfilScreenProps) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [calibModalOpenLocal, setCalibModalOpenLocal] = useState(false);
-  const calibModalOpen = calibModalOpenProp ?? calibModalOpenLocal;
-  const setCalibModalOpen = (open: boolean) => {
-    if (onCalibModalOpenChange) onCalibModalOpenChange(open);
-    setCalibModalOpenLocal(open);
-  };
 
   const updateSetting = <K extends keyof typeof settings>(key: K, value: (typeof settings)[K]) => {
     onSettingsChange({ ...settings, [key]: value });
@@ -179,7 +168,7 @@ export default function PerfilScreen({
                   </span>
                 </div>
                 <button
-                  onClick={() => setCalibModalOpen(true)}
+                  onClick={() => onOpenCalibration?.()}
                   className="clay-button-secondary w-full py-2 rounded-xl font-title-sm text-title-sm"
                 >
                   Recalibrar
@@ -187,7 +176,7 @@ export default function PerfilScreen({
               </div>
             ) : (
               <button
-                onClick={() => setCalibModalOpen(true)}
+                onClick={() => onOpenCalibration?.()}
                 className="clay-btn-primary w-full py-3 rounded-xl font-title-md text-title-md"
               >
                 Calibrar controlador
@@ -272,14 +261,6 @@ export default function PerfilScreen({
         </p>
       </footer>
 
-      <CalibrationModal
-        isOpen={calibModalOpen}
-        onClose={() => setCalibModalOpen(false)}
-        onCalibrate={(range) => {
-          onCalibrate(range);
-          setCalibModalOpen(false);
-        }}
-      />
     </div>
   );
 }
