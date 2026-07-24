@@ -582,6 +582,7 @@ function AppContent() {
         userLevel={Math.floor(state.bestStreak / 10) + 1}
         midiConnected={midiConnected}
         controllerRange={config?.controllerRange ?? state.controllerRange}
+        onOpenCalibration={handleOpenCalibration}
       />
 
       {/* Main Content */}

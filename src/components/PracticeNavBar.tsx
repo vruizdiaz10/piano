@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import NavUserMenu from './NavUserMenu';
 import { useAuth } from '../hooks/useAuth';
 import logoUrl from '../assets/logo.svg';
@@ -13,6 +14,7 @@ interface PracticeNavBarProps {
   userLevel?: number;
   midiConnected?: boolean;
   controllerRange?: { min: number; max: number } | null;
+  onOpenCalibration?: () => void;
 }
 
 export default function PracticeNavBar({
@@ -25,7 +27,9 @@ export default function PracticeNavBar({
   userLevel = 1,
   midiConnected,
   controllerRange,
+  onOpenCalibration,
 }: PracticeNavBarProps) {
+  const [midiMenuOpen, setMidiMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
   const userName = user?.displayName ?? user?.email?.split('@')[0] ?? 'Usuario';
 
@@ -63,24 +67,52 @@ export default function PracticeNavBar({
       </div>
       <div className="flex items-center gap-2">
         {midiConnected !== undefined && (
-          <div
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-label border
-              ${!midiConnected
-                ? 'bg-gray-100 text-gray-400 border-gray-200'
-                : controllerRange
-                  ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
-                  : 'bg-amber-50 text-amber-600 border-amber-200'
-              }`}
-          >
-            <span className={`w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`} />
-            <span className="material-symbols-outlined text-[14px]">piano</span>
-            <span>
-              {midiConnected
-                ? controllerRange
-                  ? `${midiToNote(controllerRange.min).name}${midiToNote(controllerRange.min).octave}–${midiToNote(controllerRange.max).name}${midiToNote(controllerRange.max).octave}`
-                  : 'Sin calibrar'
-                : 'Sin MIDI'}
-            </span>
+          <div className="relative">
+            <button
+              onClick={() => midiConnected && setMidiMenuOpen(!midiMenuOpen)}
+              disabled={!midiConnected}
+              aria-label={
+                !midiConnected
+                  ? 'Sin controlador MIDI'
+                  : controllerRange
+                    ? `MIDI calibrado: ${midiToNote(controllerRange.min).name}${midiToNote(controllerRange.min).octave} - ${midiToNote(controllerRange.max).name}${midiToNote(controllerRange.max).octave}. Tocá para opciones`
+                    : 'MIDI conectado sin calibrar. Tocá para opciones'
+              }
+              aria-expanded={midiMenuOpen}
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-label border
+                transition-all duration-200
+                ${!midiConnected
+                  ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-default'
+                  : controllerRange
+                    ? 'bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100 cursor-pointer'
+                    : 'bg-amber-50 text-amber-600 border-amber-200 hover:bg-amber-100 cursor-pointer animate-pulse'
+                }`}
+            >
+              <span className={`w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`} />
+              <span className="material-symbols-outlined text-[14px]">piano</span>
+              <span>
+                {midiConnected
+                  ? controllerRange
+                    ? `${midiToNote(controllerRange.min).name}${midiToNote(controllerRange.min).octave}–${midiToNote(controllerRange.max).name}${midiToNote(controllerRange.max).octave}`
+                    : 'Sin calibrar'
+                  : 'Sin MIDI'}
+              </span>
+              {midiConnected && <span className="material-symbols-outlined text-[12px] ml-0.5">expand_more</span>}
+            </button>
+            {midiMenuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setMidiMenuOpen(false)} />
+                <div className="absolute right-0 top-full mt-1 z-50 bg-surface rounded-xl shadow-lg border border-outline-variant/30 py-1 min-w-[160px]">
+                  <button
+                    onClick={() => { setMidiMenuOpen(false); onOpenCalibration?.() }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-on-surface hover:bg-surface-variant/50 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">settings</span>
+                    {controllerRange ? 'Recalibrar' : 'Calibrar'}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         )}
         <NavUserMenu
