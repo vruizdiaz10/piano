@@ -550,7 +550,6 @@ function AppContent() {
           }}
           onDeleteAccount={handleDeleteAccount}
           onLogout={handleLogout}
-          onCalibrate={(range) => updateConfig({ controllerRange: range })}
           controllerRange={config?.controllerRange ?? state.controllerRange}
           midiConnected={midiConnected}
           onOpenCalibration={handleOpenCalibration}

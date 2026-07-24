@@ -27,7 +27,6 @@ interface PerfilScreenProps {
   };
   onSettingsChange: (settings: PerfilScreenProps['settings']) => void;
   controllerRange?: { min: number; max: number } | null;
-  onCalibrate: (range: { min: number; max: number }) => void;
   onDeleteAccount: () => void;
   onLogout?: () => void;
   midiConnected?: boolean;
@@ -48,7 +47,6 @@ export default function PerfilScreen({
   onDeleteAccount,
   onLogout,
   controllerRange,
-  onCalibrate,
   midiConnected,
   onOpenCalibration,
 }: PerfilScreenProps) {
