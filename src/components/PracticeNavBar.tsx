@@ -1,6 +1,7 @@
 import NavUserMenu from './NavUserMenu';
 import { useAuth } from '../hooks/useAuth';
 import logoUrl from '../assets/logo.svg';
+import { midiToNote } from '../utils/midiToNote';
 
 interface PracticeNavBarProps {
   onBack: () => void;
@@ -10,6 +11,8 @@ interface PracticeNavBarProps {
   totalAttempts: number;
   sessionTarget: number;
   userLevel?: number;
+  midiConnected?: boolean;
+  controllerRange?: { min: number; max: number } | null;
 }
 
 export default function PracticeNavBar({
@@ -20,6 +23,8 @@ export default function PracticeNavBar({
   totalAttempts,
   sessionTarget,
   userLevel = 1,
+  midiConnected,
+  controllerRange,
 }: PracticeNavBarProps) {
   const { user, signOut } = useAuth();
   const userName = user?.displayName ?? user?.email?.split('@')[0] ?? 'Usuario';
@@ -57,6 +62,27 @@ export default function PracticeNavBar({
         ))}
       </div>
       <div className="flex items-center gap-2">
+        {midiConnected !== undefined && (
+          <div
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-label border
+              ${!midiConnected
+                ? 'bg-gray-100 text-gray-400 border-gray-200'
+                : controllerRange
+                  ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
+                  : 'bg-amber-50 text-amber-600 border-amber-200'
+              }`}
+          >
+            <span className={`w-2 h-2 rounded-full ${midiConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`} />
+            <span className="material-symbols-outlined text-[14px]">piano</span>
+            <span>
+              {midiConnected
+                ? controllerRange
+                  ? `${midiToNote(controllerRange.min).name}${midiToNote(controllerRange.min).octave}–${midiToNote(controllerRange.max).name}${midiToNote(controllerRange.max).octave}`
+                  : 'Sin calibrar'
+                : 'Sin MIDI'}
+            </span>
+          </div>
+        )}
         <NavUserMenu
           userName={userName}
           userLevel={userLevel}

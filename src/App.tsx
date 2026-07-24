@@ -580,6 +580,8 @@ function AppContent() {
         totalAttempts={state.totalAttempts}
         sessionTarget={state.sessionTarget}
         userLevel={Math.floor(state.bestStreak / 10) + 1}
+        midiConnected={midiConnected}
+        controllerRange={config?.controllerRange ?? state.controllerRange}
       />
 
       {/* Main Content */}
