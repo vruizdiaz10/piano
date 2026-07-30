@@ -503,15 +503,50 @@
 
 /* ─── Landscape / Game Layout ─── */
 .game-layout { touch-action: manipulation; overflow-x: hidden; }
+
 @media (orientation: landscape) and (max-height: 600px) {
-  .game-layout { flex-direction: row; align-items: flex-start; touch-action: manipulation; }
-  .game-layout-staff { width: 55%; }
-  .game-layout-keyboard { width: 45%; position: sticky; top: 0; }
-  .game-layout-keyboard > div { margin-bottom: 0; }
-  #game-content > div:first-child { margin-bottom: 0 !important; }
-  #game-content > div:nth-child(2) { margin-bottom: 0 !important; padding-top: 0 !important; }
-  .game-layout-keyboard .h-36 { height: 7rem !important; }
+  /* NavBar collapse */
+  .game-layout-nav-hidden { display: none !important; }
+
+  /* Main content: side-by-side */
+  .game-layout { flex-direction: row !important; align-items: stretch; gap: 0; max-width: 100%; }
+  .game-layout-staff { width: 50%; display: flex; flex-direction: column; justify-content: center; overflow: hidden; position: relative; }
+  .game-layout-keyboard { width: 50%; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+  .game-layout-staff > *, .game-layout-keyboard > * { min-height: 0; }
+
+  /* Staff panel — strip 3D tilt, shrink padding */
+  .game-layout-staff .perspective-stage { transform: none; margin-bottom: 0; max-width: 100%; }
+  .game-layout-staff .tilted-stand { transform: none; padding: 0.35rem; border-width: 2px; }
+  .game-layout-staff .clay-surface { min-height: 40px; padding: 0.15rem; border-radius: 0.5rem; }
+  .game-layout-staff .clay-surface svg { max-height: 100px; }
+  .game-layout-staff .wood-texture { background-image: none; background-color: transparent; box-shadow: none; }
+  .game-layout-staff .absolute.bottom-0 { display: none; }
+
+  /* Feedback compact */
+  .game-layout-staff .staff-feedback { height: auto; padding: 0; flex-shrink: 0; }
+
+  /* Controls at bottom of staff panel */
+  .game-layout-staff .staff-controls { gap: 0.25rem; flex-wrap: nowrap; }
+  .game-layout-staff .staff-controls .material-symbols-outlined { font-size: 18px !important; }
+
+  /* Keyboard panel */
+  .keyboard-label { display: none !important; }
+  .game-layout-keyboard .game-layout-key-full { flex: 1; display: flex; flex-direction: column; min-height: 0; border: none; box-shadow: none; padding: 0.15rem; margin-top: 0; }
+  .game-layout-keyboard .game-layout-key-full > :last-child { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .game-layout-keyboard .game-layout-key-full > :last-child > :first-child { flex: 1; height: auto !important; min-height: 0; }
+  .game-layout-keyboard .piano-key-white { height: 100% !important; min-height: 0; }
+  .game-layout-keyboard .piano-key-black { max-height: 75% !important; }
+  .game-layout-keyboard .border { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+  /* Progress bar → thin fixed bottom bar */
+  .game-layout-progress { position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; margin: 0; max-width: 100%; background: transparent; }
+  .game-layout-progress > div:first-child { display: none !important; }
+  .game-layout-progress .clay-progress-bar { height: 4px; border-radius: 0; }
+
+  /* Hide MIDI indicator in controls row */
+  .game-layout-midi-indicator { display: none !important; }
 }
+
 @media (min-width: 1024px) {
   .game-layout-staff svg { max-height: 160px; }
 }
