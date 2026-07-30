@@ -34,7 +34,7 @@ export default function PracticeNavBar({
   const userName = user?.displayName ?? user?.email?.split('@')[0] ?? 'Usuario';
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding h-20 bg-sheet-cream/90 backdrop-blur-md shadow-[0_8px_30px_-5px_rgba(61,31,16,0.05)] border-b border-outline-variant/30">
+    <nav className="game-layout-nav fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-padding h-20 bg-sheet-cream/90 backdrop-blur-md shadow-[0_8px_30px_-5px_rgba(61,31,16,0.05)] border-b border-outline-variant/30">
       <div className="flex items-center gap-4">
         <button
           onClick={onBack}

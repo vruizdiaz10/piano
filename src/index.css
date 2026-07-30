@@ -507,6 +507,8 @@
 @media (orientation: landscape) and (max-height: 600px) {
   /* NavBar collapse */
   .game-layout-nav-hidden { display: none !important; }
+  .game-layout-nav { height: 40px !important; }
+  main { padding-top: 40px !important; }
 
   /* Main content: side-by-side */
   .game-layout { flex-direction: row !important; align-items: stretch; gap: 0; max-width: 100%; }
