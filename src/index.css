@@ -511,9 +511,9 @@
   main { padding-top: 40px !important; }
 
   /* Main content: side-by-side with gap */
-  .game-layout { flex-direction: row !important; align-items: stretch; gap: 0.5rem; max-width: 100%; padding: 0 0.25rem; }
-  .game-layout-staff { width: 55%; display: flex; flex-direction: column; min-height: 0; overflow: hidden; justify-content: flex-start; }
-  .game-layout-keyboard { width: 45%; display: flex; flex-direction: column; min-height: 0; overflow: hidden; justify-content: flex-start; padding-top: 2.5rem; }
+  .game-layout { flex-direction: row !important; align-items: flex-start; gap: 0.5rem; max-width: 100%; padding: 0 0.25rem; }
+  .game-layout-staff { width: 55%; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+  .game-layout-keyboard { width: 45%; display: flex; flex-direction: column; min-height: 0; overflow: hidden; padding-top: 3.25rem; }
 
   /* Staff panel — strip 3D tilt, shrink padding */
   .game-layout-staff .perspective-stage { transform: none; margin-bottom: 0; max-width: 100%; }
