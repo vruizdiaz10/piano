@@ -611,7 +611,12 @@ function AppContent() {
       <main className="h-screen w-full max-w-[1200px] mx-auto px-6 pt-20 pb-4 flex flex-col items-center overflow-hidden">
         <h1 className="sr-only">Practicar: {selectedLesson}</h1>
 
-        {/* Conductor's Stand */}
+        <div className="game-layout w-full flex-1 min-h-0 flex flex-col">
+
+          {/* ── LEFT PANEL: Staff + Feedback + Controls ── */}
+          <div className="game-layout-staff w-full min-h-0 flex flex-col">
+
+            {/* Conductor's Stand */}
         <div className="perspective-stage w-full max-w-3xl mb-2 shrink-0">
           <div className="tilted-stand wood-texture rounded-t-3xl rounded-b-xl p-4 md:p-6 border-t-8 border-r-4 border-l-4 border-b-8 border-mahogany-dark/80 relative">
             <div className={`absolute inset-0 rounded-3xl transition-opacity duration-300 pointer-events-none mix-blend-overlay ${staffFlash === 'correct' ? 'opacity-100' : staffFlash === 'wrong' ? 'opacity-100' : 'opacity-0'}`} style={{ background: staffFlash === 'correct' ? 'radial-gradient(circle, rgba(34,197,94,0.2) 0%, transparent 70%)' : 'radial-gradient(circle, rgba(168,32,36,0.2) 0%, transparent 70%)' }} />
@@ -624,20 +629,82 @@ function AppContent() {
           </div>
         </div>
 
-        {/* Feedback — fixed height to prevent keyboard layout shift */}
-        <div className="w-full max-w-3xl px-4 h-16 overflow-hidden flex items-start justify-center shrink-0">
+        {/* Feedback — with class for landscape compact */}
+        <div className="staff-feedback w-full max-w-3xl px-4 h-16 overflow-hidden flex items-start justify-center shrink-0">
           <Feedback isCorrect={state.lastAnswerCorrect} note={state.currentNote} recovering={state.recovering} errorType={state.lastErrorType} notation={state.notation} />
         </div>
 
-        {/* Octave Bar — toggleable manual octave shift */}
-        {octaveBarVisible && (
-          <div className="w-full max-w-3xl shrink-0">
-            <OctaveBar shift={octaveShift} onShiftChange={setOctaveShift} baseStart={baseKeyboardStart} />
+          {/* Lesson Controls — inside staff panel for landscape side-by-side */}
+          <div className="staff-controls w-full max-w-3xl flex items-center justify-center gap-6 mt-2 shrink-0">
+            {(() => {
+              const ctrlRange = config?.controllerRange ?? state.controllerRange
+              return (
+                <div className="game-layout-midi-indicator flex items-center gap-2 clay-inner-panel px-3 py-2 rounded-full" aria-label={midiConnected ? 'MIDI: Conectado' : 'MIDI: Sin conexión'}>
+                  <span className={`w-2.5 h-2.5 rounded-full ${midiConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`} />
+                  <span className="material-symbols-outlined text-sm text-primary">piano</span>
+                  <span className="font-label-caps text-[9px] uppercase tracking-widest text-primary">
+                    {midiConnected
+                      ? ctrlRange
+                        ? `${midiToNote(ctrlRange.min).name}${midiToNote(ctrlRange.min).octave}–${midiToNote(ctrlRange.max).name}${midiToNote(ctrlRange.max).octave}`
+                        : 'MIDI'
+                      : 'Sin MIDI'}
+                  </span>
+                </div>
+              )
+            })()}
+            <ControlButton
+              icon={state.isMuted ? 'volume_off' : 'volume_up'}
+              label={state.isMuted ? 'Sonido' : 'Silenciar'}
+              onClick={() => setMuted(!state.isMuted)}
+              active={state.isMuted}
+            />
+            <ControlButton
+              icon="history"
+              label="Reiniciar"
+              onClick={() => restartGame()}
+            />
+            <ControlButton
+              icon="text_fields"
+              label={state.showNoteName ? 'Ocultar nota' : 'Mostrar nota'}
+              onClick={() => setShowNoteName(!state.showNoteName)}
+              active={state.showNoteName}
+            />
+            <ControlButton
+              icon="graphic_eq"
+              label={octaveBarVisible ? 'Ocultar octava' : 'Octava'}
+              onClick={() => setOctaveBarVisible(!octaveBarVisible)}
+              active={octaveBarVisible}
+            />
+            {state.isTimed && (
+              <div className="flex items-center gap-2 clay-inner-panel px-3 py-2 rounded-full">
+                <span className="material-symbols-outlined text-sm text-primary">timer</span>
+                <span className="font-title-sm text-primary">{timerDisplay}s</span>
+              </div>
+            )}
           </div>
-        )}
 
-        {/* Progress bar */}
-        <div className="w-full max-w-3xl mt-2 shrink-0">
+        </div>
+
+        {/* ── RIGHT PANEL: Octave Bar + Keyboard ── */}
+        <div className="game-layout-keyboard w-full min-h-0 flex flex-col">
+
+          {/* Octave Bar — toggleable manual octave shift */}
+          {octaveBarVisible && (
+            <div className="w-full max-w-3xl shrink-0">
+              <OctaveBar shift={octaveShift} onShiftChange={setOctaveShift} baseStart={baseKeyboardStart} />
+            </div>
+          )}
+
+          {/* Virtual Keyboard */}
+          <div className="w-full max-w-3xl bg-surface-variant/50 p-3 rounded-3xl shadow-inner border border-outline-variant/40 mt-3 flex flex-col flex-1 min-h-0">
+            <div className="keyboard-label font-label-caps text-[10px] text-center text-outline uppercase tracking-widest font-bold mb-2">Selecciona la tecla correcta</div>
+            <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} startMidi={keyboardStart} />
+          </div>
+
+        </div>
+
+        {/* ── PROGRESS BAR — with class for landscape fixed-bottom thin bar ── */}
+        <div className="game-layout-progress w-full max-w-3xl mt-2 shrink-0">
           <div className="flex justify-between items-center mb-1 px-2">
             <span className="font-label-caps text-[10px] uppercase tracking-widest text-outline font-bold">Progreso</span>
             <span className="font-label-caps text-[10px] text-outline">{state.totalAttempts}/{state.sessionTarget}</span>
@@ -654,61 +721,8 @@ function AppContent() {
           </div>
         </div>
 
-        {/* Virtual Keyboard */}
-        <div className="w-full max-w-3xl bg-surface-variant/50 p-3 rounded-3xl shadow-inner border border-outline-variant/40 mt-3">
-          <div className="font-label-caps text-[10px] text-center text-outline uppercase tracking-widest font-bold mb-2">Selecciona la tecla correcta</div>
-          <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} startMidi={keyboardStart} />
-        </div>
-
-        {/* Lesson Controls */}
-        <div className="w-full max-w-3xl flex items-center justify-center gap-6 mt-2 shrink-0">
-          {(() => {
-            const ctrlRange = config?.controllerRange ?? state.controllerRange
-            return (
-              <div className="flex items-center gap-2 clay-inner-panel px-3 py-2 rounded-full" aria-label={midiConnected ? 'MIDI: Conectado' : 'MIDI: Sin conexión'}>
-                <span className={`w-2.5 h-2.5 rounded-full ${midiConnected ? 'bg-emerald-500 animate-pulse' : 'bg-gray-300'}`} />
-                <span className="material-symbols-outlined text-sm text-primary">piano</span>
-                <span className="font-label-caps text-[9px] uppercase tracking-widest text-primary">
-                  {midiConnected
-                    ? ctrlRange
-                      ? `${midiToNote(ctrlRange.min).name}${midiToNote(ctrlRange.min).octave}–${midiToNote(ctrlRange.max).name}${midiToNote(ctrlRange.max).octave}`
-                      : 'MIDI'
-                    : 'Sin MIDI'}
-                </span>
-              </div>
-            )
-          })()}
-          <ControlButton
-            icon={state.isMuted ? 'volume_off' : 'volume_up'}
-            label={state.isMuted ? 'Sonido' : 'Silenciar'}
-            onClick={() => setMuted(!state.isMuted)}
-            active={state.isMuted}
-          />
-          <ControlButton
-            icon="history"
-            label="Reiniciar"
-            onClick={() => restartGame()}
-          />
-          <ControlButton
-            icon="text_fields"
-            label={state.showNoteName ? 'Ocultar nota' : 'Mostrar nota'}
-            onClick={() => setShowNoteName(!state.showNoteName)}
-            active={state.showNoteName}
-          />
-          <ControlButton
-            icon="graphic_eq"
-            label={octaveBarVisible ? 'Ocultar octava' : 'Octava'}
-            onClick={() => setOctaveBarVisible(!octaveBarVisible)}
-            active={octaveBarVisible}
-          />
-          {state.isTimed && (
-            <div className="flex items-center gap-2 clay-inner-panel px-3 py-2 rounded-full">
-              <span className="material-symbols-outlined text-sm text-primary">timer</span>
-              <span className="font-title-sm text-primary">{timerDisplay}s</span>
-            </div>
-          )}
-        </div>
-      </main>
+      </div>
+    </main>
 
       {/* Pause Overlay */}
       {isPaused && (
