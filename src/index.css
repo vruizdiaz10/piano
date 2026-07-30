@@ -510,35 +510,35 @@
   .game-layout-nav { height: 40px !important; }
   main { padding-top: 40px !important; }
 
-  /* Main content: side-by-side */
-  .game-layout { flex-direction: row !important; align-items: stretch; gap: 0; max-width: 100%; }
-  .game-layout-staff { width: 50%; display: flex; flex-direction: column; justify-content: center; overflow: hidden; position: relative; }
-  .game-layout-keyboard { width: 50%; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
-  .game-layout-staff > *, .game-layout-keyboard > * { min-height: 0; }
+  /* Main content: side-by-side with gap */
+  .game-layout { flex-direction: row !important; align-items: stretch; gap: 0.5rem; max-width: 100%; padding: 0 0.25rem; }
+  .game-layout-staff { width: 55%; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+  .game-layout-keyboard { width: 45%; display: flex; flex-direction: column; min-height: 0; overflow: hidden; justify-content: center; }
 
   /* Staff panel — strip 3D tilt, shrink padding */
   .game-layout-staff .perspective-stage { transform: none; margin-bottom: 0; max-width: 100%; }
-  .game-layout-staff .tilted-stand { transform: none; padding: 0.35rem; border-width: 2px; }
-  .game-layout-staff .clay-surface { min-height: 40px; padding: 0.15rem; border-radius: 0.5rem; }
-  .game-layout-staff .clay-surface svg { max-height: 100px; }
+  .game-layout-staff .tilted-stand { transform: none; padding: 0.25rem; border-width: 2px; }
+  .game-layout-staff .clay-surface { min-height: 30px; padding: 0.15rem; border-radius: 0.5rem; }
+  .game-layout-staff .clay-surface svg { max-height: 180px; }
   .game-layout-staff .wood-texture { background-image: none; background-color: transparent; box-shadow: none; }
   .game-layout-staff .absolute.bottom-0 { display: none; }
 
   /* Feedback compact */
   .game-layout-staff .staff-feedback { height: auto; padding: 0; flex-shrink: 0; }
+  .game-layout-staff .staff-feedback > * { transform: scale(0.8); transform-origin: center; }
 
   /* Controls at bottom of staff panel */
-  .game-layout-staff .staff-controls { gap: 0.25rem; flex-wrap: nowrap; }
+  .game-layout-staff .staff-controls { gap: 0.25rem; flex-wrap: nowrap; margin-top: 0.15rem; }
   .game-layout-staff .staff-controls .material-symbols-outlined { font-size: 18px !important; }
 
   /* Keyboard panel */
   .keyboard-label { display: none !important; }
-  .game-layout-keyboard .game-layout-key-full { flex: 1; display: flex; flex-direction: column; min-height: 0; border: none; box-shadow: none; padding: 0.15rem; margin-top: 0; }
-  .game-layout-keyboard .game-layout-key-full > :last-child { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-  .game-layout-keyboard .game-layout-key-full > :last-child > :first-child { flex: 1; height: auto !important; min-height: 0; }
-  .game-layout-keyboard .piano-key-white { height: 100% !important; min-height: 0; }
-  .game-layout-keyboard .piano-key-black { max-height: 75% !important; }
-  .game-layout-keyboard .border { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  .game-layout-keyboard .game-layout-key-full { border: none; box-shadow: none; padding: 0.15rem; margin-top: 0; }
+  .game-layout-keyboard .game-layout-key-full > :last-child { overflow: hidden; }
+  .game-layout-keyboard .piano-key-white { height: 65px !important; }
+  .game-layout-keyboard .piano-key-black { max-height: 48px !important; }
+  .game-layout-keyboard .bg-surface-variant\/50 { flex: initial; padding: 0.25rem; margin-top: 0; }
+  .game-layout-keyboard .bg-surface-variant\/50 > .flex-1 { min-height: 0; }
 
   /* Progress bar → thin fixed bottom bar */
   .game-layout-progress { position: fixed; bottom: 0; left: 0; right: 0; z-index: 40; margin: 0; max-width: 100%; background: transparent; }
