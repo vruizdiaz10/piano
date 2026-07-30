@@ -124,7 +124,7 @@ export default function PianoKeyboard({ onPlayNote, highlightKey, correctKey, wr
   }
 
   return (
-    <div className="border border-[var(--gold-dim)]/50 rounded-lg shadow-inner shadow-[var(--ebony)]/10">
+    <div className="border border-[var(--gold-dim)]/50 rounded-lg shadow-inner shadow-[var(--ebony)]/10 game-layout-key-full">
       {isPortraitMobile && (
         <div className="flex justify-center gap-2 py-1">
           <button
