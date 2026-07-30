@@ -52,7 +52,7 @@ export default function PracticeNavBar({
         </button>
       </div>
       {/* Stats Bar */}
-      <div className="hidden md:flex items-center gap-5">
+      <div className="hidden md:flex items-center gap-5 game-layout-nav-hidden">
         {[
           { icon: 'local_fire_department', value: String(streak), label: 'Racha' },
           { icon: 'stars', value: `${Math.round(accuracy)}%`, label: 'Precisión' },
@@ -66,6 +66,7 @@ export default function PracticeNavBar({
         ))}
       </div>
       <div className="flex items-center gap-2">
+        <div className="game-layout-nav-hidden">
         {midiConnected !== undefined && (
           <div className="relative">
             <button
@@ -115,13 +116,16 @@ export default function PracticeNavBar({
             )}
           </div>
         )}
-        <NavUserMenu
-          userName={userName}
-          userLevel={userLevel}
-          userAvatar={user?.photoURL ?? undefined}
-          onProfile={onProfile}
-          onLogout={() => signOut()}
-        />
+        </div>
+        <div className="game-layout-nav-hidden">
+          <NavUserMenu
+            userName={userName}
+            userLevel={userLevel}
+            userAvatar={user?.photoURL ?? undefined}
+            onProfile={onProfile}
+            onLogout={() => signOut()}
+          />
+        </div>
       </div>
     </nav>
   );
