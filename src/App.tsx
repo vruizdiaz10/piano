@@ -704,7 +704,7 @@ function AppContent() {
         </div>
 
         {/* ── PROGRESS BAR — with class for landscape fixed-bottom thin bar ── */}
-        <div className="game-layout-progress w-full max-w-3xl mt-2 shrink-0">
+        <div className="game-layout-progress w-full max-w-3xl mt-2 shrink-0 mx-auto">
           <div className="flex justify-between items-center mb-1 px-2">
             <span className="font-label-caps text-[10px] uppercase tracking-widest text-outline font-bold">Progreso</span>
             <span className="font-label-caps text-[10px] text-outline">{state.totalAttempts}/{state.sessionTarget}</span>
