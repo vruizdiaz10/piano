@@ -696,7 +696,7 @@ function AppContent() {
           )}
 
           {/* Virtual Keyboard */}
-          <div className="w-full max-w-3xl bg-surface-variant/50 p-3 rounded-3xl shadow-inner border border-outline-variant/40 mt-3 flex flex-col flex-1 min-h-0">
+          <div className="w-full max-w-3xl bg-surface-variant/50 p-3 rounded-3xl shadow-inner border border-outline-variant/40 flex flex-col flex-1 min-h-0">
             <div className="keyboard-label font-label-caps text-[10px] text-center text-outline uppercase tracking-widest font-bold mb-2">Selecciona la tecla correcta</div>
             <PianoKeyboard onPlayNote={handleKeyboardPlay} highlightKey={highlightKey} correctKey={correctKey} wrongKey={wrongKey} startMidi={keyboardStart} />
           </div>
