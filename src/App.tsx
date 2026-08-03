@@ -614,7 +614,7 @@ function AppContent() {
         <div className="game-layout w-full flex-1 min-h-0 flex flex-col">
 
           {/* ── LEFT PANEL: Staff + Feedback + Controls ── */}
-          <div className="game-layout-staff w-full min-h-0 flex flex-col">
+          <div className="game-layout-staff w-full min-h-0 flex flex-col items-center">
 
             {/* Conductor's Stand */}
         <div className="perspective-stage w-full max-w-3xl mb-2 shrink-0">
@@ -686,7 +686,7 @@ function AppContent() {
         </div>
 
         {/* ── RIGHT PANEL: Octave Bar + Keyboard ── */}
-        <div className="game-layout-keyboard w-full min-h-0 flex flex-col">
+        <div className="game-layout-keyboard w-full min-h-0 flex flex-col items-center">
 
           {/* Octave Bar — toggleable manual octave shift */}
           {octaveBarVisible && (
